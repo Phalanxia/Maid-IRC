@@ -2,14 +2,47 @@
 html(lang='en')
 	head
 		meta(charset='utf-8')
-		title IRC
+		title #{server}
 		link(rel='stylesheet', type='text/css', href='css/font-awesome.min.css')
 		link(rel='stylesheet', type='text/css', href='css/fonts.css')
-		link(rel='stylesheet', type='text/css', href='css/styles.css')
+		link(rel='stylesheet', type='text/css', href='css/client.css')
 		link(rel='stylesheet', type='text/css', href='css/ui-lightness/jquery-ui-1.10.3.custom.min.css')
 		script(src='/socket.io/socket.io.js')
 	body
-		h1 #{title}
+		//- h1 #{title}
+		#sidebar
+			header
+				h1
+					span.themecolor Madi
+					| IRC
+			nav
+				ul
+					li(data-do='!')
+						i.fa.fa-comments-o
+						span Channel Name
+			footer#controlSystem
+				button#settingsButton.fa.fa-cog
+				button#shutdown.fa.fa-power-off
+				span#connectionStatus
+					| Connecting?
+		#rightSide
+			#console
+				#consoleMiddle
+					#consoleLeft
+						header#topic
+							input(type='text', placeholder='Topic Text Here', value='No channels selected?')
+						output#consoleOutput
+						#consoleInput
+							input(type='text', x-webkit-speech)
+							button(onclick='javascript:consoleSend()')
+								| Enter
+					#users
+						section#channelUserCount
+						ul
+						section#userEdit
+							i.fa.fa-circle
+							h1 #{name}
 	script(src='js/lib/jquery-2.0.3.js')
 	script(src='js/lib/jquery-ui-1.10.3.custom.min.js')
-	script(src='js/core.js')
+	script(src='js/client.js')
+	script(src='js/ui.js')
