@@ -29,19 +29,12 @@ app.get('/', function (req, res) {
 	res.render("index", {});
 });
 
-app.post('/client', function (req, res) {
-	console.log(req.body);
-	res.render("client", {title: req.body.cats});
-});
-
 // Set up socket.io
-
 var io = require('socket.io').listen(server);
 io.set('log level', 1);
 
 io.sockets.on('connection', function (socket) {
 	// Emit
-	//io.sockets.emit('ircserver', connectedIRCserver);
 
 	// Recieved
 	socket.on('shutdown', function (data) {
@@ -61,3 +54,53 @@ function log (name, content) {
 		if (err) throw err;
 	});
 }
+
+// Client
+app.post('/client', function (req, res) {
+	console.log(req.body);
+	res.render("client", {server: req.body.server, name: req.body.name, channel: req.body.channel});
+
+	var theChannel = [req.body.channel]
+	console.log(theChannel);
+
+	var client = new ircLib.Client(req.body.server, req.body.name, {
+		channels: theChannel,
+		userName: req.body.name,
+		password: null,
+		realName: "MadiIRC",
+		floodProtection: true,
+		floodProtectionDelay: 1000,
+		autoRejoin: true,
+		autoConnect: true,
+		stripColors: true
+	});
+
+	// IRC Listeners
+	client.addListener('registered', function (message) {
+		console.log('Server: ' + message.server);
+		console.log(message.args[1]);
+	});
+
+	client.addListener('message', function (from, to, message) {
+		console.log(to + ' => ' + from + ': ' + message);
+		if (message == 'say meow') {
+			client.say('##phalanxia', 'nyan~');
+		}
+	});
+
+	client.addListener('join', function (from, to, message) {
+		data = ['join', from, to, message];
+		io.sockets.emit('join/part', data);
+	});
+
+	client.addListener('part', function (from, to, message) {
+		data = ['part', from, to, message];
+		io.sockets.emit('join/part', data);
+	});
+
+	client.addListener('error', function (message) {
+		console.log('error: ', message);
+	});
+
+	return client;
+});
