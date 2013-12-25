@@ -1,9 +1,5 @@
-var client = {
-	server: document.domain
-}
-
 // socket.io
-var socket = io.connect('http://' + client.server + ':4848', {
+var socket = io.connect('http://' + document.domain + ':4848', {
 	'reconnect': true,
 	'reconnection delay': 500
 });
