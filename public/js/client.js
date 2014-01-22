@@ -5,6 +5,7 @@ var client = {
 		pastDisconnect: false
 	},
 	focusedChannel: "",
+	channelList: [],
 	nickname: "" // TEMP: For testing
 }
 
@@ -21,14 +22,15 @@ var socket = io.connect('http://' + client.server + ':4848', {
 
 /**
  * Socket.io ON list
- *	
- *
+ *	connect
+ *	disconnect
+ *	ircRecieveMessage
  *
  * Socket.io EMIT list
- *  ircSay
+ *  message
  *		[channel, message]
  *		Sends a message to a channel.
- *  ircCommand
+ *  command
  *		{type, content}
  * 		Send a command.
  * 
@@ -38,7 +40,7 @@ socket.on('connect', function () {
 	client.status.connection = true;
 
 	$('#connectionStatus')
-		.css('background-color','#4eaa46')
+		.css('background-color', '#4eaa46')
 		.html("Connected");
 
 	console.log("Connected to backend.");
@@ -49,7 +51,7 @@ socket.on('disconnect', function () {
 	client.status.pastDisconnect = true;
 	
 	$('#connectionStatus')
-		.css('background-color','#c83c3c')
+		.css('background-color', '#c83c3c')
 		.html("Disconnected");
 
 	console.warn("Lost connection to backend.");
@@ -57,7 +59,7 @@ socket.on('disconnect', function () {
 
 // IRC
 socket.on('ircRecieveMessage', function (data) {
-	var _now new Data(),
+	var _now = new Data(),
 		message;
 });
 
@@ -67,7 +69,7 @@ var irc = {
 			return;
 		} else if (!data.startsWith("/")) {
 			// It's not a command.
-			socket.emit('ircSay', [client.focusedChannel, data]);
+			socket.emit('message', [client.focusedChannel, data]);
 			// HTML to plaintext... kinda.
 			var message = data
 				.replace(/&/g, "&amp;")
@@ -76,6 +78,7 @@ var irc = {
 				.replace(/</g, "&lt;")
 				.replace(/>/g, "&gt;"),
 				now = new Date();
+			// Display it in the console.
 			$('#consoleOutput').append('<article class="' + "consoleMessage channel-" + client.focusedChannel.substring(2).toLowerCase() + '"><aside><time>[' + now.getHours() + ':' + now.getMinutes() + ':'+ now.getSeconds() + ']</time><span class="nickname">' + client.nickname + '</span></aside><p class="kitten">' + message + '</p></article>');
 		} else {
 			// It's a command.
@@ -100,22 +103,22 @@ var irc = {
 			}
 
 			// It is a command so lets run it!
-			switch(command) {
+			switch (command) {
 				case "me":
-					socket.emit('ircCommand', {type: "me", content: message});
+					socket.emit('command', {type: "me", content: message});
 					break;
 				case "join":
 					// Parse the message to support joining multiple channels at once.
 					var _channels = message.split(" ");
 					for (i = 0; i < _channels.length; i++) {
-						socket.emit('ircCommand', {type: "join", content: _channels[i]});
+						socket.emit('command', {type: "join", content: _channels[i]});
 					}
 					break;
 				case "part":
 					// Parse the message to support parting multiple channels at once.
 					var _channels = message.split(" ");
 					for (i = 0; i < _channels.length; i++) {
-						socket.emit('ircCommand', {type: "break", content: _channels[i]});
+						socket.emit('command', {type: "part", content: _channels[i]});
 					}
 					break;
 			}
