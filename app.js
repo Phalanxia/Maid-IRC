@@ -26,29 +26,14 @@ var server = http.createServer(app)
 	.listen(config.http_port, config.http_host);
 
 app.get('/', function (req, res) {
-	res.render("index", {});
+	res.render("index", {}); // Change "index" to "client" to test the client without having to connect to IRC.
 });
 
 // Set up socket.io
 var io = require('socket.io').listen(server);
 io.set('log level', 1);
 
-io.sockets.on('connection', function (socket) {
-	// Emit
-
-	// Recieved
-	socket.on('shutdown', function (data) {
-		setTimeout(function () {
-			console.log('Exiting.');
-			process.exit(0);
-		}, 100);
-	});
-
-	socket.on('server', function (data) {
-		console.log(data);
-	});
-});
-
+// Logging to file.
 function log (name, content) {
 	fs.appendFile(config.logging_directory + name + '.log', content + '\r\n', function (err) {
 		if (err) throw err;
@@ -57,7 +42,8 @@ function log (name, content) {
 
 // Client
 app.post('/client', function (req, res) {
-	console.log(req.body);
+	// I feel like this might be a messy way of doing it but it will be fine for now.
+
 	res.render("client", {server: req.body.server, name: req.body.name, channel: req.body.channel});
 
 	var theChannel = [req.body.channel]
@@ -100,6 +86,28 @@ app.post('/client', function (req, res) {
 
 	client.addListener('error', function (message) {
 		console.log('error: ', message);
+	});
+
+	// And now the rest of the Socket.io code.
+	io.sockets.on('connection', function (socket) {
+		// Emit
+
+		// Recieved
+		socket.on('shutdown', function (data) {
+			setTimeout(function () {
+				console.log('Exiting.');
+				process.exit(0);
+			}, 100);
+		});
+
+		socket.on('server', function (data) {
+			console.log(data);
+		});
+
+		// IRC
+		socket.on('message' , function (data) {
+			client.say(data[0], data[1]);
+		});
 	});
 
 	return client;

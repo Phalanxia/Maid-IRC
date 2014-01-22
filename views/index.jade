@@ -10,10 +10,17 @@ html(lang='en')
 		script(src='/socket.io/socket.io.js')
 	body
 		form(action='/client', method='post')
-			input(id='server', type='text', placeholder='server', name='server')
-			input(id='name', type='text', placeholder='name', name='name')
-			input(id='channel', type='text', placeholder='channel', name='channel')
-			input(id='submit', type='submit', placeholder='submit', name='submit')
+			h1 MadiIRC
+			section
+				i(class='fa fa-sitemap')
+				input(id='server', type='text', placeholder='Server', name='server' required)
+			section
+				i(class='fa fa-user')
+				input(id='name', type='text', placeholder='Nickname', name='name' required)
+			section
+				i(class='fa fa-users')
+				input(id='channel', type='text', placeholder='Channel/s', name='channel' required)
+			input(id='submit', type='submit', placeholder='Submit', name='submit')
 	script(src='js/lib/jquery-2.0.3.js')
 	script(src='js/lib/jquery-ui-1.10.3.custom.min.js')
-	script(src='js/core.js')
+	script(src='js/index.js')
