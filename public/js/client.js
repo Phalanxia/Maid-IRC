@@ -5,7 +5,7 @@ var client = {
 		pastDisconnect: false
 	},
 	focusedChannel: "",
-	channelList: [],
+	channels: [],
 	nickname: "" // TEMP: For testing
 }
 
@@ -24,13 +24,15 @@ var socket = io.connect('http://' + client.server + ':4848', {
  * Socket.io ON list
  *	connect
  *	disconnect
- *	ircRecieveMessage
+ *	recieveMessage
+ *		[to, from, message]
+ *		Recieve a message from IRC.
  *
  * Socket.io EMIT list
- *  message
+ *  sendMessage
  *		[channel, message]
  *		Sends a message to a channel.
- *  command
+ *  sendCommand
  *		{type, content}
  * 		Send a command.
  * 
@@ -58,9 +60,15 @@ socket.on('disconnect', function () {
 });
 
 // IRC
-socket.on('ircRecieveMessage', function (data) {
-	var _now = new Data(),
-		message;
+socket.on('ircInfo', function (data) {
+	client.channels = data.channels;
+	client.nickname = data.nickname;
+});
+
+socket.on('recieveMessage', function (data) {
+	// TODO: Redo how the timestamps works. It's pretty bad at the moment.
+	var _now = new Date();
+	$('#consoleOutput').append('<article class="consoleMessage" data-channel"' + data[0] + '"><aside><time>[' + _now.getHours() + ':' + _now.getMinutes() + ':'+ _now.getSeconds() + ']</time><span>' + data[1] + '</span></aside><p>' + data[2] + '</p></article>');
 });
 
 var irc = {
@@ -69,7 +77,7 @@ var irc = {
 			return;
 		} else if (!data.startsWith("/")) {
 			// It's not a command.
-			socket.emit('message', [client.focusedChannel, data]);
+			socket.emit('sendMessage', [client.focusedChannel, data]);
 			// HTML to plaintext... kinda.
 			var message = data
 				.replace(/&/g, "&amp;")
@@ -86,7 +94,7 @@ var irc = {
 			message = data.split(" ")[1];
 
 			var command = data.split(" ")[0],
-				commandList = ['me', 'join', 'part'],
+				commandList = ['me', 'join', 'part', 'whois'],
 				commandFound = false;
 
 			// Check to see if the command is in commandList.
@@ -105,20 +113,20 @@ var irc = {
 			// It is a command so lets run it!
 			switch (command) {
 				case "me":
-					socket.emit('command', {type: "me", content: message});
+					socket.emit('sendCommand', {type: "me", content: message});
 					break;
 				case "join":
 					// Parse the message to support joining multiple channels at once.
 					var _channels = message.split(" ");
 					for (i = 0; i < _channels.length; i++) {
-						socket.emit('command', {type: "join", content: _channels[i]});
+						socket.emit('sendCommand', {type: "join", content: _channels[i]});
 					}
 					break;
 				case "part":
 					// Parse the message to support parting multiple channels at once.
 					var _channels = message.split(" ");
 					for (i = 0; i < _channels.length; i++) {
-						socket.emit('command', {type: "part", content: _channels[i]});
+						socket.emit('sendCommand', {type: "part", content: _channels[i]});
 					}
 					break;
 			}

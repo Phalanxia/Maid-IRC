@@ -10,7 +10,9 @@ html(lang='en')
 		script(src='/socket.io/socket.io.js')
 	body
 		form(action='/client', method='post')
-			h1 MadiIRC
+			h1
+				span Maid
+				| IRC
 			section
 				i(class='fa fa-sitemap')
 				input(id='server', type='text', placeholder='Server', name='server' required)
