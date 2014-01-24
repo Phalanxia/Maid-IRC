@@ -1,7 +1,14 @@
-Web-IRC-client
+Maid IRC
 ==============
 
 A web IRC client based on node.js and socket.io
+
+## Screenshots
+
+![Login Screen](screenshots/login.png)
+Login Screen
+
+More screenshots will be added later as this client becomes closer to being fully functional.
 
 ## Copyright and license
 
