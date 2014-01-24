@@ -457,7 +457,7 @@ body {
   color: #efefef;
   font-size: 14px;
 }
-#console #consoleMiddle #consoleLeft #consoleOutput article aside .nickname {
+#console #consoleMiddle #consoleLeft #consoleOutput article aside span {
   float: right;
   padding: 0 8px 0 0;
   font-size: 14px;
