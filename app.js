@@ -50,26 +50,23 @@ app.post('/client', function (req, res) {
 
 	res.render("client", {server: req.body.server, name: req.body.name, channel: req.body.channel});
 
+	var client = new ircLib.Client(req.body.server, req.body.name, {
+		channels: [req.body.channel],
+		userName: req.body.name,
+		password: null,
+		realName: "MaidIRC",
+		floodProtection: true,
+		floodProtectionDelay: 1000,
+		autoRejoin: true,
+		autoConnect: true,
+		stripColors: true
+	}),
+	_settings = {
+		nickname: req.body.name,
+	}
+
 	io.sockets.on('connection', function (socket) {
-		var theChannel = [req.body.channel];
-			console.log(theChannel);
-
-		var client = new ircLib.Client(req.body.server, req.body.name, {
-			channels: theChannel,
-			userName: req.body.name,
-			password: null,
-			realName: "MaidIRC",
-			floodProtection: true,
-			floodProtectionDelay: 1000,
-			autoRejoin: true,
-			autoConnect: true,
-			stripColors: true
-		});
-
-		var settings = {
-			nickname: req.body.name,
-			channels: []
-		}
+		socket.emit('initialInfo', req.body.name);
 
 		// IRC Listeners
 		client.addListener('registered', function (message) {
@@ -78,7 +75,9 @@ app.post('/client', function (req, res) {
 		});
 
 		client.addListener('names', function (data) {
-			console.log(data);
+			console.log("names: " + data);
+			// This happens every time the client joins a channel so I will use this for sending channel data to the client.
+			socket.emit('ircInfo', client.chans);
 		});
 
 		client.addListener('message', function (from, to, message) {
@@ -88,12 +87,16 @@ app.post('/client', function (req, res) {
 
 		client.addListener('join', function (from, to, message) {
 			data = ['join', from, to, message];
-			io.sockets.emit('join/part', data);
+			socket.emit('join/part', data);
+			// Send channel info to the client.
+			socket.emit('ircInfo', client.chans);
 		});
 
 		client.addListener('part', function (from, to, message) {
 			data = ['part', from, to, message];
-			io.sockets.emit('join/part', data);
+			socket.emit('join/part', data);
+			// Send channel info to the client.
+			socket.emit('ircInfo', client.chans);
 		});
 
 		client.addListener('error', function (message) {
@@ -104,7 +107,6 @@ app.post('/client', function (req, res) {
 		
 		// Recieved
 		socket.on('shutdown', function (data) {
-			console.log("working 1");
 			//client.disconnect("Quit");
 			setTimeout(function () {
 				console.log('Exiting.');
@@ -118,15 +120,28 @@ app.post('/client', function (req, res) {
 		});
 
 		// IRC Emit
-		socket.emit('ircInfo', settings);
 
 		// IRC Recieve
 		socket.on('sendServer', function (data) {
 			console.log(data);
 		});
 
-		socket.on('sendMessage' , function (data) {
+		socket.on('sendMessage', function (data) {
 			client.say(data[0], data[1]);
+		});
+
+		socket.on('sendCommand', function (data) {
+			switch(data.type) {
+				case "join":
+					client.join(data.content);
+					break;
+				case "part":
+					client.part(data.content);
+					break;
+				case "me":
+					client.action(data.channel, data.content);
+					break;
+			}
 		});
 	});
 });

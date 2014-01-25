@@ -6,7 +6,8 @@ var client = {
 	},
 	focusedChannel: "",
 	channels: [],
-	nickname: "" // TEMP: For testing
+	nickname: "",
+	channelList: ""
 }
 
 if (typeof String.prototype.startsWith != 'function') { // Thanks to http://stackoverflow.com/a/646643/2152712
@@ -60,15 +61,44 @@ socket.on('disconnect', function () {
 });
 
 // IRC
+socket.on('initialInfo', function (data) {
+	client.nickname = data;
+});
+
 socket.on('ircInfo', function (data) {
-	client.channels = data.channels;
-	client.nickname = data.nickname;
+	client.channels = data;
+	client.channelList = Object.keys(client.channels);
+
+	$('#sidebar nav ul').empty();
+	function updateChannelMenu (element, index) {
+		$('#sidebar nav ul').append('<li data-do=""><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
+	}
+
+	client.channelList.forEach(updateChannelMenu);
+	
+	if (client.focusedChannel == '') {
+		client.focusedChannel = client.channelList[0];
+		$('#sidebar nav ul li:nth-of-type(1)').addClass('focusedChannel');
+	}
+
+	$('#topic input')
+		.val('')
+		.val(client.channels[client.focusedChannel].topic);
+});
+
+$('#sidebar nav ul').on('click', 'li', function () {
+	var $index = $('#sidebar nav ul li').index(this);
+	client.focusedChannel = client.channelList[$index];
+	$('#topic input').val(client.channels[client.channelList[$index]].topic);
+	$('#sidebar nav ul li').removeClass('focusedChannel');
+	$('#sidebar nav ul li:nth-of-type(' + ($index+=1) + ')').addClass('focusedChannel');
 });
 
 socket.on('recieveMessage', function (data) {
 	// TODO: Redo how the timestamps works. It's pretty bad at the moment.
 	var _now = new Date();
-	$('#consoleOutput').append('<article class="consoleMessage" data-channel"' + data[0] + '"><aside><time>[' + _now.getHours() + ':' + _now.getMinutes() + ':'+ _now.getSeconds() + ']</time><span>' + data[1] + '</span></aside><p>' + data[2] + '</p></article>');
+	$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + data[0] + '"><aside><time>[' + _now.getHours() + ':' + _now.getMinutes() + ':'+ _now.getSeconds() + ']</time><span>' + data[1] + '</span></aside><p>' + data[2] + '</p></article>');
+	$("#consoleOutput article:not([data-channel='" + client.focusedChannel + "'])").hide();
 });
 
 var irc = {
@@ -79,21 +109,22 @@ var irc = {
 			// It's not a command.
 			socket.emit('sendMessage', [client.focusedChannel, data]);
 			// HTML to plaintext... kinda.
-			var message = data
+			var _message = data
 				.replace(/&/g, "&amp;")
 				.replace(/"/g, '&quot;')
 				.replace(/'/g, "&apos;")
 				.replace(/</g, "&lt;")
 				.replace(/>/g, "&gt;"),
-				now = new Date();
+				_now = new Date();
 			// Display it in the console.
-			$('#consoleOutput').append('<article class="' + "consoleMessage channel-" + client.focusedChannel.substring(2).toLowerCase() + '"><aside><time>[' + now.getHours() + ':' + now.getMinutes() + ':'+ now.getSeconds() + ']</time><span class="nickname">' + client.nickname + '</span></aside><p class="kitten">' + message + '</p></article>');
+			$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + client.focusedChannel + '"><aside><time>[' + _now.getHours() + ':' + _now.getMinutes() + ':'+ _now.getSeconds() + ']</time><span>' + client.nickname + '</span></aside><p>' + _message + '</p></article>');
+			$("#consoleOutput article:not([data-channel='" + client.focusedChannel + "'])").hide();
 		} else {
 			// It's a command.
 			data = data.substring(1, data.length);
-			message = data.split(" ")[1];
 
 			var command = data.split(" ")[0],
+				_message = data.substring(command.length+=1, data.length),
 				commandList = ['me', 'join', 'part', 'whois'],
 				commandFound = false;
 
@@ -113,19 +144,20 @@ var irc = {
 			// It is a command so lets run it!
 			switch (command) {
 				case "me":
-					socket.emit('sendCommand', {type: "me", content: message});
+					socket.emit('sendCommand', {type: "me", channel: client.focusedChannel, content: _message});
+					var _now = new Date();
+					$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + client.focusedChannel + '"><aside><time>[' + _now.getHours() + ':' + _now.getMinutes() + ':'+ _now.getSeconds() + ']</time><span>&gt;</span></aside><p>' + client.nickname + ' ' + _message + '</p></article>');
+					$("#consoleOutput article:not([data-channel='" + client.focusedChannel + "'])").hide();
 					break;
 				case "join":
-					// Parse the message to support joining multiple channels at once.
-					var _channels = message.split(" ");
-					for (i = 0; i < _channels.length; i++) {
+					var _channels = _message.split(" ");
+					for (i = 0; i < _channels.length; i+=1) {
 						socket.emit('sendCommand', {type: "join", content: _channels[i]});
 					}
 					break;
 				case "part":
-					// Parse the message to support parting multiple channels at once.
-					var _channels = message.split(" ");
-					for (i = 0; i < _channels.length; i++) {
+					var _channels = _message.split(" ");
+					for (i = 0; i < _channels.length; i+=1) {
 						socket.emit('sendCommand', {type: "part", content: _channels[i]});
 					}
 					break;

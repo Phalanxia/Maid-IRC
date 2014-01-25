@@ -269,6 +269,9 @@ body {
   font-weight: normal;
   line-height: 40px;
 }
+#sidebar nav ul li.focusedChannel {
+  background-color: #4d4d4d;
+}
 #sidebar nav ul .currentNav {
   background: #1e1e1e;
   box-shadow: inset 2px 0 0 0 #52c1ff;
