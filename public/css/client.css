@@ -228,8 +228,11 @@ body {
   overflow-y: auto;
 }
 #sidebar nav ul li:hover {
-  background-color: #4d4d4d;
+  background-color: #3c3c3c;
   cursor: pointer;
+}
+#sidebar nav ul li:active {
+  background-color: #4d4d4d;
 }
 #sidebar nav ul li[data-do]:after {
   display: block;
