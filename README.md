@@ -11,6 +11,13 @@ Login screen
 
 More screenshots will be added later as this client becomes closer to being fully functional.
 
+## Community
+
+Need support? Want to chat? Join our channel on the Freenode IRC network.
+
+	HOST: irc.freenode.net
+	CHANNEL: ##phalanxia
+
 ## Copyright and license
 
 The MIT License (MIT)
