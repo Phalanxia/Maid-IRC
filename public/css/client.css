@@ -451,12 +451,6 @@ body {
   font-size: 14px;
   color: #282828;
 }
-#console #consoleMiddle #consoleLeft #consoleOutput article aside .channel {
-  float: left;
-  padding: 0 0 0 8px;
-  color: #efefef;
-  font-size: 14px;
-}
 #console #consoleMiddle #consoleLeft #consoleOutput article aside span {
   float: right;
   padding: 0 8px 0 0;

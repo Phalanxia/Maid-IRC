@@ -216,6 +216,8 @@ form input[type="submit"] {
 }
 form input[type="submit"]:hover {
   cursor: pointer;
+  background-color: #52c1ff;
+  color: #1b1b1b;
 }
 form input[type="submit"]:active {
   opacity: 0.8;
