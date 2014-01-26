@@ -182,24 +182,24 @@ body {
 #sidebar header h1 {
   display: block;
   width: inherit;
-  height: 50px;
+  height: 40px;
   color: #9e9e9e;
   font-family: visitor;
   font-size: 24px;
   font-weight: 200;
-  line-height: 40px;
+  line-height: 35px;
   text-align: center;
   -webkit-font-smoothing: subpixel-antialiased;
 }
 #sidebar header h1:after {
   position: relative;
-  top: -3px;
-  left: 12px;
-  margin: 0 12px 0 0;
+  top: 10px;
+  left: -32px;
+  margin: 0 -24px 0 0;
   content: "Alpha";
   font-size: 10px;
-  color: #282828;
-  background: #52c1ff;
+  color: #efefef;
+  background: none;
   padding: 2px;
   border-radius: 2px;
 }
