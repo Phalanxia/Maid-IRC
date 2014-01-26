@@ -159,9 +159,9 @@ form h1 {
 }
 form h1:after {
   position: relative;
-  top: -3px;
-  left: 12px;
-  margin: 0 12px 0 0;
+  top: 10px;
+  left: -32px;
+  margin: 0 -24px 0 0;
   content: "Alpha";
   font-size: 10px;
   color: #efefef;
