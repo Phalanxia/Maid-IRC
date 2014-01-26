@@ -7,7 +7,11 @@ A web IRC client based on node.js and socket.io
 
 Login screen
 
-![Login Screen](screenshots/login.jpg)
+![Login Screen](screenshots/login.png)
+
+Client
+
+![Login Screen](screenshots/client.png)
 
 More screenshots will be added later as this client becomes closer to being fully functional.
 
