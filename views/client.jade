@@ -2,12 +2,11 @@
 html(lang='en')
 	head
 		meta(charset='utf-8')
-		title #{server}
+		title Maid IRC: #{server}
 		link(rel='stylesheet', type='text/css', href='css/font-awesome.min.css')
 		link(rel='stylesheet', type='text/css', href='css/client.css')
 		script(src='/socket.io/socket.io.js')
 	body
-		//- h1 #{title}
 		#sidebar
 			header
 				h1
@@ -37,6 +36,6 @@ html(lang='en')
 						section#userEdit
 							i.fa.fa-circle
 							h1 #{name}
-	script(src='js/lib/jquery-2.0.3.js')
+	script(src='js/lib/jquery-2.1.0.min.js')
 	script(src='js/client.js')
 	script(src='js/ui.js')

@@ -2,7 +2,7 @@
 html(lang='en')
 	head
 		meta(charset='utf-8')
-		title IRC
+		title Maid IRC
 		link(rel='stylesheet', type='text/css', href='css/font-awesome.min.css')
 		link(rel='stylesheet', type='text/css', href='css/index.css')
 		script(src='/socket.io/socket.io.js')
@@ -19,7 +19,8 @@ html(lang='en')
 				input(id='name', type='text', placeholder='Nickname', name='name' required)
 			section
 				i(class='fa fa-users')
-				input(id='channel', type='text', placeholder='Channel/s', name='channel' required)
+				input(id='channel', type='text', placeholder='Channel', name='channel' required)
+				span(class='fa fa-key')
 			input(id='submit', type='submit', placeholder='Submit', name='submit')
-	script(src='js/lib/jquery-2.1.0.js')
+	script(src='js/lib/jquery-2.1.0.min.js')
 	script(src='js/index.js')

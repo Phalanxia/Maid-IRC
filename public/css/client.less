@@ -51,6 +51,7 @@ html, body {
 	height: 100%;
 	font-family: Arial;
 	background: #efefef;
+	overflow: hidden;
 }
 
 #sidebar {
@@ -357,12 +358,10 @@ html, body {
 						width: 220px;
 						min-width: 20px;
 						margin: 0 8px 0 0;
-						background-color: @grey;
-						border-right: 1px solid #0e0e0e;
+						border-right: 1px solid #d9d9d9;
 						time {
 							float: left;
 							width: 80px;
-							background-color: @themecolor;
 							text-align: center;
 							font-size: 14px;
 							color: @grey;
@@ -378,6 +377,7 @@ html, body {
 						padding: 0 0 0 8px;
 						font-size: 14px;
 						color: #1b1b1b;
+						white-space: pre-wrap;
 						word-wrap: break-word;
 						.messageMadi {
 							padding: 2px;
@@ -487,16 +487,18 @@ html, body {
 		width: 200px;
 		background: @grey;
 		border-left: 1px solid #161616;
-		box-shadow: inset 0 1px 0 #323232; // inset 0 1px 0px #0e0e0e
+		box-shadow: inset 0 1px 0 #323232;
 		#channelUserCount {
-			width: 200px;
-			height: 40px;
-			border-bottom: 1px solid #0e0e0e;
-			box-shadow: 0 1px 0px #323232;
-			line-height: 40px;
-			color: @white;
-			text-align: center;
-			background-color: @darkgrey;
+			p {
+				width: 200px;
+				height: 40px;
+				border-bottom: 1px solid #0e0e0e;
+				box-shadow: 0 1px 0px #323232;
+				line-height: 40px;
+				color: @lightgrey;
+				text-align: center;
+				background-color: @darkgrey;
+			}
 		}
 		ul {
 			overflow-x: scroll;
@@ -504,6 +506,15 @@ html, body {
 				color: @white;
 				line-height: 24px;
 				font-size: 14px;
+				border-bottom: 1px solid #161616;
+				box-shadow: 0 1px 0px #323232;
+				&:hover {
+					background-color: #3c3c3c;
+					cursor: pointer;
+				}
+				&:active {
+					background-color: #4d4d4d;
+				}
 				span {
 					float: left;
 					display: block;
