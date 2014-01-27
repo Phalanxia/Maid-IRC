@@ -144,6 +144,10 @@ form {
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   -moz-transform: translate(-50%, -50%);
+  -webkit-transition: all 2s ease-in-out;
+  -moz-transition: all 2s ease-in-out;
+  -o-transition: all 2s ease-in-out;
+  transition: all 2s ease-in-out;
 }
 form h1 {
   display: block;
@@ -174,6 +178,7 @@ form h1 span {
 }
 form section {
   display: inline-block;
+  width: 270px;
   margin: 0 0 16px 0;
   background: white;
   border-radius: 4px;
@@ -203,6 +208,42 @@ form section input[type="text"] {
 }
 form section input[type="text"]:before {
   color: #3c3c3c;
+}
+form section:nth-of-type(3) input {
+  width: 149px;
+}
+form section:nth-of-type(3) span {
+  display: block;
+  float: right;
+  width: 32px;
+  height: 32px;
+  margin: 5px;
+  background-color: #efefef;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 32px;
+}
+form section:nth-of-type(3) span:hover {
+  cursor: pointer;
+}
+form section:nth-of-type(3) span:active {
+  opacity: 0.8;
+}
+form input[type="password"] {
+  float: right;
+  width: 149px;
+  height: 44px;
+  padding: 0 16px;
+  background-color: white;
+  border-radius: 4px;
+  border: none;
+  line-height: 20px;
+  margin: 0 0 16px 0;
+}
+form input[type="password"]:after {
+  content: "";
+  border-bottom: 4px solid white;
 }
 form input[type="submit"] {
   width: 270px;

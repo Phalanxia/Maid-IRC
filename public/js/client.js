@@ -84,22 +84,73 @@ socket.on('ircInfo', function (data) {
 	$('#topic input')
 		.val('')
 		.val(client.channels[client.focusedChannel].topic);
+
+	$('#users ul').empty();
+
+	// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
+	var _userList = [],
+		_opCount;
+	
+	for (var k in client.channels[client.focusedChannel].users) { 
+		_userList.push(k);
+	}
+	
+	for (var i = 0; i < _userList.length; i++) {
+		$('#users ul').append('<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
+
+		if (client.channels[client.focusedChannel].users[_userList[i]] !== '') {
+			_opCount = _opCount += 1;
+		}
+	}
+
+	// Get user count
+	$('#channelUserCount').empty().html('<p>' + _opCount + " ops, " + Object.keys(client.channels[client.focusedChannel].users).length + " total</p>");
 });
 
 $('#sidebar nav ul').on('click', 'li', function () {
 	var $index = $('#sidebar nav ul li').index(this);
 	client.focusedChannel = client.channelList[$index];
+	
 	$('#topic input').val(client.channels[client.channelList[$index]].topic);
 	$('#sidebar nav ul li').removeClass('focusedChannel');
 	$('#sidebar nav ul li:nth-of-type(' + ($index+=1) + ')').addClass('focusedChannel');
+	$('#users ul').empty();
+
+	// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
+	var _userList = [],
+		_opCount;
+	
+	for (var k in client.channels[client.focusedChannel].users) { 
+		_userList.push(k);
+	}
+	
+	for (var i = 0; i < _userList.length; i++) {
+		$('#users ul').append('<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
+
+		if (client.channels[client.focusedChannel].users[_userList[i]] !== '') {
+			_opCount = _opCount += 1;
+		}
+	}
+
+	// Get user count
+	$('#channelUserCount').empty().html('<p>' + _opCount + " ops, " + Object.keys(client.channels[client.focusedChannel].users).length + " total</p>");
 });
 
 socket.on('recieveMessage', function (data) {
-	// TODO: Redo how the timestamps works. It's pretty bad at the moment.
-	var _now = new Date();
-	$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + data[0] + '"><aside><time>[' + _now.getHours() + ':' + _now.getMinutes() + ':'+ _now.getSeconds() + ']</time><span>' + data[1] + '</span></aside><p>' + data[2] + '</p></article>');
+	$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + data[0] + '"><aside><time>' + getTimeStamp() + '</time><span>' + data[1] + '</span></aside><p>' + data[2] + '</p></article>');
 	$("#consoleOutput article:not([data-channel='" + client.focusedChannel + "'])").hide();
 });
+
+function getTimeStamp () {
+	_declaredTime = new Date(),
+	_time = _declaredTime.getTime() / 1000,
+	_hours = (parseInt(_time / 3600) % 24) - (_declaredTime.getTimezoneOffset() / 60),
+	_minutes = parseInt(_time / 60) % 60,
+	_seconds = parseInt(_time % 60, 10),
+	_timeStamp = '[' + (_hours < 10 ? "0" + _hours : _hours) + ':' + (_minutes < 10 ? "0" + _minutes : _minutes) + ':' + (_seconds < 10 ? "0" + _seconds : _seconds) + ']';
+
+	return _timeStamp;
+}
 
 var irc = {
 	sendMessage: function (data) {
@@ -114,10 +165,9 @@ var irc = {
 				.replace(/"/g, '&quot;')
 				.replace(/'/g, "&apos;")
 				.replace(/</g, "&lt;")
-				.replace(/>/g, "&gt;"),
-				_now = new Date();
+				.replace(/>/g, "&gt;");
 			// Display it in the console.
-			$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + client.focusedChannel + '"><aside><time>[' + _now.getHours() + ':' + _now.getMinutes() + ':'+ _now.getSeconds() + ']</time><span>' + client.nickname + '</span></aside><p>' + _message + '</p></article>');
+			$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + client.focusedChannel + '"><aside><time>' + getTimeStamp() + '</time><span>' + client.nickname + '</span></aside><p>' + _message + '</p></article>');
 			$("#consoleOutput article:not([data-channel='" + client.focusedChannel + "'])").hide();
 		} else {
 			// It's a command.
@@ -146,7 +196,7 @@ var irc = {
 				case "me":
 					socket.emit('sendCommand', {type: "me", channel: client.focusedChannel, content: _message});
 					var _now = new Date();
-					$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + client.focusedChannel + '"><aside><time>[' + _now.getHours() + ':' + _now.getMinutes() + ':'+ _now.getSeconds() + ']</time><span>&gt;</span></aside><p>' + client.nickname + ' ' + _message + '</p></article>');
+					$('#consoleOutput').append('<article class="consoleMessage" data-channel="' + client.focusedChannel + '"><aside><time>' + getTimeStamp() + '</time><span>&gt;</span></aside><p>' + client.nickname + ' ' + _message + '</p></article>');
 					$("#consoleOutput article:not([data-channel='" + client.focusedChannel + "'])").hide();
 					break;
 				case "join":

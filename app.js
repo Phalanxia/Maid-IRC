@@ -48,18 +48,30 @@ function log (name, content) {
 app.post('/client', function (req, res) {
 	// I feel like this might be a messy way of doing it but it will be fine for now.
 
-	res.render("client", {server: req.body.server, name: req.body.name, channel: req.body.channel});
+	res.render("client", {
+		server: req.body.server,
+		name: req.body.name,
+		nicknamePassword: req.body.nicknamePassword,
+		channelPassword: req.body.channelPassword,
+		channel: req.body.channel
+	});
 
 	var client = new ircLib.Client(req.body.server, req.body.name, {
 		channels: [req.body.channel],
 		userName: req.body.name,
-		password: null,
+		password: req.body.nicknamePassword,
 		realName: "MaidIRC",
+		port: 6667,
 		floodProtection: true,
 		floodProtectionDelay: 1000,
 		autoRejoin: true,
 		autoConnect: true,
-		stripColors: true
+		secure: false,
+		selfSigned: false,
+		certExpired: false,
+		sasl: false,
+		stripColors: true,
+		messageSplit: 512
 	}),
 	_settings = {
 		nickname: req.body.name,
