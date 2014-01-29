@@ -33,6 +33,11 @@ app.get('/preview', function (req, res) {
 	res.render("client", {}); // Go to /preview to preview the client without connecting to IRC.
 });
 
+app.get('/new', function (req, res) {
+	res.render("new", {}); // Go to /preview to preview the client without connecting to IRC.
+});
+
+
 // Set up socket.io
 var io = require('socket.io').listen(server);
 io.set('log level', 1);
@@ -78,6 +83,7 @@ app.post('/client', function (req, res) {
 	}
 
 	io.sockets.on('connection', function (socket) {
+		console.log("Client connected from: " + socket.handshake.address.address + ":" + socket.handshake.address.port);
 		socket.emit('initialInfo', req.body.name);
 
 		// IRC Listeners
@@ -87,13 +93,11 @@ app.post('/client', function (req, res) {
 		});
 
 		client.addListener('names', function (data) {
-			console.log("names: " + data);
 			// This happens every time the client joins a channel so I will use this for sending channel data to the client.
 			socket.emit('ircInfo', client.chans);
 		});
 
 		client.addListener('message', function (from, to, message) {
-			console.log(to + ' => ' + from + ': ' + message);
 			socket.emit('recieveMessage', [to, from, message]);
 		});
 
@@ -146,9 +150,11 @@ app.post('/client', function (req, res) {
 			switch(data.type) {
 				case "join":
 					client.join(data.content);
+					socket.emit('ircInfo', client.chans);
 					break;
 				case "part":
 					client.part(data.content);
+					socket.emit('ircInfo', client.chans);
 					break;
 				case "me":
 					client.action(data.channel, data.content);
