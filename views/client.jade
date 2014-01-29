@@ -4,38 +4,37 @@ html(lang='en')
 		meta(charset='utf-8')
 		title Maid IRC: #{server}
 		link(rel='stylesheet', type='text/css', href='css/font-awesome.min.css')
+		link(rel='stylesheet', type='text/css', href='css/fonts.css')
 		link(rel='stylesheet', type='text/css', href='css/client.css')
 		script(src='/socket.io/socket.io.js')
 	body
 		#sidebar
 			header
 				h1
-					span.themecolor Maid
+					span Maid 
 					| IRC
-			nav
+			ul#channelList
+			footer
 				ul
-			footer#controlSystem
-				button#settingsButton.fa.fa-cog
-				button#shutdown.fa.fa-power-off
-				span#connectionStatus
-					| Connecting?
-		#rightSide
-			#console
-				#consoleMiddle
-					#consoleLeft
-						header#topic
-							input(type='text', placeholder='Topic Text Here', value='No channels selected?')
-						output#consoleOutput
-						#consoleInput
-							input(type='text', x-webkit-speech)
-							button
-								| Enter
-					#users
-						section#channelUserCount
-						ul
-						section#userEdit
-							i.fa.fa-circle
-							h1 #{name}
+					li.fa.fa-cog
+					li.fa.fa-power-off
+				span Disconnected
+		#channelConsole
+			header
+				input(type='text', placeholder='Topic', value='')
+			output
+			footer
+				input(type='text', x-webkit-speech)
+				button
+					| Enter
+		#users
+			header
+				p
+			ul
+			footer
+				button
+					i.fa.fa-circle
+				h1 #{name}
 	script(src='js/lib/jquery-2.1.0.min.js')
 	script(src='js/client.js')
 	script(src='js/ui.js')
