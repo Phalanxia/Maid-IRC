@@ -14,6 +14,16 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 	outline: 0;
 }
 
+::-moz-selection {
+    background: @brightBlue;
+    text-shadow: none;
+}
+
+::selection {
+    background: @brightBlue;
+    text-shadow: none;
+}
+
 html, body {
 	position: absolute;
 	width: 100%;
@@ -168,9 +178,10 @@ html, body {
 			height: 30px;
 			margin: 5px 0;
 			padding: 0 8px;
-			line-height: 30px;
 			border: none;
 			border-radius: 4px;
+			font-size: 14px;
+			line-height: 16px;
 		}
 	}
 	output {
@@ -242,8 +253,9 @@ html, body {
 			height: 40px;
 			padding: 0 5px;
 			background-color: #ffffff;
-			line-height: 40px;
 			border: none;
+			font-size: 16px;
+			line-height: 16px;
 		}
 		button {
 			flex: 0 1 auto;
@@ -287,6 +299,7 @@ html, body {
 			width: inherit;
 			line-height: 40px;
 			text-align: center;
+			font-size: 14px;
 			color: #efefef;
 		}
 	}
