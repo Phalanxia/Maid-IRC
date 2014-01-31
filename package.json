@@ -1,5 +1,5 @@
 {	"name": "webircclient",
-	"version": "0.0.1",
+	"version": "0.0.32",
 	"author": "Madison Tries (https://github.com/Phalanxia)",
 	"description": "A web IRC client based on node.js and socket.io.",
 	"repository": {
@@ -12,7 +12,7 @@
 	"dependencies": {
 		"irc": "~0.3.6",
 		"socket.io": "~0.9.16",
-		"jade": "~0.35.0",
+		"jade": "~1.1.5",
 		"express": "~3.4.3"
 	},
 	"license": "The MIT License (MIT)",
