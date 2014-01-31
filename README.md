@@ -1,6 +1,6 @@
 # ![Maid IRC](public/img/logo.png)
 
-===
+==============
 
 A web IRC client based on node.js and socket.io
 
