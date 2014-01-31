@@ -1,5 +1,5 @@
 {	"name": "webircclient",
-	"version": "0.0.32",
+	"version": "0.0.3",
 	"author": "Madison Tries (https://github.com/Phalanxia)",
 	"description": "A web IRC client based on node.js and socket.io.",
 	"repository": {
