@@ -2,6 +2,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 // Varibles
 @themeColor: #52C1FF;
+@darkBlue: #182432;
 
 *:focus {
 	outline: none;
@@ -16,8 +17,50 @@ html, body {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	font-family: Arial;
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
 	background: #fafbfb;
+}
+
+a, a:visited {
+	text-decoration: none;
+	color: @themeColor;
+}
+
+a:hover{ 
+	text-decoration: underline;
+	color: @themeColor;
+}
+
+a:active {
+	text-decoration: none;
+	color: @darkBlue;
+}
+
+#ieBad {
+	position: absolute;
+	top: 32px;
+	left: 0;
+	right: 0;
+	width: 640px;
+	margin: 0 auto;
+	padding: 16px;
+	background-color: #fdf7f7;
+	border: 1px solid #d1d1d1;
+	border-left: 4px solid #903c3c;
+	border-radius: 4px;
+	h4 {
+		color: #903C3C;
+		font-size: 22px;
+		padding: 0 0 4px 0;
+	}
+	p {
+		color: #1b1b1b;
+		font-size: 14px;
+		line-height: 16px;
+		a {
+
+		}
+	}
 }
 
 form {
@@ -36,28 +79,20 @@ form {
 		display: block;
 		width: inherit;
 		height: 50px;
-		color: #9e9e9e;
-		font-family: visitor;
-		font-size: 24px;
+		color: @themeColor;
+		font-size: 23px;
 		font-weight: 200;
 		line-height: 40px;
 		text-align: center;
+		text-shadow: 1px 1px #ffffff;
 		-webkit-font-smoothing: subpixel-antialiased;
-		&:after {
-			position: relative;
-			top: 10px;
-			left: -32px;
-			margin: 0 -24px 0 0;
-			content: "Alpha";
-			font-size: 10px;
-			color: @themeColor;
-			background: none;
-			padding: 2px;
-			border-radius: 2px;
-		}
 		span {
-			color: @themeColor;
+			font-weight: 800;
+			color: @darkBlue;
 		}
+	}
+	section {
+		position: relative;
 	}
 	section:not(.password) {
 		display: inline-block;
@@ -66,6 +101,8 @@ form {
 		background: #ffffff;
 		border-radius: 4px;
 		border: 1px solid #d1d1d1;
+		-webkit-transition: all ease-in-out 0.15s;
+		transition: border-color ease-in-out 0.15s;
 		i {
 			float: left;
 			width: 16px;
@@ -114,9 +151,7 @@ form {
 			}
 		}
 	}
-	section {
-		position: relative;
-	}
+	// For the special input with the triangle thingy
 	section .nipple {
 		position: absolute;
 		top: -10px;
@@ -165,13 +200,13 @@ form {
 		&:hover {
 			cursor: pointer;
 			background-color: @themeColor;
-			color: #1b1b1b;
+			color: #fafbfb;
 		}
 		&:active {
-			opacity: 0.8;
-			height: 42px;
-			margin: 2px 0 0 0;
-			box-shadow: inset 0 -2px 0 rgba(10, 10, 10, 0.5);
+			cursor: pointer;
+			background-color: @themeColor;
+			box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
+			color: #fafbfb;
 		}
 	}
 }
