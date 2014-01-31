@@ -89,7 +89,7 @@ socket.on('ircInfo', function (data) {
 
 	// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
 	var _userList = [],
-		_opCount;
+		_opCount = 0;
 	
 	for (var k in client.channels[client.focusedChannel].users) { 
 		_userList.push(k);
@@ -98,8 +98,9 @@ socket.on('ircInfo', function (data) {
 	for (var i = 0; i < _userList.length; i++) {
 		$('#users ul').append('<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
 
-		if (client.channels[client.focusedChannel].users[_userList[i]] !== '') {
-			_opCount = _opCount += 1;
+		// Get the op count.
+		if (client.channels[client.focusedChannel].users[_userList[i]] === "@" || client.channels[client.focusedChannel].users[_userList[i]] === "~") {
+			_opCount = _opCount+=1;
 		}
 	}
 
@@ -129,7 +130,6 @@ $('#sidebar > ul').on('click', 'li', function () {
 	for (var i = 0; i < _userList.length; i++) {
 		$('#users ul').append('<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
 
-		// Todo: Make this actually get the number of ops and just not he number of people who have a non blank.... permission??? I really need to figure out what it's called.
 		// Get the op count.
 		if (client.channels[client.focusedChannel].users[_userList[i]] === "@" || client.channels[client.focusedChannel].users[_userList[i]] === "~") {
 			_opCount = _opCount+=1;
@@ -165,6 +165,13 @@ function displayMessage (nameChar, message, channel) {
 	if (channel == null) {
 		channel = client.focusedChannel;
 	}
+
+	function linkify(input) {
+		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		return input.replace(exp,"<a href='$1' target='_blank'>$1</a>");
+	}
+
+	message = linkify(message);
 
 	$('#channelConsole output').append('<article class="consoleMessage" data-channel="' + channel.toLowerCase() + '"><aside><time>' + _timeStamp + '</time><span>' + nameChar + '</span></aside><p>' + message + '</p></article>');
 
@@ -211,7 +218,7 @@ var irc = {
 			switch (command) {
 				case "me":
 					socket.emit('sendCommand', {type: "me", channel: client.focusedChannel, content: _message});
-					displayMessage("&gt;", _message);
+					displayMessage("&raquo;", client.nickname + " " + _message);
 					break;
 				case "join":
 					var _channels = _message.split(" ");

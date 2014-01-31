@@ -1,16 +1,26 @@
-!!! 5
+doctype html
 html(lang='en')
 	head
 		meta(charset='utf-8')
 		title Maid IRC
 		link(rel='stylesheet', type='text/css', href='css/font-awesome.min.css')
+		link(rel='stylesheet', type='text/css', href='css/fonts.css')
 		link(rel='stylesheet', type='text/css', href='css/index.css')
 		script(src='/socket.io/socket.io.js')
 	body
+		//if lt IE 8
+			#ieBad
+				h4 Uh oh!
+				p
+					| Sorry but the version of Internet Explorer in which you are using is out-of-date and not compatible with Maid IRC. Please update Internet Explorer or install a browser such as 
+					a(href='//google.com/chrome/‎') Google Chrome
+					|  or 
+					a(href='//www.mozilla.org/en-US/firefox/new/') Firefox
+					| .
 		form(action='/client', method='post')
 			h1
 				span Maid
-				| IRC
+				|  IRC
 			section
 				i(class='fa fa-sitemap')
 				input(id='server', type='text', placeholder='Server', name='server' required)

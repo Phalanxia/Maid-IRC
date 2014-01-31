@@ -125,12 +125,25 @@ table {
   outline: 0;
 }
 ::-moz-selection {
-  background: #1ba8ed;
+  background: #52c1ff;
   text-shadow: none;
 }
 ::selection {
-  background: #1ba8ed;
+  background: #52c1ff;
   text-shadow: none;
+}
+a,
+a:visited {
+  text-decoration: none;
+  color: #52c1ff;
+}
+a:hover {
+  text-decoration: underline;
+  color: #52c1ff;
+}
+a:active {
+  text-decoration: none;
+  color: #52c1ff;
 }
 html,
 body {
@@ -157,11 +170,12 @@ body {
   order: 0;
   width: inherit;
   height: 40px;
-  background-color: #1ba8ed;
+  background-color: #52c1ff;
 }
 #sidebar header h1 {
-  width: 100px;
-  text-align: center;
+  width: 186px;
+  padding: 0 0 0 14px;
+  text-align: left;
   line-height: 40px;
   color: #efefef;
 }
@@ -175,6 +189,7 @@ body {
   width: inherit;
 }
 #sidebar ul#channelList li {
+  position: relative;
   width: inherit;
   height: 40px;
   line-height: 40px;
@@ -196,7 +211,7 @@ body {
   padding: 0 2px;
   text-align: center;
   margin: 10px 16px 0 10px;
-  background: #1ba8ed;
+  background: #52c1ff;
   content: attr(data-do);
   border-radius: 4px;
   font-size: 12px;
@@ -209,8 +224,15 @@ body {
 #sidebar ul#channelList li span {
   font-size: 14px;
 }
-#sidebar ul#channelList li.focusedChannel {
-  box-shadow: 0 -4px 0 0 #1ba8ed;
+#sidebar ul#channelList li.focusedChannel:before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: -7px;
+  height: 0px;
+  border-top: 7px solid transparent;
+  border-left: 7px solid #213246;
+  border-bottom: 7px solid transparent;
 }
 #sidebar footer {
   flex: 0 1 auto;
@@ -223,7 +245,7 @@ body {
   display: inline-block;
 }
 #sidebar footer ul li:first-child {
-  margin: 5px 0 5px 5px;
+  margin: 5px 0 5px 7px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   border-right: 2px solid #182432;
@@ -250,7 +272,7 @@ body {
   background-color: #903c3c;
   line-height: 30px;
   padding: 0 5px;
-  margin: 5px;
+  margin: 5px 7px 5px 5px;
   border-radius: 4px;
   font-size: 14px;
   color: #d1d1d1;
@@ -268,7 +290,7 @@ body {
   flex-flow: row wrap;
   width: 100%;
   height: 40px;
-  background-color: #1ba8ed;
+  background-color: #52c1ff;
 }
 #channelConsole header input {
   flex: 1 1 auto;
@@ -315,7 +337,7 @@ body {
   float: right;
   padding: 0 8px 0 0;
   font-size: 14px;
-  color: #1ba8ed;
+  color: #52c1ff;
 }
 #channelConsole output article p {
   margin: 0 0 0 220px;
@@ -360,15 +382,21 @@ body {
   margin: 5px;
   width: 80px;
   background: none;
-  border: 1px solid #1ba8ed;
+  border: 1px solid #52c1ff;
   border-radius: 4px;
-  color: #1ba8ed;
+  color: #52c1ff;
   font-size: 14px;
   line-height: 30px;
 }
 #channelConsole footer button:hover {
   cursor: pointer;
-  background-color: #1ba8ed;
+  background-color: #52c1ff;
+  color: white;
+}
+#channelConsole footer button:active {
+  cursor: pointer;
+  background-color: #52c1ff;
+  box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
   color: white;
 }
 #users {
@@ -384,7 +412,7 @@ body {
   flex: 0 1 auto;
   order: 0;
   height: 40px;
-  background-color: #1ba8ed;
+  background-color: #52c1ff;
 }
 #users header p {
   width: inherit;
@@ -408,7 +436,7 @@ body {
   display: inline-block;
   width: 16px;
   padding: 0 8px;
-  color: #1ba8ed;
+  color: #52c1ff;
 }
 #users footer {
   flex: 0 1 auto;
@@ -431,5 +459,5 @@ body {
   float: right;
   padding: 0 14px 0 0;
   line-height: 40px;
-  color: #1ba8ed;
+  color: #52c1ff;
 }
