@@ -145,9 +145,9 @@ $('#sidebar > ul').on('click', 'li', function () {
 	$('#users header p').empty().html(_opCount + " ops, " + Object.keys(client.channels[client.focusedChannel].users).length + " total");
 });
 
-function displayMessage (nameChar, message, channel) {
+function displayMessage (data) {
 	// Filter mean characters out and replace them with nice ones. We don't want mean characters.
-	var message = message
+	var message = data.message
 		.replace(/&/g, "&amp;")
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, "&apos;")
@@ -155,31 +155,79 @@ function displayMessage (nameChar, message, channel) {
 		.replace(/>/g, "&gt;");
 
 	// Create the timestamp.
-	_declaredTime = new Date(),
-	_time = _declaredTime.getTime() / 1000,
-	_hours = (parseInt(_time / 3600) % 24) - (_declaredTime.getTimezoneOffset() / 60),
-	_minutes = parseInt(_time / 60) % 60,
-	_seconds = parseInt(_time % 60, 10),
-	_timeStamp = '[' + (_hours < 10 ? "0" + _hours : _hours) + ':' + (_minutes < 10 ? "0" + _minutes : _minutes) + ':' + (_seconds < 10 ? "0" + _seconds : _seconds) + ']';
 
-	if (channel == null) {
-		channel = client.focusedChannel;
+	var messageTime = new Date(),
+		hour = messageTime.getHours(),
+		minutes = messageTime.getMinutes(),
+		seconds = messageTime.getSeconds();
+
+	function bakaTime (time) {
+		return ("0" + time).slice(-2);
 	}
 
+	var timestamp = "[" + bakaTime(hour) + ":" + bakaTime(minutes) + ":" + bakaTime(seconds) + "]";
+
+	// Linkify raw links.
 	function linkify(input) {
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-		return input.replace(exp,"<a href='$1' target='_blank'>$1</a>");
+		return input.replace(exp, "<a href='$1' target='_blank'>$1</a>");
 	}
 
 	message = linkify(message);
+	
+	// If there is no specified channel just use the one the client is currently focused on.
+	if (data.channel == null) {
+		data.channel = client.focusedChannel;
+	}
 
-	$('#channelConsole output').append('<article class="consoleMessage" data-channel="' + channel.toLowerCase() + '"><aside><time>' + _timeStamp + '</time><span>' + nameChar + '</span></aside><p>' + message + '</p></article>');
+	$('#channelConsole output').append('<article class="consoleMessage" data-messageType="' + data.messageType + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span>' + data.head + '</span></aside><p>' + message + '</p></article>');
 
 	$("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").hide();
 }
 
 socket.on('recieveMessage', function (data) {
-	displayMessage(data[1], data[2], data[0]);
+	switch (data.type) {
+		case "message":
+			displayMessage({
+				messageType: "message",
+				head: data.nick,
+				channel: data.channel,
+				message: data.message
+			});
+			break;
+		case "join":
+			displayMessage({
+				messageType: "join",
+				head: "*",
+				channel: data.channel,
+				message: data.nick + " (" + data.info.host + ") has joined " + data.channel
+			});
+			break;
+		case "part":
+			displayMessage({
+				messageType: "part",
+				head: "*",
+				channel: data.channel,
+				message: data.nick + " (" + data.info.host + ") has left " + data.channel
+			});
+			break;
+		case "quit":
+			displayMessage({
+				messageType: "quit",
+				head: "*",
+				channel: data.channel,
+				message: data.nick + " (" + data.info.host + ") has quit " + data.channels + " (" + data.reason + ")"
+			});
+			break;
+		case "notice":
+			displayMessage({
+				messageType: "notice",
+				head: "-" + data.nick + "-",
+				channel: data.channel,
+				message: data.message
+			});
+			break;
+	}
 });
 
 var irc = {
@@ -189,9 +237,12 @@ var irc = {
 		} else if (!data.startsWith("/")) {
 			// It's not a command.
 			socket.emit('sendMessage', [client.focusedChannel, data]);
-			// HTML to plaintext... kinda.
-			// Display it in the console.
-			displayMessage(client.nickname, data);
+			// Display it in the client.
+			displayMessage({
+				messageType: "message",
+				head: client.nickname,
+				message: data
+			});
 		} else {
 			// It's a command.
 			data = data.substring(1, data.length);
@@ -218,7 +269,11 @@ var irc = {
 			switch (command) {
 				case "me":
 					socket.emit('sendCommand', {type: "me", channel: client.focusedChannel, content: _message});
-					displayMessage("&raquo;", client.nickname + " " + _message);
+					displayMessage({
+						messageType: "action",
+						head: "&raquo;",
+						message: client.nickname + " " + _message
+					});
 					break;
 				case "join":
 					var _channels = _message.split(" ");

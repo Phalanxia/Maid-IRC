@@ -97,20 +97,56 @@ app.post('/client', function (req, res) {
 			socket.emit('ircInfo', client.chans);
 		});
 
-		client.addListener('message', function (from, to, message) {
-			socket.emit('recieveMessage', [to, from, message]);
+		client.addListener('message', function (nick, to, text, message) {
+			socket.emit('recieveMessage', {
+				type: "message",
+				nick: nick,
+				channel: to,
+				message: text
+			});
 		});
 
-		client.addListener('join', function (from, to, message) {
-			data = ['join', from, to, message];
-			socket.emit('join/part', data);
+		client.addListener('join', function (channel, nick, message) {
+			socket.emit('recieveMessage', {
+				type: "join",
+				nick: nick,
+				channel: channel,
+				message: message,
+				info: message
+			});
 			// Send channel info to the client.
 			socket.emit('ircInfo', client.chans);
 		});
 
-		client.addListener('part', function (from, to, message) {
-			data = ['part', from, to, message];
-			socket.emit('join/part', data);
+		client.addListener('part', function (channel, nick, message) {
+			socket.emit('recieveMessage', {
+				type: "part",
+				nick: nick,
+				channel: channel,
+				message: message
+			});
+			// Send channel info to the client.
+			socket.emit('ircInfo', client.chans);
+		});
+
+		client.addListener('quit', function (nick, reason, channels, message) {
+			socket.emit('recieveMessage', {
+				type: "quit",
+				nick: nick,
+				channel: channels,
+				message: reason
+			});
+			// Send channel info to the client.
+			socket.emit('ircInfo', client.chans);
+		});
+
+		client.addListener('notice', function (nick, to, text, message) {
+			socket.emit('recieveMessage', {
+				type: "notice",
+				nick: nick,
+				channel: to,
+				message: text
+			});
 			// Send channel info to the client.
 			socket.emit('ircInfo', client.chans);
 		});
