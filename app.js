@@ -147,8 +147,6 @@ app.post('/client', function (req, res) {
 				channel: to,
 				message: text
 			});
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
 		});
 
 		client.addListener('error', function (message) {
@@ -159,7 +157,7 @@ app.post('/client', function (req, res) {
 		
 		// Recieved
 		socket.on('shutdown', function (data) {
-			//client.disconnect("Quit");
+			client.disconnect("Quit");
 			setTimeout(function () {
 				console.log('Exiting.');
 				process.exit(0);
@@ -170,8 +168,6 @@ app.post('/client', function (req, res) {
 			console.log("Client disconnected");
 			client.disconnect("Quit");
 		});
-
-		// IRC Emit
 
 		// IRC Recieve
 		socket.on('sendServer', function (data) {
@@ -193,6 +189,9 @@ app.post('/client', function (req, res) {
 					socket.emit('ircInfo', client.chans);
 					break;
 				case "me":
+					client.action(data.channel, data.content);
+					break;
+				case "notice":
 					client.action(data.channel, data.content);
 					break;
 			}

@@ -249,7 +249,7 @@ var irc = {
 
 			var command = data.split(" ")[0],
 				_message = data.substring(command.length+=1, data.length),
-				commandList = ['me', 'join', 'part', 'whois'],
+				commandList = ['me', 'join', 'part', 'whois', 'notice'],
 				commandFound = false;
 
 			// Check to see if the command is in commandList.
@@ -268,7 +268,12 @@ var irc = {
 			// It is a command so lets run it!
 			switch (command) {
 				case "me":
-					socket.emit('sendCommand', {type: "me", channel: client.focusedChannel, content: _message});
+					socket.emit('sendCommand', {
+						type: "me",
+						channel:
+						client.focusedChannel,
+						content: _message
+					});
 					displayMessage({
 						messageType: "action",
 						head: "&raquo;",
@@ -278,14 +283,32 @@ var irc = {
 				case "join":
 					var _channels = _message.split(" ");
 					for (i = 0; i < _channels.length; i+=1) {
-						socket.emit('sendCommand', {type: "join", content: _channels[i]});
+						socket.emit('sendCommand', {
+							type: "join",
+							content: _channels[i]
+						});
 					}
 					break;
 				case "part":
 					var _channels = _message.split(" ");
 					for (i = 0; i < _channels.length; i+=1) {
-						socket.emit('sendCommand', {type: "part", content: _channels[i]});
+						socket.emit('sendCommand', {
+							type: "part",
+							content: _channels[i]
+						});
 					}
+					break;
+				case "notice":
+					socket.emit('sendCommand', {
+						type: "notice",
+						channel: client.focusedChannel,
+						content: _message
+					});
+					displayMessage({
+						messageType: "notice",
+						head: "-" + client.nickname + "-",
+						message: client.nickname + " " + _message
+					});
 					break;
 			}
 		}
