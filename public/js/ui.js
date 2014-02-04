@@ -9,3 +9,7 @@ $('button#shutdown').click(function () {
 		socket.emit('shutdown', "Ye");
 	}
 });
+
+$('#sidebar footer ul li:nth-of-type(1), #settings header button').click(function () {
+	$('#pageCover, #settings').toggle();
+});

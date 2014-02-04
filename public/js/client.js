@@ -7,6 +7,7 @@ var client = {
 	focusedChannel: "",
 	channels: [],
 	nickname: "",
+	highlights: [],
 	channelList: ""
 }
 
@@ -28,6 +29,8 @@ var socket = io.connect('http://' + client.server + ':4848', {
  *	recieveMessage
  *		[to, from, message]
  *		Recieve a message from IRC.
+ *	initialInfo
+ *	ircInfo
  *
  * Socket.io EMIT list
  *  sendMessage
@@ -63,6 +66,7 @@ socket.on('disconnect', function () {
 // IRC
 socket.on('initialInfo', function (data) {
 	client.nickname = data;
+	client.highlights[0] = client.nickname;
 });
 
 socket.on('ircInfo', function (data) {
@@ -71,15 +75,16 @@ socket.on('ircInfo', function (data) {
 
 	$('#sidebar > ul').empty();
 	function updateChannelMenu (element, index) {
-		$('#sidebar > ul').append('<li data-do=""><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
+		$('#sidebar > ul').append('<li data-alert=""><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
 	}
 
 	client.channelList.forEach(updateChannelMenu);
 	
 	if (client.focusedChannel == '') {
 		client.focusedChannel = client.channelList[0].toLowerCase();
-		$('#sidebar > ul li:nth-of-type(1)').addClass('focusedChannel');
 	}
+
+	$('#sidebar > ul li:nth-of-type(1)').addClass('focusedChannel');
 
 	$('#topic input')
 		.val('')
@@ -94,7 +99,7 @@ socket.on('ircInfo', function (data) {
 	for (var k in client.channels[client.focusedChannel].users) { 
 		_userList.push(k);
 	}
-	
+
 	for (var i = 0; i < _userList.length; i++) {
 		$('#users ul').append('<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
 
@@ -113,25 +118,27 @@ $('#sidebar > ul').on('click', 'li', function () {
 	client.focusedChannel = client.channelList[$index].toLowerCase();
 	
 	$('#channelConsole header input').val(client.channels[client.channelList[$index]].topic);
-	$('#sidebar ul li').removeClass('focusedChannel');
-	$('#sidebar ul li:nth-of-type(' + ($index+=1) + ')').addClass('focusedChannel');
+	$('#sidebar > ul li').removeClass('focusedChannel');
+	$('#sidebar > ul li:nth-of-type(' + ($index+=1) + ')').addClass('focusedChannel');
 	$('#users ul').empty();
 
 	// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
 
 	// Set up userlist.
-	var _userList = [],
-		_opCount = 0;
+	var _channel = client.channels[client.focusedChannel],
+		_userList = [],
+		_opCount = 0,
+		_users = _channel.users;
 	
-	for (var k in client.channels[client.focusedChannel].users) { 
+	for (var k in _users) { 
 		_userList.push(k);
 	}
 	
 	for (var i = 0; i < _userList.length; i++) {
-		$('#users ul').append('<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
+		$('#users ul').append('<li><span>' + _users[_userList[i]] + '</span>' + _userList[i] + '</li>');
 
 		// Get the op count.
-		if (client.channels[client.focusedChannel].users[_userList[i]] === "@" || client.channels[client.focusedChannel].users[_userList[i]] === "~") {
+		if (_users[_userList[i]] === "@" || _users[_userList[i]] === "~") {
 			_opCount = _opCount+=1;
 		}
 	}
@@ -142,7 +149,7 @@ $('#sidebar > ul').on('click', 'li', function () {
 	$("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").hide();
 
 	// Get user count
-	$('#users header p').empty().html(_opCount + " ops, " + Object.keys(client.channels[client.focusedChannel].users).length + " total");
+	$('#users header p').empty().html(_opCount + " ops, " + Object.keys(_channel.users).length + " total");
 });
 
 function displayMessage (data) {
@@ -174,7 +181,20 @@ function displayMessage (data) {
 	}
 
 	message = linkify(message);
-	
+
+	var highlightMessageTypes = ["message, action, notice"];
+
+	if (data.messageType == "message" ||	data.messageType == "action" ||	data.messageType == "notice") {
+		function highlightNick(name, input) {
+			var exp = new RegExp('\\b(' + name + ')', 'ig');
+			return input.replace(exp, '<span class="highlighted">$1</span>');
+		}
+
+		for (var i = 0; i < client.highlights.length; i++) {
+			message = highlightNick(client.highlights[i], message);
+		}
+	}
+
 	// If there is no specified channel just use the one the client is currently focused on.
 	if (data.channel == null) {
 		data.channel = client.focusedChannel;
@@ -253,7 +273,7 @@ var irc = {
 				commandFound = false;
 
 			// Check to see if the command is in commandList.
-			for (i = 0; i < commandList.length && !commandFound; i++) {
+			for (var i = 0; i < commandList.length && !commandFound; i++) {
 				if (commandList[i] == command) {
 					commandFound = true;
 				}
@@ -261,7 +281,11 @@ var irc = {
 
 			// It's not a command.
 			if (!commandFound) {
-				alert('Invalid comamnd.');
+				displayMessage({
+					messageType: "log",
+					head: "**",
+					message: 'Sorry, "' + command + '" is not a recognized command.'
+				});
 				return;
 			}
 
@@ -270,8 +294,7 @@ var irc = {
 				case "me":
 					socket.emit('sendCommand', {
 						type: "me",
-						channel:
-						client.focusedChannel,
+						channel: client.focusedChannel,
 						content: _message
 					});
 					displayMessage({
@@ -282,7 +305,7 @@ var irc = {
 					break;
 				case "join":
 					var _channels = _message.split(" ");
-					for (i = 0; i < _channels.length; i+=1) {
+					for (var i = 0; i < _channels.length; i+=1) {
 						socket.emit('sendCommand', {
 							type: "join",
 							content: _channels[i]
@@ -291,7 +314,7 @@ var irc = {
 					break;
 				case "part":
 					var _channels = _message.split(" ");
-					for (i = 0; i < _channels.length; i+=1) {
+					for (var i = 0; i < _channels.length; i+=1) {
 						socket.emit('sendCommand', {
 							type: "part",
 							content: _channels[i]
