@@ -1,10 +1,10 @@
-{	"name": "webircclient",
-	"version": "0.0.3",
+{	"name": "maidirc",
+	"version": "0.0.4",
 	"author": "Madison Tries (https://github.com/Phalanxia)",
 	"description": "A web IRC client based on node.js and socket.io.",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Phalanxia/Web-IRC-client.git"
+		"url": "https://github.com/Phalanxia/Maid-IRC.git"
 	},
 	"keywords": [
 		"IRC"
@@ -22,5 +22,5 @@
 	"scripts": {
 		"start": "node app.js"
 	},
-	"bugs": "https://github.com/Phalanxia/Web-IRC-client/issues"
+	"bugs": "https://github.com/Phalanxia/Maid-IRC/issues"
 }

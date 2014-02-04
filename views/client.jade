@@ -11,6 +11,16 @@ html(lang='en')
 		link(rel='stylesheet', type='text/css', href='css/client.css')
 		script(src='/socket.io/socket.io.js')
 	body
+		#pageCover
+		#settings
+			header
+				h1 Settings
+				button &times;
+			nav
+				ul
+					li IRC
+					li Interface
+					li About
 		#sidebar
 			header
 				h1
@@ -28,7 +38,7 @@ html(lang='en')
 			output
 			footer
 				input(type='text', x-webkit-speech)
-				button Enter
+				button.btn Enter
 		#users
 			header
 				p

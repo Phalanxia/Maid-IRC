@@ -33,11 +33,6 @@ app.get('/preview', function (req, res) {
 	res.render("client", {}); // Go to /preview to preview the client without connecting to IRC.
 });
 
-app.get('/new', function (req, res) {
-	res.render("new", {}); // Go to /preview to preview the client without connecting to IRC.
-});
-
-
 // Set up socket.io
 var io = require('socket.io').listen(server);
 io.set('log level', 1);
