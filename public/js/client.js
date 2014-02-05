@@ -9,13 +9,7 @@ var client = {
 	nickname: "",
 	highlights: [],
 	channelList: ""
-}
-
-if (typeof String.prototype.startsWith != 'function') { // Thanks to http://stackoverflow.com/a/646643/2152712
-	String.prototype.startsWith = function (str) {
-		return this.indexOf(str) == 0;
-	};
-}
+};
 
 var socket = io.connect('http://' + client.server + ':4848', {
 	'reconnect': true,
@@ -38,8 +32,7 @@ var socket = io.connect('http://' + client.server + ':4848', {
  *		Sends a message to a channel.
  *  sendCommand
  *		{type, content}
- * 		Send a command.
- * 
+ *		Send a command.
 **/
 
 socket.on('connect', function () {
@@ -80,7 +73,7 @@ socket.on('ircInfo', function (data) {
 
 	client.channelList.forEach(updateChannelMenu);
 	
-	if (client.focusedChannel == '') {
+	if (client.focusedChannel === '') {
 		client.focusedChannel = client.channelList[0].toLowerCase();
 	}
 
@@ -184,11 +177,11 @@ function displayMessage (data) {
 
 	var highlightMessageTypes = ["message, action, notice"];
 
-	if (data.messageType == "message" ||	data.messageType == "action" ||	data.messageType == "notice") {
-		function highlightNick(name, input) {
+	if (data.messageType == "message" || data.messageType == "action" || data.messageType == "notice") {
+		var highlightNick = function (name, input) {
 			var exp = new RegExp('\\b(' + name + ')', 'ig');
 			return input.replace(exp, '<span class="highlighted">$1</span>');
-		}
+		};
 
 		for (var i = 0; i < client.highlights.length; i++) {
 			message = highlightNick(client.highlights[i], message);
@@ -196,7 +189,7 @@ function displayMessage (data) {
 	}
 
 	// If there is no specified channel just use the one the client is currently focused on.
-	if (data.channel == null) {
+	if (typeof data.channel === 'undefined') {
 		data.channel = client.focusedChannel;
 	}
 
@@ -254,7 +247,7 @@ var irc = {
 	sendMessage: function (data) {
 		if (data === '') {
 			return;
-		} else if (!data.startsWith("/")) {
+		} else if (data.substring(0, 1) != "/") {
 			// It's not a command.
 			socket.emit('sendMessage', [client.focusedChannel, data]);
 			// Display it in the client.
@@ -305,7 +298,7 @@ var irc = {
 					break;
 				case "join":
 					var _channels = _message.split(" ");
-					for (var i = 0; i < _channels.length; i+=1) {
+					for (i = 0; i < _channels.length; i+=1) {
 						socket.emit('sendCommand', {
 							type: "join",
 							content: _channels[i]
@@ -314,7 +307,7 @@ var irc = {
 					break;
 				case "part":
 					var _channels = _message.split(" ");
-					for (var i = 0; i < _channels.length; i+=1) {
+					for (i = 0; i < _channels.length; i+=1) {
 						socket.emit('sendCommand', {
 							type: "part",
 							content: _channels[i]
@@ -338,7 +331,7 @@ var irc = {
 
 		$('#channelConsole footer input')[0].value = "";
 	}
-}
+};
 
 // Press enter in chat box
 $('#channelConsole footer input').keyup(function (e) {
