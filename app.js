@@ -75,7 +75,7 @@ app.post('/client', function (req, res) {
 	}),
 	_settings = {
 		nickname: req.body.name,
-	}
+	};
 
 	io.sockets.on('connection', function (socket) {
 		console.log("Client connected from: " + socket.handshake.address.address + ":" + socket.handshake.address.port);
