@@ -175,9 +175,16 @@ function displayMessage (data) {
 
 	message = linkify(message);
 
-	var highlightMessageTypes = ["message, action, notice"];
+	var highlightMessageTypes = ["message", "action", "notice"],
+		isInHighlightList = false;
 
-	if (data.messageType == "message" || data.messageType == "action" || data.messageType == "notice") {
+	for (var i = 0; i < highlightMessageTypes.length && !isInHighlightList; i+=1) {
+		if (highlightMessageTypes[i] == data.messageType) {
+			isInHighlightList = true;
+		}
+	}
+
+	if (isInHighlightList) {
 		var highlightNick = function (name, input) {
 			var exp = new RegExp('\\b(' + name + ')', 'ig');
 			return input.replace(exp, '<span class="highlighted">$1</span>');
@@ -298,7 +305,7 @@ var irc = {
 					break;
 				case "join":
 					var _channels = _message.split(" ");
-					for (i = 0; i < _channels.length; i+=1) {
+					for (var i = 0; i < _channels.length; i+=1) {
 						socket.emit('sendCommand', {
 							type: "join",
 							content: _channels[i]
@@ -307,7 +314,7 @@ var irc = {
 					break;
 				case "part":
 					var _channels = _message.split(" ");
-					for (i = 0; i < _channels.length; i+=1) {
+					for (var i = 0; i < _channels.length; i+=1) {
 						socket.emit('sendCommand', {
 							type: "part",
 							content: _channels[i]
