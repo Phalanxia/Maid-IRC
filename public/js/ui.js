@@ -11,23 +11,5 @@ $('button#shutdown').click(function () {
 });
 
 $('#sidebar footer ul li:nth-of-type(1), #settings header button').click(function () {
-	if ($('#settings').css("opacity") === 0) {
-		$('#pageCover, #settings').show();
-		$('#settings, #pageCover').css({
-			"opacity": "1"
-		});
-		$('#settings').css({
-			"top": "50%"
-		});
-	} else {
-		$('#settings, #pageCover').css({
-			"opacity": "0"
-		});
-		$('#settings').css({
-			"top": "0%"
-		});
-		setTimeout(function () {
-			$('#pageCover, #settings').hide();
-		}, 1000);
-	}
+	$("#pageCover, #settings").toggleClass("displayed");	
 });
