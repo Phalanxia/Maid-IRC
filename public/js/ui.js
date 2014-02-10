@@ -2,14 +2,20 @@ $(window).bind('beforeunload', function () {
 	return "You have attempted to leave this page. Doing so will disconnect you from IRC.";
 });
 
-$('button#shutdown').click(function () {
-	if (confirm("Are you sure you want to shutdown?")) {
-		console.log("bye~");
-		$(window).unbind("beforeunload");
-		socket.emit('shutdown', "Ye");
-	}
+$('#shutdown footer button:last-child').click(function () {
+	socket.emit('shutdown', "Kittens are kawaii.");
+	$(window).unbind("beforeunload");
+	window.location.href = document.location.origin;
 });
 
 $('#sidebar footer ul li:nth-of-type(1), #settings header button').click(function () {
-	$("#pageCover, #settings").toggleClass("displayed");	
+	$("#pageCover, #settings").toggleClass("displayed");
+});
+
+$('#sidebar footer ul li:nth-of-type(2), #shutdown footer button:first-child').click(function () {
+	$("#pageCover, #shutdown").toggleClass("displayed");
+});
+
+$("#pageCover").click(function () {
+	$("#pageCover, .modal").removeClass("displayed");
 });

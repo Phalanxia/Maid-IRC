@@ -48,7 +48,7 @@ socket.on('connect', function () {
 socket.on('disconnect', function () {
 	client.status.connection = false;
 	client.status.pastDisconnect = true;
-	
+
 	$('#sidebar footer span')
 		.css('background-color', '#903C3C')
 		.html("Disconnected");
@@ -72,7 +72,7 @@ socket.on('ircInfo', function (data) {
 	}
 
 	client.channelList.forEach(updateChannelMenu);
-	
+
 	if (client.focusedChannel === '') {
 		client.focusedChannel = client.channelList[0].toLowerCase();
 	}
@@ -88,8 +88,8 @@ socket.on('ircInfo', function (data) {
 	// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
 	var _userList = [],
 		_opCount = 0;
-	
-	for (var k in client.channels[client.focusedChannel].users) { 
+
+	for (var k in client.channels[client.focusedChannel].users) {
 		_userList.push(k);
 	}
 
@@ -109,7 +109,7 @@ socket.on('ircInfo', function (data) {
 $('#sidebar > ul').on('click', 'li', function () {
 	var $index = $('#sidebar > ul li').index(this);
 	client.focusedChannel = client.channelList[$index].toLowerCase();
-	
+
 	$('#channelConsole header input').val(client.channels[client.channelList[$index]].topic);
 	$('#sidebar > ul li').removeClass('focusedChannel');
 	$('#sidebar > ul li:nth-of-type(' + ($index+=1) + ')').addClass('focusedChannel');
@@ -122,11 +122,11 @@ $('#sidebar > ul').on('click', 'li', function () {
 		_userList = [],
 		_opCount = 0,
 		_users = _channel.users;
-	
-	for (var k in _users) { 
+
+	for (var k in _users) {
 		_userList.push(k);
 	}
-	
+
 	for (var i = 0; i < _userList.length; i++) {
 		$('#users ul').append('<li><span>' + _users[_userList[i]] + '</span>' + _userList[i] + '</li>');
 
@@ -342,9 +342,16 @@ var irc = {
 
 // Press enter in chat box
 $('#channelConsole footer input').keyup(function (e) {
-	if (e.keyCode == 13) {
-		irc.sendMessage($('#channelConsole footer input')[0].value);
+	switch (e.keyCode) {
+		case "9": // Tab
+			e.preventDefault();
+			alert("it worked");
+			break;
+		case "13":
+			irc.sendMessage($('#channelConsole footer input')[0].value);
+			break;
 	}
+
 });
 
 $('#channelConsole footer button').click(function () {

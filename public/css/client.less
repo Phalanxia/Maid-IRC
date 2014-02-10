@@ -29,7 +29,7 @@ a, a:visited {
 	color: @brightBlue;
 }
 
-a:hover{ 
+a:hover{
 	text-decoration: underline;
 	color: @brightBlue;
 }
@@ -77,7 +77,7 @@ html, body {
 
 	display: flex;
 	flex-flow: column wrap;
-	
+
 	width: 200px;
 	height: 100%;
 	background-color: @midBlue;
@@ -209,7 +209,7 @@ html, body {
 	header {
 		flex: 0 1 auto;
 		order: 0;
-	
+
 		display: flex;
 		flex-flow: row wrap;
 
@@ -283,7 +283,7 @@ html, body {
 	footer {
 		flex: 0 1 auto;
 		order: 2;
-	
+
 		display: flex;
 		flex-flow: row nowrap;
 
@@ -340,7 +340,7 @@ html, body {
 	ul {
 		flex: 1 1 auto;
 		order: 1;
-	
+
 		width: 199px;
 		border-left: 1px solid #d1d1d1;
 		li {
@@ -395,7 +395,7 @@ html, body {
 		-moz-transition: all 0.4s ease-in-out;
 }
 
-#settings {
+.modal {
 	z-index: 3;
 	position: absolute;
 	transition: all 0.4s ease-in-out;
@@ -406,14 +406,79 @@ html, body {
 	top: -50%;
 	left: 50%;
 	/* End */
+	transform: translate(-50%, -50%);
+		-webkit-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+}
+
+.modal.alert {
+	width: 364px;
+	height: 160px;
+	border-radius: 4px;
+	box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.5);
+	background-color: #efefef;
+	p {
+		display: block;
+		padding: 30px 0 0 0;
+		text-align: center;
+		color: #919191;
+		font-size: 16px;
+		font-weight: bold;
+		line-height: 18px;
+	}
+	footer {
+		position: absolute;
+		right: 0;
+		bottom: 40px;
+		left: 0;
+		width: 284px;
+		height: 42px;
+		margin: 0 auto;
+		border-bottom-left-radius: 3px;
+		border-bottom-right-radius: 3px;
+		button:first-child {
+			border: 1px solid @red;
+			color: @red;
+			margin: 0 40px 0 0;
+			&:active {
+				background-color: @red;
+			}
+		}
+		button:last-child {
+			border: 1px solid @green;
+			color: @green;
+			&:active {
+				background-color: @green;
+			}
+		}
+		button {
+			display: inline-block;
+			float: left;
+			width: 122px;
+			height: 42px;
+			border: none;
+			text-align: center;
+			line-height: 42px;
+			border-radius: 4px;
+			background: transparent;
+			color: #efefef;
+			&:hover {
+				cursor: pointer;
+			}
+			&:active {
+				box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
+				color: #efefef;
+			}
+		}
+	}
+}
+
+#settings {
 	background-color: #efefef;
 	width: 600px;
 	height: 400px;
 	border-radius: 4px;
 	box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.5);
-	transform: translate(-50%, -50%);
-		-webkit-transform: translate(-50%, -50%);
-		-moz-transform: translate(-50%, -50%);
 	header {
 		height: 40px;
 		width: 100%;
@@ -445,7 +510,7 @@ html, body {
 				border-top-right-radius: 4px;
 			}
 			&:active {
-				background-color: darken(@brightBlue, 20%)
+				background-color: darken(@brightBlue, 20%);
 			}
 		}
 	}
@@ -472,10 +537,10 @@ html, body {
 	}
 }
 
-#settings.displayed {
-	top: 50%;
-	visibility: visible;
-	opacity: 1;
+.modal.displayed {
+	top: 50% !important;
+	visibility: visible !important;
+	opacity: 1 !important;
 }
 
 #pageCover.displayed {

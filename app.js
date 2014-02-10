@@ -149,7 +149,7 @@ app.post('/client', function (req, res) {
 		});
 
 		// And now the rest of the Socket.io code.
-		
+
 		// Recieved
 		socket.on('shutdown', function (data) {
 			client.disconnect("Quit");
