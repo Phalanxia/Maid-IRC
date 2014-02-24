@@ -1,8 +1,9 @@
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}body{line-height:1;}ol,ul{list-style:none;}blockquote,q{quotes:none;}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}table{border-collapse:collapse;border-spacing:0;}
-
 // Varibles
-@themeColor: #52C1FF;
+@brightBlue: #52C1FF; // Alt: 1BA8ED
+@midBlue: #213246;
 @darkBlue: #182432;
+@green: #3C9067;
+@red: #903C3C;
 
 *:focus {
 	outline: none;
@@ -17,18 +18,18 @@ html, body {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	font-family: "Source Sans Pro", Helvetica, sans-serif;
-	background: #fafbfb;
+	font-family: 'Open Sans', Helvetica, sans-serif;
+	background: @midBlue;
 }
 
 a, a:visited {
 	text-decoration: none;
-	color: @themeColor;
+	color: @brightBlue;
 }
 
-a:hover{ 
+a:hover{
 	text-decoration: underline;
-	color: @themeColor;
+	color: @brightBlue;
 }
 
 a:active {
@@ -74,32 +75,33 @@ form {
 	-webkit-transition: all 2s ease-in-out;
 	-moz-transition: all 2s ease-in-out;
 	transition: all 2s ease-in-out;
+
 	h1 {
 		display: block;
 		width: inherit;
-		height: 50px;
-		color: @themeColor;
+		height: 32px;
+		color: @brightBlue;
 		font-size: 23px;
 		font-weight: 200;
-		line-height: 40px;
+		line-height: 32px;
+		margin: 0 0 16 0;
 		text-align: center;
-		text-shadow: 1px 1px #ffffff;
 		-webkit-font-smoothing: subpixel-antialiased;
 		span {
-			font-weight: 800;
-			color: @darkBlue;
+			color: #fafbfb;
 		}
 	}
+
 	section {
 		position: relative;
 	}
-	section:not(.password) {
+
+	section:not(.bubble):not(.checkbox) {
 		display: inline-block;
 		width: 270px;
 		margin: 0 0 16px 0;
 		background: #ffffff;
 		border-radius: 4px;
-		border: 1px solid #d1d1d1;
 		-webkit-transition: all ease-in-out 0.15s;
 		transition: border-color ease-in-out 0.15s;
 		i {
@@ -112,8 +114,13 @@ form {
 			border-top-left-radius: 3px;
 			border-bottom-left-radius: 3px;
 			text-align: center;
-			color: #1b1b1b;
+			color: @midBlue;
 		}
+
+		input {
+			font-size: 14px;
+		}
+
 		input[type="text"] {
 			display: inline-block;
 			width: 193px;
@@ -128,92 +135,201 @@ form {
 				color: #3c3c3c;
 			}
 		}
-		&:nth-of-type(3) input {
-			width: 149px;
+
+		input[name="server"] {
+			width: 142px;
+			padding: 0 0 0 16px;
 		}
-		&:nth-of-type(3) span {
-			display: block;
-			float: right;
-			width: 32px;
-			height: 32px;
-			margin: 5px;
-			background-color: #efefef;
-			border: 1px solid #d1d1d1;
-			border-radius: 4px;
-			text-align: center;
-			line-height: 32px;
-			&:hover {
-				cursor: pointer;
-			}
-			&:active {
-				opacity: 0.8;
-			}
+
+		input[name="port"] {
+			width: 34px;
+			height: 34px;
+			padding: 0 16px;
+			margin: 5px 0;
+			border-left: 1px dashed #d1d1d1;
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
 		}
 	}
 	// For the special input with the triangle thingy
-	section .nipple {
+	section.bubble input {
+		float: right;
+		width: 149px;
+		height: 44px;
+		margin: 0 0 16px 0;
+		padding: 0 16px;
+		border: none;
+		background-color: #ffffff;
+		border-radius: 4px;
+		line-height: 20px;
+		&:focus {
+			box-shadow: 0 0 0 2px @brightBlue;
+		}
+	}
+
+	section.bubble .nipple {
 		position: absolute;
-		top: -10px;
+		top: -11px;
 		right: 8px;
 		height: 6px;
 		width: 27px;
 		overflow: hidden;
 		padding: 5px 0 0 0;
 	}
-	section .nipple span {
+
+	section.bubble .nipple span {
 		display: block;
 		width: 20px;
 		height: 20px;
 		padding: 0 0 7px 0;
 		background-color: #ffffff;
-		border: 1px solid #d1d1d1;
 		-webkit-transform: rotate(45deg);
 		-moz-transform: rotate(45deg);
 		-ms-transform: rotate(45deg);
 		-o-transform: rotate(45deg);
 		transform: rotate(45deg);
 	}
-	section input[type="password"] {
-		float: right;
-		width: 149px;
-		height: 44px;
-		padding: 0 16px;
-		background-color: #ffffff;
-		border: 1px solid #d1d1d1;
-		border-radius: 4px;
-		line-height: 20px;
+
+	section.checkbox {
+		height: 28px;
 		margin: 0 0 16px 0;
-		&:focus {
-			border: 1px solid @themeColor;
+		input, span {
+			float: right;
+		}
+		input {
+			margin: 0 0 0 16px;
+		}
+		span {
+			color: #fafbfb;
+			line-height: 28px;
 		}
 	}
+
+	.outline {
+		box-shadow: 0 0 0 2px @brightBlue;
+	}
+
 	input[type="submit"] {
 		width: 270px;
 		height: 44px;
-		background: none;
-		border: 1px solid @themeColor;
+		background: @brightBlue;
+		border: none;
+		//box-shadow: 0 4px 0 0 darken(@brightBlue, 20%);
 		border-radius: 4px;
-		color: @themeColor;
+		color: #fafbfb;
 		font-size: 14px;
 		line-height: 34px;
+		font-weight: bold;
 		&:hover {
 			cursor: pointer;
-			background-color: @themeColor;
+			background-color: @brightBlue;
 			color: #fafbfb;
 		}
 		&:active {
 			cursor: pointer;
-			background-color: @themeColor;
+			background-color: @brightBlue;
 			box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
 			color: #fafbfb;
 		}
 	}
 }
 
-.outline {
-	border: 1px solid @themeColor !important;
+input[type="checkbox"] {
+	-webkit-appearance: none;
+	display: block;
+	width: 70px;
+	height: 28px;
+	margin: 0;
+	background-color: @darkBlue;
+	border-radius: 4px;
+	border: 3px solid @darkBlue;
+	font-size: 10px;
+	&:before {
+		display: block;
+		position: absolute;
+		top: 100%;
+		left: 100%;
+		content: '';
+	}
+	&:after {
+		display: block;
+		left: 0;
+		top: 0;
+		width: 33px;
+		margin: 0 0 0 31px;
+		height: 22px;
+		background-color: @red;
+		border-radius: 4px;
+
+		// Inner Text
+
+		line-height: 21px;
+		text-align: center;
+		content: '|||';
+		color: darken(@red, 20%);
+
+		//Transition
+
+		transition: all 0.1s cubic-bezier(0, .28, 1, .8);
+			-webkit-transition: all 0.1s cubic-bezier(0, .28 , 1, .8);
+			-moz-transition: all 0.1s cubic-bezier(0, .28, 1, .8);
+	}
+	&:checked {
+		&:after {
+			display: block;
+			left: 0;
+			margin: 0;
+			background-color: @green;
+			color: darken(@green, 20%);
+		}
+	}
+	&:hover {
+		cursor: pointer;
+	}
 }
 
-section.outline .nipple span {
-	border: 1px solid @themeColor !important;
+a#advanced, a#github {
+	position: absolute;
+	bottom: 30px;
+	font-size: 16px;
+	font-family: 'Open Sans', Helvetica, sans-serif;
+	color: #fafbfb;
+	&:active, &:visited, &:hover {
+		color: #fafbfb !important;
+		text-decoration: none;
+		cursor: pointer;
+	}
+}
+
+a#github {
+	left: 32px;
+	i {
+		margin: 0 8px 0 0;
+		font-size: 24px;
+	}
+}
+
+a#advanced {
+	right: 32px;
+	span {
+		margin: 2px auto 0 auto;
+	}
+}
+
+a {
+	span {
+		display: block;
+		height: 2px;
+		width: 1px;
+		margin: 0 auto;
+		opacity: 0;
+		background-color: #fafbfb;
+		transition: all 0.4s ease-in-out;
+			-webkit-transition: all 0.4s ease-in-out;
+			-moz-transition: all 0.4s ease-in-out;
+	}
+	&:hover span {
+		width: 100%;
+		opacity: 1;
+	}
 }

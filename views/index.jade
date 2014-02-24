@@ -5,6 +5,7 @@ html(lang='en')
 		title Maid IRC
 		link(rel='stylesheet', type='text/css', href='css/font-awesome.min.css')
 		link(rel='stylesheet', type='text/css', href='css/fonts.css')
+		link(rel='stylesheet', type='text/css', href='css/normalize.css')
 		link(rel='stylesheet', type='text/css', href='css/index.css')
 		script(src='/socket.io/socket.io.js')
 	body
@@ -22,15 +23,21 @@ html(lang='en')
 				span Maid
 				|  IRC
 			section
-				i(class='fa fa-sitemap')
-				input(id='server', type='text', placeholder='Server', name='server' required)
-			section
-				i(class='fa fa-user')
+				i.fa.fa-user
 				input(id='name', type='text', placeholder='Nickname', name='name' required)
 			section
-				i(class='fa fa-users')
+				i.fa.fa-sitemap
+				input(id='server', type='text', placeholder='Server', name='server' required)
+				input(id='port', type='text', placeholder='Port', name='port' maxlength='4')
+			section
+				i.fa.fa-users
 				input(id='channel', type='text', placeholder='Channel', name='channel' required)
-				span(class='fa fa-key')
 			input(id='submit', type='submit', placeholder='Submit', name='submit')
+		a(href='//github.com/Phalanxia/Maid-IRC')#github
+			i.fa.fa-github
+			| Github
+			span
+		a#advanced Advanced
+			span
 	script(src='js/lib/jquery-2.1.0.min.js')
-	script(src='js/login.js')
+	script(src='js/index.js')

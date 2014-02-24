@@ -4,7 +4,8 @@ var ircLib = require('irc'),
 	express = require('express'),
 	io = require('socket.io'),
 	http = require('http'),
-	fs = require('fs');
+	fs = require('fs'),
+	lessMiddleware = require('less-middleware');
 
 // Get config
 var config = require('./configs/config.js');
@@ -16,17 +17,31 @@ app.configure(function () {
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 
-	app.use(express.bodyParser());
+	app.use(express.json());
+	app.use(express.urlencoded());
 	app.use(express.methodOverride());
 	app.use(app.router);
+
+	// Set up less.css middleware
+	app.use(lessMiddleware({
+		src: __dirname + '/public',
+		compress: true
+	}));
+
 	app.use(express.static(__dirname + '/public'));
+	app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
 });
 
 var server = http.createServer(app)
 	.listen(config.http_port, config.http_host);
 
+if ('development' == app.get('env')) {
+	app.use(express.errorHandler());
+	app.use(express.logger('dev'));
+}
+
 app.get('/', function (req, res) {
-	res.render("index", {});
+	res.render('index', {});
 });
 
 app.get('/preview', function (req, res) {
@@ -51,17 +66,27 @@ app.post('/client', function (req, res) {
 	res.render("client", {
 		server: req.body.server,
 		name: req.body.name,
-		nicknamePassword: req.body.nicknamePassword,
-		channelPassword: req.body.channelPassword,
-		channel: req.body.channel
 	});
+
+	console.log(JSON.stringify(req.body));
+
+	if (!req.body.realName) req.body.realName = "MaidIRC";
+	if (!req.body.port)	req.body.port = 6667;
+
+	if (!req.body.sslToggle || req.body.sslToggle == "undefined") {
+		req.body.sslToggle = false;
+	} else if (req.body.sslToggle == "on") {
+		req.body.sslToggle = true;
+	} else {
+		req.body.sslToggle = false;
+	}
 
 	var client = new ircLib.Client(req.body.server, req.body.name, {
 		channels: [req.body.channel],
 		userName: req.body.name,
 		password: req.body.nicknamePassword,
-		realName: "MaidIRC",
-		port: 6667,
+		realName: req.body.realName,
+		port: req.body.port,
 		floodProtection: true,
 		floodProtectionDelay: 1000,
 		autoRejoin: true,
