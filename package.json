@@ -13,7 +13,8 @@
 		"irc": "~0.3.6",
 		"socket.io": "~0.9.16",
 		"jade": "~1.1.5",
-		"express": "~3.4.3"
+		"express": "~3.4.3",
+		"less-middleware": "*"
 	},
 	"license": "The MIT License (MIT)",
 	"engines": {

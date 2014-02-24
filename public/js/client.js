@@ -345,7 +345,6 @@ $('#channelConsole footer input').keyup(function (e) {
 	switch (e.keyCode) {
 		case "9": // Tab
 			e.preventDefault();
-			alert("it worked");
 			break;
 		case "13":
 			irc.sendMessage($('#channelConsole footer input')[0].value);

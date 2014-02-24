@@ -64,7 +64,7 @@ html, body {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-family: 'Open Sans', Helvetica, sans-serif;
 	background: #fafafa;
 	overflow: hidden;
 	display: flex;
@@ -95,7 +95,7 @@ html, body {
 			color: #efefef;
 			span {
 				font-weight: 800;
-				color: @midBlue; 
+				color: @midBlue;
 			}
 		}
 	}
@@ -168,22 +168,17 @@ html, body {
 		background-color: @darkBlue;
 		ul {
 			display: inline-block;
-			li:first-child {
-				margin: 5px 0 5px 7px;
-			}
 			li {
-				width: 15px;
-				height: 15px;
-				margin: 5px;
-				padding: 7px;
-				border-radius: 4px;
+				width: 14px;
+				height: 14px;
+				padding: 13px 14px;
 				color: #d1d1d1;
 				-webkit-transition: background-color 0.2s ease-in-out;
 				-moz-transition: background-color 0.2s ease-in-out;
 				transition: background-color 0.2s ease-in-out;
 				&:hover {
 					cursor: pointer;
-					background-color: @midBlue;
+					background-color: lighten(@darkBlue, 10%);
 				}
 			}
 		}
@@ -195,7 +190,7 @@ html, body {
 			margin: 5px 7px 5px 5px;
 			border-radius: 4px;
 			font-size: 14px;
-			color: #d1d1d1;
+			color: #efefef;
 		}
 	}
 }
@@ -437,19 +432,15 @@ html, body {
 		border-bottom-left-radius: 3px;
 		border-bottom-right-radius: 3px;
 		button:first-child {
-			border: 1px solid @red;
-			color: @red;
+			background-color: #DE5555;
 			margin: 0 40px 0 0;
-			&:active {
-				background-color: @red;
-			}
+			border-bottom: 2px solid darken(#DE5555, 10%);
+			text-shadow: 0 1px 1px darken(#DE5555, 10%);
 		}
 		button:last-child {
-			border: 1px solid @green;
-			color: @green;
-			&:active {
-				background-color: @green;
-			}
+			background-color: #39C082;
+			border-bottom: 2px solid darken(#39C082, 10%);
+			text-shadow: 0 1px 1px darken(#39C082, 10%);
 		}
 		button {
 			display: inline-block;
@@ -467,7 +458,6 @@ html, body {
 			}
 			&:active {
 				box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
-				color: #efefef;
 			}
 		}
 	}
@@ -518,17 +508,18 @@ html, body {
 		display: inline-block;
 		width: 160px;
 		height: 360px;
-		background-color: #ffffff;
+		background-color: @midBlue;
 		border-bottom-left-radius: 4px;
 		li {
 			width: 144px;
 			height: 40px;
 			padding: 0 0 0 16px;
 			line-height: 40px;
+			font-size: 14px;
 			color: darken(#efefef, 30%);
 			&:hover {
 				cursor: pointer;
-				background-color: darken(#ffffff, 5%);
+				background-color: darken(@midBlue, 5%);
 			}
 		}
 	}
