@@ -1,7 +1,8 @@
 {	"name": "maidirc",
-	"version": "0.0.4",
-	"author": "Madison Tries (https://github.com/Phalanxia)",
+	"version": "0.0.5",
 	"description": "A web IRC client based on node.js and socket.io.",
+	"author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
+	"private": true,
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Phalanxia/Maid-IRC.git"
