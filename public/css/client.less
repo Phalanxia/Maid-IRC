@@ -1,7 +1,3 @@
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}body{line-height:1;}ol,ul{list-style:none;}blockquote,q{quotes:none;}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none;}table{border-collapse:collapse;border-spacing:0;}
-
-// 313D4B
-
 // Varibles
 
 @brightBlue: #52C1FF; // Alt: 1BA8ED
@@ -89,7 +85,10 @@ html, body {
 		background-color: @brightBlue;
 		h1 {
 			width: 186px;
+			margin: 0;
 			padding: 0 0 0 14px;
+			font-size: 16px;
+			font-weight: 200;
 			text-align: left;
 			line-height: 40px;
 			color: #efefef;
@@ -104,6 +103,9 @@ html, body {
 		order: 1;
 
 		width: inherit;
+		margin: 0;
+		padding: 0;
+		list-style: none;
 		li {
 			position: relative;
 			width: inherit;
@@ -167,7 +169,10 @@ html, body {
 		height: 40px;
 		background-color: @darkBlue;
 		ul {
+			margin: 0;
+			padding: 0;
 			display: inline-block;
+			list-style: none;
 			li {
 				width: 14px;
 				height: 14px;
@@ -325,6 +330,8 @@ html, body {
 		height: 40px;
 		background-color: @brightBlue;
 		p {
+			margin: 0;
+			padding: 0;
 			width: inherit;
 			line-height: 40px;
 			text-align: center;
@@ -337,7 +344,10 @@ html, body {
 		order: 1;
 
 		width: 199px;
+		margin: 0;
+		padding: 0;
 		border-left: 1px solid #d1d1d1;
+		list-style: none;
 		li {
 			height: 24px;
 			color: @midBlue;
@@ -368,6 +378,7 @@ html, body {
 		}
 		h1 {
 			float: right;
+			margin: 0;
 			padding: 0 14px 0 0;
 			line-height: 40px;
 			color: @brightBlue;
@@ -414,6 +425,7 @@ html, body {
 	background-color: #efefef;
 	p {
 		display: block;
+		margin: 0;
 		padding: 30px 0 0 0;
 		text-align: center;
 		color: #919191;
@@ -477,9 +489,10 @@ html, body {
 		border-top-right-radius: 4px;
 		h1 {
 			float: left;
+			margin: 0;
 			padding: 0 0 0 16px;
 			line-height: 40px;
-			font-size: 16px;
+			font-weight: 400;
 			font-size: 16px;
 			color: #efefef;
 		}
@@ -504,22 +517,29 @@ html, body {
 			}
 		}
 	}
-	ul {
-		display: inline-block;
+	nav
 		width: 160px;
 		height: 360px;
-		background-color: @midBlue;
-		border-bottom-left-radius: 4px;
-		li {
-			width: 144px;
-			height: 40px;
-			padding: 0 0 0 16px;
-			line-height: 40px;
-			font-size: 14px;
-			color: darken(#efefef, 30%);
-			&:hover {
-				cursor: pointer;
-				background-color: darken(@midBlue, 5%);
+		ul {
+			display: inline-block;
+			width: 160px;
+			height: 360px;
+			margin: 0;
+			padding: 0;
+			background-color: @midBlue;
+			border-bottom-left-radius: 4px;
+			list-style: none;
+			li {
+				width: 144px;
+				height: 40px;
+				padding: 0 0 0 16px;
+				line-height: 40px;
+				font-size: 14px;
+				color: darken(#efefef, 30%);
+				&:hover {
+					cursor: pointer;
+					background-color: darken(@midBlue, 5%);
+				}
 			}
 		}
 	}
