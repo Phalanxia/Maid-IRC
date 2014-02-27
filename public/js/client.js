@@ -16,6 +16,14 @@ var socket = io.connect('http://' + client.server + ':4848', {
 	'reconnection delay': 500
 });
 
+var select = function (selectors) {
+	if (selectors.indexOf(',') != -1) {
+		return document.querySelectorAll(selectors);
+	} else {
+		return document.querySelector(selectors);
+	}
+};
+
 /**
  * Socket.io ON list
  *	connect
@@ -38,9 +46,8 @@ var socket = io.connect('http://' + client.server + ':4848', {
 socket.on('connect', function () {
 	client.status.connection = true;
 
-	$('#sidebar footer span')
-		.css('background-color', '#3C9067')
-		.html("Connected");
+	select('#sidebar footer span').style.backgroundColor = '#3C9067';
+	select('#sidebar footer span').innerHTML = "Connected";
 
 	console.log("Connected to backend.");
 });
@@ -49,9 +56,8 @@ socket.on('disconnect', function () {
 	client.status.connection = false;
 	client.status.pastDisconnect = true;
 
-	$('#sidebar footer span')
-		.css('background-color', '#903C3C')
-		.html("Disconnected");
+	select('#sidebar footer span').style.backgroundColor = "#903C3C";
+	select('#sidebar footer span').innerHTML = "Disconnected";
 
 	console.warn("Lost connection to backend.");
 });
@@ -66,9 +72,9 @@ socket.on('ircInfo', function (data) {
 	client.channels = data;
 	client.channelList = Object.keys(client.channels);
 
-	$('#sidebar > ul').empty();
+	select('#sidebar > ul').innerHTML = '';
 	function updateChannelMenu (element, index) {
-		$('#sidebar > ul').append('<li data-alert=""><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
+		select('#sidebar > ul').insertAdjacentHTML('beforeend', '<li data-alert=""><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
 	}
 
 	client.channelList.forEach(updateChannelMenu);
@@ -77,13 +83,10 @@ socket.on('ircInfo', function (data) {
 		client.focusedChannel = client.channelList[0].toLowerCase();
 	}
 
-	$('#sidebar > ul li:nth-of-type(1)').addClass('focusedChannel');
-
-	$('#topic input')
-		.val('')
-		.val(client.channels[client.focusedChannel].topic);
-
-	$('#users > ul').empty();
+	select('#sidebar > ul li:nth-of-type(1)').classList.add('focusedChannel');
+	select('#channelConsole header input').value = '';
+	select('#channelConsole header input').value = client.channels[client.focusedChannel].topic;
+	select('#users > ul').innerHTML = '';
 
 	// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
 	var _userList = [],
@@ -94,7 +97,7 @@ socket.on('ircInfo', function (data) {
 	}
 
 	for (var i = 0; i < _userList.length; i++) {
-		$('#users ul').append('<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
+		select('#users ul').insertAdjacentHTML('beforeend', '<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
 
 		// Get the op count.
 		if (client.channels[client.focusedChannel].users[_userList[i]] === "@" || client.channels[client.focusedChannel].users[_userList[i]] === "~") {
@@ -103,47 +106,53 @@ socket.on('ircInfo', function (data) {
 	}
 
 	// Get user count
-	$('#users header p').empty().html(_opCount + " ops, " + Object.keys(client.channels[client.focusedChannel].users).length + " total");
+	select('#users header p').innerHTML = '';
+	select('#users header p').innerHTML = _opCount + " ops, " + Object.keys(client.channels[client.focusedChannel].users).length + " total";
 });
 
-$('#sidebar > ul').on('click', 'li', function () {
-	var $index = $('#sidebar > ul li').index(this);
-	client.focusedChannel = client.channelList[$index].toLowerCase();
+for (var i = 0, len = select('#sidebar > ul').children.length; i < len; i++) {
+	(function(index){
+		select('#sidebar > ul').children[i].onclick = function(){
+			client.focusedChannel = client.channelList[index].toLowerCase();
 
-	$('#channelConsole header input').val(client.channels[client.channelList[$index]].topic);
-	$('#sidebar > ul li').removeClass('focusedChannel');
-	$('#sidebar > ul li:nth-of-type(' + ($index+=1) + ')').addClass('focusedChannel');
-	$('#users ul').empty();
+			select('#channelConsole header input').value = client.channels[client.channelList[index]].topic;
+			select('sidebar > ul li').classList.remove('focusedChannel');
+			select('#sidebar > ul li:nth-of-type(' + (index+=1) + ')').classList.add('focusedChannel');
+			select('#users ul').innerHTML = '';
 
-	// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
+			// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
 
-	// Set up userlist.
-	var _channel = client.channels[client.focusedChannel],
-		_userList = [],
-		_opCount = 0,
-		_users = _channel.users;
+			// Set up userlist.
+			var _channel = client.channels[client.focusedChannel],
+				_userList = [],
+				_opCount = 0,
+				_users = _channel.users;
 
-	for (var k in _users) {
-		_userList.push(k);
-	}
+			for (var k in _users) {
+				_userList.push(k);
+			}
 
-	for (var i = 0; i < _userList.length; i++) {
-		$('#users ul').append('<li><span>' + _users[_userList[i]] + '</span>' + _userList[i] + '</li>');
+			for (var i = 0; i < _userList.length; i++) {
+				select('#users ul').insertAdjacentHTML('beforeend', '<li><span>' + _users[_userList[i]] + '</span>' + _userList[i] + '</li>');
 
-		// Get the op count.
-		if (_users[_userList[i]] === "@" || _users[_userList[i]] === "~") {
-			_opCount = _opCount+=1;
-		}
-	}
+				// Get the op count.
+				if (_users[_userList[i]] === "@" || _users[_userList[i]] === "~") {
+					_opCount = _opCount+=1;
+				}
+			}
 
-	// Show messages that are from the focused channel.
-	$('#channelConsole output article[data-channel=' + client.focusedChannel + ']').show();
-	// Hide messages that are not from the focused channel.
-	$("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").hide();
+			// Show messages that are from the focused channel.
+			select('#channelConsole output article[data-channel=' + client.focusedChannel + ']').style.display = '';
+			// Hide messages that are not from the focused channel.
+			select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").style.display = 'none';
 
-	// Get user count
-	$('#users header p').empty().html(_opCount + " ops, " + Object.keys(_channel.users).length + " total");
-});
+			// Get user count
+			select('#users header p').innerHTML = '';
+			select('#users header p').innerHTML = _opCount + " ops, " + Object.keys(_channel.users).length + " total";
+		};
+	})(i);
+}
+
 
 function displayMessage (data) {
 	// Filter mean characters out and replace them with nice ones. We don't want mean characters.
@@ -155,7 +164,6 @@ function displayMessage (data) {
 		.replace(/>/g, "&gt;");
 
 	// Create the timestamp.
-
 	var messageTime = new Date(),
 		hour = messageTime.getHours(),
 		minutes = messageTime.getMinutes(),
@@ -200,9 +208,11 @@ function displayMessage (data) {
 		data.channel = client.focusedChannel;
 	}
 
-	$('#channelConsole output').append('<article class="consoleMessage" data-messageType="' + data.messageType + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span>' + data.head + '</span></aside><p>' + message + '</p></article>');
+	select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.messageType + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span>' + data.head + '</span></aside><p>' + message + '</p></article>');
 
-	$("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").hide();
+	if (select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])")) {
+		select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").style.display = 'none';
+	}
 }
 
 socket.on('recieveMessage', function (data) {
@@ -336,23 +346,23 @@ var irc = {
 			}
 		}
 
-		$('#channelConsole footer input')[0].value = "";
+		select('#channelConsole footer input').value = "";
 	}
 };
 
 // Press enter in chat box
-$('#channelConsole footer input').keyup(function (e) {
+select('#channelConsole footer input').onkeyup = function (e) {
 	switch (e.keyCode) {
 		case "9": // Tab
 			e.preventDefault();
 			break;
 		case "13":
-			irc.sendMessage($('#channelConsole footer input')[0].value);
+			irc.sendMessage(select('#channelConsole footer input').value);
 			break;
 	}
 
-});
+};
 
-$('#channelConsole footer button').click(function () {
-	irc.sendMessage($('#channelConsole footer input')[0].value);
-});
+select('#channelConsole footer button').onclick = function () {
+	irc.sendMessage(select('#channelConsole footer input').value);
+};
