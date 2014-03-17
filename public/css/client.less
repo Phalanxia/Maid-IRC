@@ -1,5 +1,3 @@
-// Variables
-
 @brightBlue: #52C1FF; // Alt: 1BA8ED
 @midBlue: #213246;
 @darkBlue: #182432;
@@ -13,11 +11,13 @@
 ::-moz-selection {
 	background: @brightBlue;
 	text-shadow: none;
+	color: #efefef;
 }
 
 ::selection {
 	background: @brightBlue;
 	text-shadow: none;
+	color: #efefef;
 }
 
 a, a:visited {
@@ -43,6 +43,9 @@ a:active {
 	color: @brightBlue;
 	font-size: 14px;
 	line-height: 30px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 	&:hover {
 		cursor: pointer;
 		background-color: @brightBlue;
@@ -77,6 +80,9 @@ html, body {
 	width: 200px;
 	height: 100%;
 	background-color: @midBlue;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 	header {
 		flex: 0 1 auto;
 		order: 0;
@@ -227,7 +233,7 @@ html, body {
 			border: none;
 			border-radius: 4px;
 			font-size: 14px;
-			line-height: 16px;
+			line-height: 17px;
 		}
 	}
 	output {
@@ -236,6 +242,7 @@ html, body {
 
 		width: 100%;
 		height: 100%;
+		overflow-y: scroll;
 		article {
 			float: left;
 			width: 100%;
@@ -249,7 +256,6 @@ html, body {
 				min-width: 20px;
 				height: 100%;
 				margin: 0 8px 0 0;
-				border-right: 1px solid #d9d9d9;
 				time {
 					float: left;
 					width: 80px;
@@ -267,6 +273,7 @@ html, body {
 			p {
 				margin: 0 0 0 220px;
 				padding: 0 0 0 8px;
+				border-left: 1px solid #d9d9d9;
 				font-size: 14px;
 				color: #1b1b1b;
 				white-space: pre-wrap;
@@ -324,6 +331,9 @@ html, body {
 	width: 200px;
 	height: 100%;
 	background-color: #efefef;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 	header {
 		flex: 0 1 auto;
 		order: 0;
@@ -372,8 +382,12 @@ html, body {
 			margin: 0;
 			border: 0;
 			i {
-				color: @green;
+				display: block;
+				background-color: @green;
 				margin: 14px 14px;
+				height: 14px;
+				width: 14px;
+				border-radius: 7px;
 			}
 		}
 		p {

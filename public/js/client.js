@@ -25,7 +25,7 @@ var select = function (selectors) {
 };
 
 /**
- * Socket.io ON list
+ * Socket.io ON list:
  *	connect
  *	disconnect
  *	recieveMessage
@@ -34,7 +34,7 @@ var select = function (selectors) {
  *	initialInfo
  *	ircInfo
  *
- * Socket.io EMIT list
+ * Socket.io EMIT list:
  *  sendMessage
  *		[channel, message]
  *		Sends a message to a channel.
@@ -155,25 +155,20 @@ for (var i = 0, len = select('#sidebar > ul').children.length; i < len; i++) {
 
 
 function displayMessage (data) {
-	// Filter mean characters out and replace them with nice ones. We don't want mean characters.
 	var message = data.message
+		// Filter mean characters out and replace them with nice ones. We don't want mean characters.
 		.replace(/&/g, "&amp;")
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, "&apos;")
 		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;");
+		.replace(/>/g, "&gt;"),
+		scrollInfoView,
+		// Create the timestamp.
+		messageTime = new Date(),
+		timestamp = "[" + ("0" + messageTime.getHours()).slice(-2) + ":" + ("0" + messageTime.getMinutes()).slice(-2) + ":" + ("0" + messageTime.getSeconds()).slice(-2) + "]",
+		highlightMessageTypes = ["message", "action", "notice"],
+		isInHighlightList = false;
 
-	// Create the timestamp.
-	var messageTime = new Date(),
-		hour = messageTime.getHours(),
-		minutes = messageTime.getMinutes(),
-		seconds = messageTime.getSeconds();
-
-	function bakaTime (time) {
-		return ("0" + time).slice(-2);
-	}
-
-	var timestamp = "[" + bakaTime(hour) + ":" + bakaTime(minutes) + ":" + bakaTime(seconds) + "]";
 
 	// Linkify raw links.
 	function linkify(input) {
@@ -182,9 +177,6 @@ function displayMessage (data) {
 	}
 
 	message = linkify(message);
-
-	var highlightMessageTypes = ["message", "action", "notice"],
-		isInHighlightList = false;
 
 	for (var i = 0; i < highlightMessageTypes.length && !isInHighlightList; i+=1) {
 		if (highlightMessageTypes[i] == data.messageType) {
@@ -208,10 +200,20 @@ function displayMessage (data) {
 		data.channel = client.focusedChannel;
 	}
 
+	// If scrolled at the bottom set scrollIntView as true.
+	if (select('#channelConsole output').scrollHeight - select('#channelConsole output').scrollTop === select('#channelConsole output').clientHeight) {
+		scrollInfoView = true;
+	}
+
 	select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.messageType + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span>' + data.head + '</span></aside><p>' + message + '</p></article>');
 
 	if (select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])")) {
 		select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").style.display = 'none';
+	}
+
+	//Scroll to bottom unless the user is scrolled up
+	if (scrollInfoView) {
+		select('#channelConsole output').scrollTop = select('#channelConsole output').scrollHeight;
 	}
 }
 
@@ -351,16 +353,15 @@ var irc = {
 };
 
 // Press enter in chat box
-select('#channelConsole footer input').onkeyup = function (e) {
-	switch (e.keyCode) {
-		case "9": // Tab
-			e.preventDefault();
+select('#channelConsole footer input').onkeydown = function (event) {
+	switch (event.which) {
+		case 9: // Tab
+			event.preventDefault();
 			break;
-		case "13":
+		case 13:
 			irc.sendMessage(select('#channelConsole footer input').value);
 			break;
 	}
-
 };
 
 select('#channelConsole footer button').onclick = function () {
