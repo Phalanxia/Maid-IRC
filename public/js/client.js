@@ -68,6 +68,43 @@ socket.on('initialInfo', function (data) {
 	client.highlights[0] = client.nickname;
 });
 
+function channelSetup() {
+	// Set up userlist.
+	var _channel = client.channels[client.focusedChannel],
+		_userList = [],
+		_opCount = 0,
+		_users = _channel.users;
+
+	for (var k in _users) {
+		_userList.push(k);
+	}
+
+	_userList.sort(function(a,b) {
+		var rankString = "\r+~@";
+		var rankA = rankString.indexOf(_users[a]),
+			rankB = rankString.indexOf(_users[b]);
+
+		var rankSort = rankA == rankB ? 0 : (rankA > rankB ? -1 : 1);
+		if (rankSort == 0) {
+			return a.toLowerCase() > b.toLowerCase() ? 1 : -1;
+		}
+		return rankSort;
+	});
+
+	for (var i = 0; i < _userList.length; i++) {
+		select('#users ul').insertAdjacentHTML('beforeend', '<li><span>' + _users[_userList[i]] + '</span>' + _userList[i] + '</li>');
+
+		// Get the op count.
+		if (_users[_userList[i]] === "@" || _users[_userList[i]] === "~") {
+			_opCount = _opCount+=1;
+		}
+	}
+
+	// Get user count
+	select('#users header p').innerHTML = '';
+	select('#users header p').innerHTML = _opCount + " ops, " + Object.keys(_channel.users).length + " total";
+}
+
 socket.on('ircInfo', function (data) {
 	client.channels = data;
 	client.channelList = Object.keys(client.channels);
@@ -88,26 +125,7 @@ socket.on('ircInfo', function (data) {
 	select('#channelConsole header input').value = client.channels[client.focusedChannel].topic;
 	select('#users > ul').innerHTML = '';
 
-	// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
-	var _userList = [],
-		_opCount = 0;
-
-	for (var k in client.channels[client.focusedChannel].users) {
-		_userList.push(k);
-	}
-
-	for (var i = 0; i < _userList.length; i++) {
-		select('#users ul').insertAdjacentHTML('beforeend', '<li><span>' + client.channels[client.focusedChannel].users[_userList[i]] + '</span>' + _userList[i] + '</li>');
-
-		// Get the op count.
-		if (client.channels[client.focusedChannel].users[_userList[i]] === "@" || client.channels[client.focusedChannel].users[_userList[i]] === "~") {
-			_opCount = _opCount+=1;
-		}
-	}
-
-	// Get user count
-	select('#users header p').innerHTML = '';
-	select('#users header p').innerHTML = _opCount + " ops, " + Object.keys(client.channels[client.focusedChannel].users).length + " total";
+	channelSetup();
 });
 
 for (var i = 0, len = select('#sidebar > ul').children.length; i < len; i++) {
@@ -120,35 +138,12 @@ for (var i = 0, len = select('#sidebar > ul').children.length; i < len; i++) {
 			select('#sidebar > ul li:nth-of-type(' + (index+=1) + ')').classList.add('focusedChannel');
 			select('#users ul').innerHTML = '';
 
-			// TODO: Make this organize users based on their ... permissions? I can't remember what it's called I didn't sleep last night sorry.
-
-			// Set up userlist.
-			var _channel = client.channels[client.focusedChannel],
-				_userList = [],
-				_opCount = 0,
-				_users = _channel.users;
-
-			for (var k in _users) {
-				_userList.push(k);
-			}
-
-			for (var i = 0; i < _userList.length; i++) {
-				select('#users ul').insertAdjacentHTML('beforeend', '<li><span>' + _users[_userList[i]] + '</span>' + _userList[i] + '</li>');
-
-				// Get the op count.
-				if (_users[_userList[i]] === "@" || _users[_userList[i]] === "~") {
-					_opCount = _opCount+=1;
-				}
-			}
-
 			// Show messages that are from the focused channel.
 			select('#channelConsole output article[data-channel=' + client.focusedChannel + ']').style.display = '';
 			// Hide messages that are not from the focused channel.
 			select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").style.display = 'none';
 
-			// Get user count
-			select('#users header p').innerHTML = '';
-			select('#users header p').innerHTML = _opCount + " ops, " + Object.keys(_channel.users).length + " total";
+			channelSetup();
 		};
 	})(i);
 }
