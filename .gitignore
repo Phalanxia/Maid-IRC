@@ -1,4 +1,9 @@
 *.log
+
+pids
+*.pid
+*.seed
+
 node_modules/
 rubbish/
 public/css/index.css

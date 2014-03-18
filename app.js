@@ -1,4 +1,4 @@
-console.log("Starting MaidIRC");
+console.log("Starting MaidIRC.\nEnviroment: " + process.env.NODE_ENV);
 
 var ircLib = require('irc'),
 	express = require('express'),
@@ -12,6 +12,16 @@ var config = require('./configs/config.js');
 
 // Set up express
 var app = express();
+
+app.configure('development', function() {
+	app.use(express.errorHandler());
+	app.use(express.logger('dev'));
+});
+
+app.configure('production', function() {
+	var minify = require('express-minify');
+	app.use(minify());
+});
 
 app.configure(function () {
 	app.set('views', __dirname + '/views');
@@ -34,11 +44,6 @@ app.configure(function () {
 
 var server = http.createServer(app)
 	.listen(config.http_port, config.http_host);
-
-if ('development' == app.get('env')) {
-	app.use(express.errorHandler());
-	app.use(express.logger('dev'));
-}
 
 app.get('/', function (req, res) {
 	res.render('index', {});
