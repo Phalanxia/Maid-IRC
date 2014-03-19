@@ -128,26 +128,37 @@ socket.on('ircInfo', function (data) {
 	channelSetup();
 });
 
-for (var i = 0, len = select('#sidebar > ul').children.length; i < len; i++) {
-	(function(index){
-		select('#sidebar > ul').children[i].onclick = function(){
-			client.focusedChannel = client.channelList[index].toLowerCase();
+select('#sidebar > ul').onclick = function(event) {
+	var items = select('#sidebar > ul').getElementsByTagName('li');
+	for (i = 0; i < items.length; i++) {
+		items[i].i = i;
+		items[i].onclick = function () {
+			var theNumber = this.i;
+			client.focusedChannel = client.channelList[theNumber].toLowerCase();
 
-			select('#channelConsole header input').value = client.channels[client.channelList[index]].topic;
-			select('sidebar > ul li').classList.remove('focusedChannel');
-			select('#sidebar > ul li:nth-of-type(' + (index+=1) + ')').classList.add('focusedChannel');
+			select('#channelConsole header input').value = client.channels[client.channelList[theNumber]].topic;
+
+			for (var i = document.querySelectorAll('#sidebar > ul li').length - 1; i >= 0; i--) {
+				document.querySelectorAll('#sidebar > ul li')[i].classList.remove('focusedChannel');
+			};
+
+			select('#sidebar > ul li:nth-of-type(' + (theNumber+=1) + ')').classList.add('focusedChannel');
 			select('#users ul').innerHTML = '';
 
 			// Show messages that are from the focused channel.
-			select('#channelConsole output article[data-channel=' + client.focusedChannel + ']').style.display = '';
+			for (var i = document.querySelectorAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]').length - 1; i >= 0; i--) {
+				document.querySelectorAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]')[i].style.display = '';
+			};
+
 			// Hide messages that are not from the focused channel.
-			select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").style.display = 'none';
+			for (var i = document.querySelectorAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])').length - 1; i >= 0; i--) {
+				document.querySelectorAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])')[i].style.display = 'none';
+			};
 
 			channelSetup();
 		};
-	})(i);
-}
-
+	}
+};
 
 function displayMessage (data) {
 	var message = data.message
@@ -202,9 +213,9 @@ function displayMessage (data) {
 
 	select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.messageType + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span>' + data.head + '</span></aside><p>' + message + '</p></article>');
 
-	if (select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])")) {
-		select("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").style.display = 'none';
-	}
+	for (var i = document.querySelectorAll("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").length - 1; i >= 0; i--) {
+		document.querySelectorAll("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])")[i].style.display = 'none';
+	};
 
 	//Scroll to bottom unless the user is scrolled up
 	if (scrollInfoView) {
@@ -221,6 +232,14 @@ socket.on('recieveMessage', function (data) {
 				channel: data.channel,
 				message: data.message
 			});
+			break;
+		case "serverMessage":
+			displayMessage({
+				messageType: "serverMessage",
+				head: "*",
+				channel: "server",
+				message: data.message
+			})
 			break;
 		case "join":
 			displayMessage({
@@ -253,6 +272,22 @@ socket.on('recieveMessage', function (data) {
 				channel: data.channel,
 				message: data.message
 			});
+			break;
+		case "nickChange":
+			for (var i = data.channels.length - 1; i >= 0; i--) {
+				displayMessage({
+					messageType: "nickChange",
+					head: "&gt;",
+					channel: data.channels[i],
+					message: data.oldNick + " is now known as " + data.newNick
+				});
+			};
+
+			// Check to see if it's you that changed nick and update it on the client.
+			if (data.oldNick === client.nickname) {
+				client.nickname = data.newNick;
+				select('#users footer p').innerHTML = client.nickname;
+			}
 			break;
 	}
 });
@@ -346,6 +381,10 @@ var irc = {
 		select('#channelConsole footer input').value = "";
 	}
 };
+
+socket.on('networkName', function (data) {
+	select('#sidebar h2').innerHTML = data;
+});
 
 // Press enter in chat box
 select('#channelConsole footer input').onkeydown = function (event) {

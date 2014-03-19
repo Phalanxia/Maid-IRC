@@ -104,6 +104,17 @@ html, body {
 			}
 		}
 	}
+	h2 {
+		padding: 10px 8px;
+		margin: 0;
+		color: #efefef;
+		font-size: 14px;
+		font-weight: normal;
+		&:hover {
+			cursor: pointer;
+			background-color: @darkBlue;
+		}
+	}
 	ul#channelList {
 		flex: 1 1 auto;
 		order: 1;
@@ -165,7 +176,7 @@ html, body {
 			}
 		}
 		li.focusedChannel:hover {
-			background-color: @midBlue;
+			background-color: @darkBlue;
 		}
 	}
 	footer {
@@ -272,7 +283,7 @@ html, body {
 			}
 			p {
 				margin: 0 0 0 220px;
-				padding: 0 0 0 8px;
+				padding: 0 8px;
 				border-left: 1px solid #d9d9d9;
 				font-size: 14px;
 				color: #1b1b1b;
@@ -283,6 +294,12 @@ html, body {
 					background-color: @brightBlue;
 					border-radius: 2px;
 					color: #ffffff;
+				}
+			}
+			.filler {
+				display: none; // Not done.
+				&:hover {
+					background: none;
 				}
 			}
 		}
