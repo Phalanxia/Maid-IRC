@@ -7,6 +7,8 @@ var ircLib = require('irc'),
 	fs = require('fs'),
 	lessMiddleware = require('less-middleware');
 
+var devMode = false;
+
 // Get config
 var config = require('./configs/config.js');
 
@@ -16,6 +18,7 @@ var app = express();
 app.configure('development', function() {
 	app.use(express.errorHandler());
 	app.use(express.logger('dev'));
+	devMode = true;
 });
 
 app.configure('production', function() {
@@ -73,7 +76,9 @@ app.post('/client', function (req, res) {
 		name: req.body.name,
 	});
 
-	console.log(JSON.stringify(req.body));
+	if (devMode) {
+		console.log(JSON.stringify(req.body));
+	}
 
 	if (!req.body.realName) req.body.realName = "MaidIRC";
 	if (!req.body.port)	req.body.port = 6667;
@@ -112,9 +117,36 @@ app.post('/client', function (req, res) {
 		socket.emit('initialInfo', req.body.name);
 
 		// IRC Listeners
+
+		// Get the network name.
+		client.addListener('raw', function (data) {
+			if (data.rawCommand == '005') {
+				for (var i = data.args.length - 1; i >= 0; i--) {
+					if (data.args[i].indexOf("NETWORK") != -1) {
+						var networkName = data.args[i].split("NETWORK=")[1];
+						socket.emit('networkName', networkName);
+					}
+				};
+			}
+		});
+
 		client.addListener('registered', function (message) {
-			console.log('Server: ' + message.server);
-			console.log(message.args[1]);
+			if (devMode) {
+				console.log('Server: ' + message.server);
+				console.log(message.args[1]);
+			}
+
+			socket.emit('recieveMessage', {
+				type: "serverMessage",
+				message: message.args[1]
+			});
+		});
+
+		client.addListener('motd', function (motd) {
+			socket.emit('recieveMessage', {
+				type: "serverMessage",
+				message: motd
+			});
 		});
 
 		client.addListener('names', function (data) {
@@ -154,6 +186,7 @@ app.post('/client', function (req, res) {
 			socket.emit('ircInfo', client.chans);
 		});
 
+
 		client.addListener('quit', function (nick, reason, channels, message) {
 			socket.emit('recieveMessage', {
 				type: "quit",
@@ -172,6 +205,18 @@ app.post('/client', function (req, res) {
 				channel: to,
 				message: text
 			});
+		});
+
+		client.addListener('nick', function (oldNick, newNick, channels, message) {
+			socket.emit('recieveMessage', {
+				type: "nickChange",
+				oldNick: oldNick,
+				newNick: newNick,
+				channels: channels,
+				message: message
+			});
+			// Send channel info to the client.
+			socket.emit('ircInfo', client.chans);
 		});
 
 		client.addListener('error', function (message) {

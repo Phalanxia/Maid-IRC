@@ -32,6 +32,7 @@ html(lang='en')
 				h1
 					span Maid 
 					| IRC
+			h2 #{server}
 			ul#channelList
 			footer
 				ul
@@ -42,6 +43,8 @@ html(lang='en')
 			header
 				input(type='text', placeholder='Topic', value='')
 			output
+				article.filler
+					p
 			footer
 				input(type='text', x-webkit-speech)
 				button.btn Enter
