@@ -122,7 +122,12 @@ socket.on('ircInfo', function (data) {
 
 	select('#sidebar > ul li:nth-of-type(1)').classList.add('focusedChannel');
 	select('#channelConsole header input').value = '';
-	select('#channelConsole header input').value = client.channels[client.focusedChannel].topic;
+
+	if (client.channels[client.focusedChannel].topic !== undefined) {
+		select('#channelConsole header input').value = client.channels[client.focusedChannel].topic;
+	} else {
+		select('#channelConsole header input').value = '';
+	}
 	select('#users > ul').innerHTML = '';
 
 	channelSetup();
@@ -136,11 +141,15 @@ select('#sidebar > ul').onclick = function(event) {
 			var theNumber = this.i;
 			client.focusedChannel = client.channelList[theNumber].toLowerCase();
 
-			select('#channelConsole header input').value = client.channels[client.channelList[theNumber]].topic;
+			if (client.channels[client.channelList[theNumber]].topic !== undefined) {
+				select('#channelConsole header input').value = client.channels[client.channelList[theNumber]].topic;
+			} else {
+				select('#channelConsole header input').value = '';
+			}
 
 			for (var i = document.querySelectorAll('#sidebar > ul li').length - 1; i >= 0; i--) {
 				document.querySelectorAll('#sidebar > ul li')[i].classList.remove('focusedChannel');
-			};
+			}
 
 			select('#sidebar > ul li:nth-of-type(' + (theNumber+=1) + ')').classList.add('focusedChannel');
 			select('#users ul').innerHTML = '';
@@ -148,12 +157,12 @@ select('#sidebar > ul').onclick = function(event) {
 			// Show messages that are from the focused channel.
 			for (var i = document.querySelectorAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]').length - 1; i >= 0; i--) {
 				document.querySelectorAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]')[i].style.display = '';
-			};
+			}
 
 			// Hide messages that are not from the focused channel.
 			for (var i = document.querySelectorAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])').length - 1; i >= 0; i--) {
 				document.querySelectorAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])')[i].style.display = 'none';
-			};
+			}
 
 			channelSetup();
 		};
@@ -281,13 +290,21 @@ socket.on('recieveMessage', function (data) {
 					channel: data.channels[i],
 					message: data.oldNick + " is now known as " + data.newNick
 				});
-			};
+			}
 
 			// Check to see if it's you that changed nick and update it on the client.
 			if (data.oldNick === client.nickname) {
 				client.nickname = data.newNick;
 				select('#users footer p').innerHTML = client.nickname;
 			}
+			break;
+		case "topicChange":
+			displayMessage({
+				messageType: "topicChange",
+				head: "&gt;",
+				channel: data.channel,
+				message: data.nick + ' has changed the topic to: "' + data.topic + '"'
+			});
 			break;
 	}
 });
@@ -391,6 +408,7 @@ select('#channelConsole footer input').onkeydown = function (event) {
 	switch (event.which) {
 		case 9: // Tab
 			event.preventDefault();
+			// TODO: Tab completion.
 			break;
 		case 13:
 			irc.sendMessage(select('#channelConsole footer input').value);

@@ -180,7 +180,8 @@ app.post('/client', function (req, res) {
 				type: "part",
 				nick: nick,
 				channel: channel,
-				message: message
+				message: message,
+				info: message
 			});
 			// Send channel info to the client.
 			socket.emit('ircInfo', client.chans);
@@ -192,7 +193,8 @@ app.post('/client', function (req, res) {
 				type: "quit",
 				nick: nick,
 				channel: channels,
-				message: reason
+				message: reason,
+				info: message
 			});
 			// Send channel info to the client.
 			socket.emit('ircInfo', client.chans);
@@ -219,6 +221,17 @@ app.post('/client', function (req, res) {
 			socket.emit('ircInfo', client.chans);
 		});
 
+		client.addListener('topic', function (channel, topic, nick) {
+			socket.emit('topic', {
+				type: 'topicChange',
+				channel: channel,
+				topic: topic,
+				nick: nick
+			});
+			// Send channel info to the client.
+			socket.emit('ircInfo', client.chans);
+		});
+
 		client.addListener('error', function (message) {
 			console.log('error: ', message);
 		});
@@ -228,10 +241,12 @@ app.post('/client', function (req, res) {
 		// Recieved
 		socket.on('shutdown', function (data) {
 			client.disconnect("Quit");
-			setTimeout(function () {
-				console.log('Exiting.');
-				process.exit(0);
-			}, 100);
+			if (devMode) {
+				setTimeout(function () {
+					console.log('Exiting.');
+					process.exit(0);
+				}, 100);
+			}
 		});
 
 		socket.on('disconnect', function () {
