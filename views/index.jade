@@ -19,20 +19,16 @@ html(lang='en')
 					a(href='//www.mozilla.org/en-US/firefox/new/') Firefox
 					| .
 		form(action='/client', method='post')
-			h1
-				span Maid
-				|  IRC
+			h1 Maid IRC
 			section
-				i.fa.fa-user
 				input(id='name', type='text', placeholder='Nickname', name='name' required)
 			section
-				i.fa.fa-sitemap
 				input(id='server', type='text', placeholder='Server', name='server' required)
-				input(id='port', type='text', placeholder='Port', name='port' maxlength='4')
+				input(id='port', type='number', placeholder='Port', name='port' maxlength='4')
 			section
-				i.fa.fa-users
 				input(id='channel', type='text', placeholder='Channel', name='channel' required)
-			input(id='submit', type='submit', placeholder='Submit', name='submit')
+			footer
+				input(id='submit', type='submit', placeholder='Submit', name='submit')
 		a(href='//github.com/Phalanxia/Maid-IRC')#github
 			i.fa.fa-github
 			| Github

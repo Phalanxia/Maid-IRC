@@ -18,7 +18,7 @@ html, body {
 	width: 100%;
 	height: 100%;
 	font-family: 'Open Sans', Helvetica, sans-serif;
-	background: @midBlue;
+	background: #ecf0f5;
 }
 
 a, a:visited {
@@ -64,16 +64,19 @@ a:active {
 }
 
 form {
-	width: 270px;
 	position: absolute;
 	top: 50%;
 	left: 50%;
+	width: 290px;
 	transform: translate(-50%, -50%);
 		-webkit-transform: translate(-50%, -50%);
 		-moz-transform: translate(-50%, -50%);
 	-webkit-transition: all 2s ease-in-out;
 	-moz-transition: all 2s ease-in-out;
 	transition: all 2s ease-in-out;
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0 2px 2px 0px rgba(196, 200, 205, 0.5);
 
 	h1 {
 		display: block;
@@ -86,62 +89,52 @@ form {
 		margin: 0 0 16 0;
 		text-align: center;
 		-webkit-font-smoothing: subpixel-antialiased;
-		span {
-			color: #fafbfb;
-		}
 	}
 
 	section {
 		position: relative;
 	}
 
-	section:not(.bubble):not(.checkbox) {
+	section:not(.checkbox) {
 		display: inline-block;
-		width: 270px;
-		margin: 0 0 16px 0;
-		background: #ffffff;
+		width: 248px;
+		margin: 0 20px 16px 20px;
+		background: #fbfbfb;
+		border: 1px solid #efefef;
 		border-radius: 4px;
 		-webkit-transition: all ease-in-out 0.15s;
 		transition: border-color ease-in-out 0.15s;
-		i {
-			float: left;
-			width: 16px;
-			height: 16px;
-			padding: 14px 14px;
-			background-color: #efefef;
-			border-right: 1px solid #d1d1d1;
-			border-top-left-radius: 3px;
-			border-bottom-left-radius: 3px;
-			text-align: center;
-			color: @midBlue;
-		}
 
 		input {
 			font-size: 14px;
 		}
 
-		input[type="text"] {
+		input[type="text"], input[type="number"], input[type="password"] {
 			display: inline-block;
-			width: 193px;
+			width: 218px;
 			height: 44px;
 			padding: 0 16px;
-			background: none;
 			border: none;
-			color: #1b1b1b;
+			background: none;
 			border-radius: 4px;
 			line-height: 20px;
+			color: #1b1b1b;
 			&:before {
 				color: #3c3c3c;
 			}
 		}
 
 		input[name="server"] {
-			width: 142px;
+			width: 150px;
 			padding: 0 0 0 16px;
 		}
 
+		input[name="realName"] {
+			border-bottom: 1px dashed #d1d1d;
+		}
+
 		input[name="port"] {
-			width: 34px;
+			width: 47px;
 			height: 34px;
 			padding: 0 16px;
 			margin: 5px 0;
@@ -150,56 +143,17 @@ form {
 			border-bottom-left-radius: 0;
 		}
 	}
-	// For the special input with the triangle thingy
-	section.bubble input {
-		float: right;
-		width: 149px;
-		height: 44px;
-		margin: 0 0 16px 0;
-		padding: 0 16px;
-		border: none;
-		background-color: #ffffff;
-		border-radius: 4px;
-		line-height: 20px;
-		&:focus {
-			box-shadow: 0 0 0 2px @brightBlue;
-		}
-	}
-
-	section.bubble .nipple {
-		position: absolute;
-		top: -11px;
-		right: 8px;
-		height: 6px;
-		width: 27px;
-		overflow: hidden;
-		padding: 5px 0 0 0;
-	}
-
-	section.bubble .nipple span {
-		display: block;
-		width: 20px;
-		height: 20px;
-		padding: 0 0 7px 0;
-		background-color: #ffffff;
-		-webkit-transform: rotate(45deg);
-		-moz-transform: rotate(45deg);
-		-ms-transform: rotate(45deg);
-		-o-transform: rotate(45deg);
-		transform: rotate(45deg);
-	}
-
 	section.checkbox {
-		height: 28px;
-		margin: 0 0 16px 0;
+		height: 40px;
+		margin: 0 20px 0 10px;
 		input, span {
 			float: right;
 		}
 		input {
-			margin: 0 0 0 16px;
+			margin: 3px 0 0 16px;
 		}
 		span {
-			color: #fafbfb;
+			color: @brightBlue;
 			line-height: 28px;
 		}
 	}
@@ -208,74 +162,80 @@ form {
 		box-shadow: 0 0 0 2px @brightBlue;
 	}
 
-	input[type="submit"] {
-		width: 270px;
-		height: 44px;
-		background: @brightBlue;
+	hr {
+		display: block;
+		height: 0;
+		width: 250px;
 		border: none;
-		//box-shadow: 0 4px 0 0 darken(@brightBlue, 20%);
-		border-radius: 4px;
-		color: #fafbfb;
-		font-size: 14px;
-		line-height: 34px;
-		font-weight: bold;
-		&:hover {
-			cursor: pointer;
-			background-color: @brightBlue;
+		border-top: 1px dashed #d1d1d1;
+		margin: 0 20px 20px 20px;
+	}
+
+	footer {
+		padding: 20px;
+		background-color: #F6F9FD;
+		border-top: 1px solid #efefef;
+		border-bottom-right-radius: 10px;
+		border-bottom-left-radius: 10px;
+		input[type="submit"] {
+			width: 250px;
+			height: 44px;
+			background: @brightBlue;
+			border: none;
+			//box-shadow: 0 4px 0 0 darken(@brightBlue, 20%);
+			border-radius: 4px;
 			color: #fafbfb;
-		}
-		&:active {
-			cursor: pointer;
-			background-color: @brightBlue;
-			box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
-			color: #fafbfb;
+			font-size: 14px;
+			line-height: 34px;
+			font-weight: bold;
+			&:hover {
+				cursor: pointer;
+				background-color: @brightBlue;
+				color: #fafbfb;
+			}
+			&:active {
+				cursor: pointer;
+				background-color: @brightBlue;
+				box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
+				color: #fafbfb;
+			}
 		}
 	}
 }
 
 input[type="checkbox"] {
 	-webkit-appearance: none;
+	appearance: none;
 	display: block;
-	width: 70px;
-	height: 28px;
-	margin: 0;
-	background-color: @darkBlue;
+	width: 22px;
+	height: 22px;
+	margin: 3px 0 0 16px;
+	background: none;
+	background-color: #fbfbfb;
 	border-radius: 4px;
-	border: 3px solid @darkBlue;
+	border: 1px solid #efefef;
 	font-size: 10px;
-	&:before {
-		display: block;
-		position: absolute;
-		top: 100%;
-		left: 100%;
-		content: '';
-	}
 	&:after {
-		display: block;
+		display: none;
+		content: '\2713';
 		left: 0;
-		top: 0;
-		width: 33px;
-		margin: 0 0 0 31px;
+		width: 22px;
 		height: 22px;
-		background-color: @red;
-		border-radius: 4px;
-		// Inner Text
-		line-height: 21px;
-		text-align: center;
-		content: '|||';
-		color: darken(@red, 20%);
-		//Transition
-		transition: all 0.1s cubic-bezier(0, .28, 1, .8);
-			-webkit-transition: all 0.1s cubic-bezier(0, .28 , 1, .8);
-			-moz-transition: all 0.1s cubic-bezier(0, .28, 1, .8);
+		margin: 0;
+		color: @brightBlue;
 	}
 	&:checked {
 		&:after {
 			display: block;
+			content: '\2713';
 			left: 0;
+			width: 20px;
+			height: 20px;
 			margin: 0;
-			background-color: @green;
-			color: darken(@green, 20%);
+			color: @brightBlue;
+			text-align: center;
+			line-height: 22px;
+			font-size: 14px;
 		}
 	}
 	&:hover {
@@ -288,9 +248,9 @@ a#advanced, a#github {
 	bottom: 30px;
 	font-size: 16px;
 	font-family: 'Open Sans', Helvetica, sans-serif;
-	color: #fafbfb;
+	color: @brightBlue;
 	&:active, &:visited, &:hover {
-		color: #fafbfb !important;
+		color: @brightBlue !important;
 		text-decoration: none;
 		cursor: pointer;
 	}
@@ -318,7 +278,7 @@ a {
 		width: 1px;
 		margin: 0 auto;
 		opacity: 0;
-		background-color: #fafbfb;
+		background-color: @brightBlue;
 		transition: all 0.4s ease-in-out;
 			-webkit-transition: all 0.4s ease-in-out;
 			-moz-transition: all 0.4s ease-in-out;
