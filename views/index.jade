@@ -9,26 +9,25 @@ html(lang='en')
 		link(rel='stylesheet', type='text/css', href='css/index.css')
 		script(src='/socket.io/socket.io.js')
 	body
-		//if lt IE 8
-			#ieBad
-				h4 Uh oh!
-				p
-					| Sorry but the version of Internet Explorer in which you are using is out-of-date and not compatible with Maid IRC. Please update Internet Explorer or install a browser such as 
-					a(href='//google.com/chrome/‎') Google Chrome
-					|  or 
-					a(href='//www.mozilla.org/en-US/firefox/new/') Firefox
-					| .
 		form(action='/client', method='post')
 			h1 Maid IRC
 			section
-				input(id='name', type='text', placeholder='Nickname', name='name' required)
+				input#name(type='text', placeholder='Nickname', name='name', spellcheck="false", autofocus, required)
+			section.advanced
+				input#nicknamePassword(type='password', name='nicknamePassword', placeholder='Password', tabIndex='-1')
+			section.advanced
+				input#realName(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
+			hr.advanced
 			section
-				input(id='server', type='text', placeholder='Server', name='server' required)
-				input(id='port', type='number', placeholder='Port', name='port' maxlength='4')
+				input#server(type='text', placeholder='Server', name='server', spellcheck="false", required)
+				input#port(type='number', placeholder='Port', name='port', maxlength='4', max="9999")
+			section.checkbox.advanced
+				input#ssl(type='checkbox', name='sslToggle', tabIndex='-1')
+				span.checkboxLabel SSL
 			section
-				input(id='channel', type='text', placeholder='Channel', name='channel' required)
+				input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
 			footer
-				input(id='submit', type='submit', placeholder='Submit', name='submit')
+				input#submit(type='submit', placeholder='Submit', name='submit')
 		a(href='//github.com/Phalanxia/Maid-IRC')#github
 			i.fa.fa-github
 			| Github

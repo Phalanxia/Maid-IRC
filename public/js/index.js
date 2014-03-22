@@ -1,17 +1,11 @@
-var select = function (selectors) {
-	if (selectors.indexOf(',') != -1) {
-		return document.querySelectorAll(selectors);
-	} else {
-		return document.querySelector(selectors);
+document.querySelector('a#advanced').onclick = function () {
+	for (var i = document.querySelectorAll('.advanced').length - 1; i >= 0; i--) {
+		document.querySelectorAll('.advanced')[i].style.display = 'block';
 	}
-};
 
-var advanced = false;
-
-select('a#advanced').onclick = function () {
-	if (!advanced) {
-		advanced = true;
-		select('section:nth-of-type(2)').insertAdjacentHTML('afterend', '<section class="checkbox"><input id="ssl" type="checkbox" name="sslToggle"><span class="checkboxLabel">SSL</span></section>');
-		select('section:nth-of-type(1)').insertAdjacentHTML('afterend', '<section><input id="nicknamePassword" type="password" placeholder="Password" name="nicknamePassword"></section><section><input id="realName" type="text" placeholder="Real Name" name="realName"></section><hr />');
+	for (var i = document.querySelectorAll('input').length - 1; i >= 0; i--) {
+		document.querySelectorAll('input')[i].tabIndex = '0';
 	}
+
+	document.querySelector('a#advanced').style.display = 'none';
 };
