@@ -85,7 +85,7 @@ function channelSetup() {
 			rankB = rankString.indexOf(_users[b]);
 
 		var rankSort = rankA == rankB ? 0 : (rankA > rankB ? -1 : 1);
-		if (rankSort == 0) {
+		if (rankSort === 0) {
 			return a.toLowerCase() > b.toLowerCase() ? 1 : -1;
 		}
 		return rankSort;
@@ -224,7 +224,7 @@ function displayMessage (data) {
 
 	for (var i = document.querySelectorAll("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").length - 1; i >= 0; i--) {
 		document.querySelectorAll("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])")[i].style.display = 'none';
-	};
+	}
 
 	//Scroll to bottom unless the user is scrolled up
 	if (scrollInfoView) {
@@ -248,7 +248,7 @@ socket.on('recieveMessage', function (data) {
 				head: "*",
 				channel: "server",
 				message: data.message
-			})
+			});
 			break;
 		case "join":
 			displayMessage({

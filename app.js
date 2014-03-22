@@ -1,4 +1,10 @@
-console.log("Starting MaidIRC.\nEnviroment: " + process.env.NODE_ENV);
+console.log("Starting Maid IRC.\nEnviroment: " + process.env.NODE_ENV);
+
+if (process.env.NODE_ENV === undefined) {
+	console.warn("Please define the NODE_ENV.");
+} else if (process.env.NODE_ENV !== "production" || process.env.NODE_ENV !== "development") {
+	console.warn('Sorry! NODE_ENV: "' + process.env.NODE_ENV + '" is not recognized. Try "development" or "production".');
+}
 
 var ircLib = require('irc'),
 	express = require('express'),

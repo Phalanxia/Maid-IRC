@@ -13,6 +13,18 @@
 	src: url('../fonts/visitor1.ttf');
 }
 
+::-moz-selection {
+	background: @brightBlue;
+	text-shadow: none;
+	color: #efefef;
+}
+
+::selection {
+	background: @brightBlue;
+	text-shadow: none;
+	color: #efefef;
+}
+
 html, body {
 	position: absolute;
 	width: 100%;
@@ -36,31 +48,8 @@ a:active {
 	color: @darkBlue;
 }
 
-#ieBad {
-	position: absolute;
-	top: 32px;
-	left: 0;
-	right: 0;
-	width: 640px;
-	margin: 0 auto;
-	padding: 16px;
-	background-color: #fdf7f7;
-	border: 1px solid #d1d1d1;
-	border-left: 4px solid #903c3c;
-	border-radius: 4px;
-	h4 {
-		color: #903C3C;
-		font-size: 22px;
-		padding: 0 0 4px 0;
-	}
-	p {
-		color: #1b1b1b;
-		font-size: 14px;
-		line-height: 16px;
-		a {
-
-		}
-	}
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0) inset;
 }
 
 form {
@@ -75,7 +64,7 @@ form {
 	-moz-transition: all 2s ease-in-out;
 	transition: all 2s ease-in-out;
 	background-color: #ffffff;
-	border-radius: 10px;
+	border-radius: 4px;
 	box-shadow: 0 2px 2px 0px rgba(196, 200, 205, 0.5);
 
 	h1 {
@@ -93,10 +82,10 @@ form {
 
 	section {
 		position: relative;
+		box-shadow: 0 0 0 2px rgba(0, 0, 0, 0) rgba(255, 255, 255, 0);
 	}
 
 	section:not(.checkbox) {
-		display: inline-block;
 		width: 248px;
 		margin: 0 20px 16px 20px;
 		background: #fbfbfb;
@@ -129,10 +118,6 @@ form {
 			padding: 0 0 0 16px;
 		}
 
-		input[name="realName"] {
-			border-bottom: 1px dashed #d1d1d;
-		}
-
 		input[name="port"] {
 			width: 47px;
 			height: 34px;
@@ -142,7 +127,18 @@ form {
 			border-top-left-radius: 0;
 			border-bottom-left-radius: 0;
 		}
+
+		&.advanced {
+			display: none;
+		}
+
+		&.selected {
+			border: transparent;
+			padding: 1px;
+			box-shadow: 0 0 0 2px @brightBlue;
+		}
 	}
+
 	section.checkbox {
 		height: 40px;
 		margin: 0 20px 0 10px;
@@ -156,10 +152,9 @@ form {
 			color: @brightBlue;
 			line-height: 28px;
 		}
-	}
-
-	.outline {
-		box-shadow: 0 0 0 2px @brightBlue;
+		&.advanced {
+			display: none;
+		}
 	}
 
 	hr {
@@ -169,6 +164,9 @@ form {
 		border: none;
 		border-top: 1px dashed #d1d1d1;
 		margin: 0 20px 20px 20px;
+		&.advanced {
+			display: none;
+		}
 	}
 
 	footer {
