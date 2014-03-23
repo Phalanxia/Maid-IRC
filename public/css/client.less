@@ -105,11 +105,11 @@ html, body {
 		}
 	}
 	h2 {
-		padding: 10px 8px;
+		padding: 10px 8px 10px 13px;
 		margin: 0;
 		color: #efefef;
-		font-size: 14px;
-		font-weight: normal;
+		font-size: 16px;
+		font-weight: 200;
 		&:hover {
 			cursor: pointer;
 			background-color: @darkBlue;
@@ -129,12 +129,30 @@ html, body {
 			height: 40px;
 			line-height: 40px;
 			color: #efefef;
+			&:nth-child(odd) {
+				background-color: darken(@midBlue, 2%);
+			}
 			i {
 				padding: 0 14px;
 				color: #efefef;
 			}
 			&:hover {
 				cursor: pointer;
+				background-color: @darkBlue;
+			}
+			&.focusedChannel {
+				&:before {
+					content: "";
+					position: absolute;
+					top: 12px;
+					right: 0;
+					height: 0px;
+					border-top: 7px solid transparent;
+					border-bottom: 7px solid transparent;
+					border-right: 7px solid #fafafa;
+				}
+			}
+			&.focusedChannel:hover {
 				background-color: @darkBlue;
 			}
 			&[data-alert] {
@@ -162,21 +180,6 @@ html, body {
 			span {
 				font-size: 14px;
 			}
-		}
-		li.focusedChannel {
-			&:before {
-				content: "";
-				position: absolute;
-				top: 12px;
-				right: -7px;
-				height: 0px;
-				border-top: 7px solid transparent;
-				border-bottom: 7px solid transparent;
-				border-left: 7px solid @midBlue;
-			}
-		}
-		li.focusedChannel:hover {
-			background-color: @darkBlue;
 		}
 	}
 	footer {
@@ -254,6 +257,7 @@ html, body {
 		width: 100%;
 		height: 100%;
 		overflow-y: scroll;
+		position: relative;
 		article {
 			float: left;
 			width: 100%;
@@ -296,8 +300,12 @@ html, body {
 					color: #ffffff;
 				}
 			}
-			.filler {
+			&.filler {
+				// display: block;
+				height: 100%;
 				display: none; // Not done.
+				p {
+				}
 				&:hover {
 					background: none;
 				}
