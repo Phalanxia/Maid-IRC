@@ -145,7 +145,7 @@ app.post('/client', function (req, res) {
 						var networkName = data.args[i].split("NETWORK=")[1];
 						socket.emit('networkName', networkName);
 					}
-				};
+				}
 			}
 		});
 
