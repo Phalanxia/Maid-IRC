@@ -1,3 +1,16 @@
+/*
+ ,ggg, ,ggg,_,ggg,                                       ,a8a,  ,ggggggggggg,        ,gggg,
+dP""Y8dP""Y88P""Y8b                            8I       ,8" "8,dP"""88""""""Y8,    ,88"""Y8b,
+Yb, `88'  `88'  `88                            8I       d8   8bYb,  88      `8b   d8"     `Y8
+ `"  88    88    88               gg           8I       88   88 `"  88      ,8P  d8'   8b  d8
+     88    88    88               ""           8I       88   88     88aaaad8P"  ,8I    "Y88P'
+     88    88    88    ,gggg,gg   gg     ,gggg,8I       Y8   8P     88""""Yb,   I8'
+     88    88    88   dP"  "Y8I   88    dP"  "Y8I       `8, ,8'     88     "8b  d8
+     88    88    88  i8'    ,8I   88   i8'    ,8I  8888  "8,8"      88      `8i Y8,
+     88    88    Y8,,d8,   ,d8b,_,88,_,d8,   ,d8b, `8b,  ,d8b,      88       Yb,`Yba,,_____,
+     88    88    `Y8P"Y8888P"`Y88P""Y8P"Y8888P"`Y8   "Y88P" "Y8     88        Y8  `"Y8888888
+*/
+
 console.log("Starting Maid IRC.\nEnviroment: " + process.env.NODE_ENV);
 
 if (process.env.NODE_ENV === undefined) {
