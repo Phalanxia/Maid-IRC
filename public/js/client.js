@@ -4,7 +4,7 @@ var client = {
 		connection: false,
 		pastDisconnect: false
 	},
-	focusedChannel: "",
+	focusedChannel: undefined,
 	channels: [],
 	nickname: "",
 	highlights: [],
@@ -17,11 +17,11 @@ var socket = io.connect('http://' + client.server + ':4848', {
 });
 
 var select = function (selectors) {
-	if (selectors.indexOf(',') != -1) {
-		return document.querySelectorAll(selectors);
-	} else {
-		return document.querySelector(selectors);
-	}
+	return document.querySelector(selectors);
+};
+
+var selectAll = function (selectors) {
+	return document.querySelectorAll(selectors);
 };
 
 /**
@@ -46,8 +46,7 @@ var select = function (selectors) {
 socket.on('connect', function () {
 	client.status.connection = true;
 
-	select('#sidebar footer span').style.backgroundColor = '#3C9067';
-	select('#sidebar footer span').innerHTML = "Connected";
+	select('#sidebar header span#status').style.backgroundColor = '#3C9067';
 
 	console.log("Connected to backend.");
 });
@@ -56,8 +55,7 @@ socket.on('disconnect', function () {
 	client.status.connection = false;
 	client.status.pastDisconnect = true;
 
-	select('#sidebar footer span').style.backgroundColor = "#903C3C";
-	select('#sidebar footer span').innerHTML = "Disconnected";
+	select('#sidebar header span#status').style.backgroundColor = "#903C3C";
 
 	console.warn("Lost connection to backend.");
 });
@@ -109,26 +107,34 @@ socket.on('ircInfo', function (data) {
 	client.channels = data;
 	client.channelList = Object.keys(client.channels);
 
+	// Lets reset the UI!
+	select('#channelConsole header input').value = '';
+	select('#users > ul').innerHTML = '';
 	select('#sidebar > ul').innerHTML = '';
+
 	function updateChannelMenu (element, index) {
-		select('#sidebar > ul').insertAdjacentHTML('beforeend', '<li data-alert=""><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
+		select('#sidebar > ul').insertAdjacentHTML('beforeend', '<li data-type="channel" data-alert="" data-channelNumber="' + index + '"><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
 	}
 
 	client.channelList.forEach(updateChannelMenu);
 
-	if (client.focusedChannel === '') {
+	if (client.focusedChannel === undefined) {
 		client.focusedChannel = client.channelList[0].toLowerCase();
+		if (client.channelList[0] !== undefined) {
+			select('#sidebar > ul li[data-channelNumber="0"]').classList.add('focusedChannel');
+			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]'), function(obj) {
+				obj.style.display = '';
+			});
+		}
+	} else {
+		select('#sidebar > ul li[data-channelNumber="' + client.channelList.indexOf(client.focusedChannel) + '"').classList.add('focusedChannel');
 	}
-
-	select('#sidebar > ul li:nth-of-type(1)').classList.add('focusedChannel');
-	select('#channelConsole header input').value = '';
 
 	if (client.channels[client.focusedChannel].topic !== undefined) {
 		select('#channelConsole header input').value = client.channels[client.focusedChannel].topic;
 	} else {
 		select('#channelConsole header input').value = '';
 	}
-	select('#users > ul').innerHTML = '';
 
 	channelSetup();
 });
@@ -147,22 +153,22 @@ select('#sidebar > ul').onclick = function(event) {
 				select('#channelConsole header input').value = '';
 			}
 
-			for (var i = document.querySelectorAll('#sidebar > ul li').length - 1; i >= 0; i--) {
-				document.querySelectorAll('#sidebar > ul li')[i].classList.remove('focusedChannel');
-			}
+			[].map.call(selectAll('#sidebar > ul li'), function(obj) {
+				obj.classList.remove('focusedChannel');
+			});
 
 			select('#sidebar > ul li:nth-of-type(' + (theNumber+=1) + ')').classList.add('focusedChannel');
 			select('#users ul').innerHTML = '';
 
 			// Show messages that are from the focused channel.
-			for (var i = document.querySelectorAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]').length - 1; i >= 0; i--) {
-				document.querySelectorAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]')[i].style.display = '';
-			}
+			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]'), function(obj) {
+				obj.style.display = '';
+			});
 
 			// Hide messages that are not from the focused channel.
-			for (var i = document.querySelectorAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])').length - 1; i >= 0; i--) {
-				document.querySelectorAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])')[i].style.display = 'none';
-			}
+			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])'), function(obj) {
+				obj.style.display = 'none';
+			});
 
 			channelSetup();
 		};
@@ -186,7 +192,7 @@ function displayMessage (data) {
 
 
 	// Linkify raw links.
-	function linkify(input) {
+	function linkify (input) {
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 		return input.replace(exp, "<a href='$1' target='_blank'>$1</a>");
 	}
@@ -222,9 +228,11 @@ function displayMessage (data) {
 
 	select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.messageType + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span>' + data.head + '</span></aside><p>' + message + '</p></article>');
 
-	for (var i = document.querySelectorAll("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])").length - 1; i >= 0; i--) {
-		document.querySelectorAll("#channelConsole output article:not([data-channel='" + client.focusedChannel + "'])")[i].style.display = 'none';
-	}
+	// Hide messages not from the focused channel
+	[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])'), function(obj) {
+		obj.style.display = 'none';
+	});
+
 
 	//Scroll to bottom unless the user is scrolled up
 	if (scrollInfoView) {
@@ -295,7 +303,7 @@ socket.on('recieveMessage', function (data) {
 			// Check to see if it's you that changed nick and update it on the client.
 			if (data.oldNick === client.nickname) {
 				client.nickname = data.newNick;
-				select('#users footer p').innerHTML = client.nickname;
+				select('#sidebar footer p').innerHTML = client.nickname;
 			}
 			break;
 		case "topicChange":
