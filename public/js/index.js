@@ -1,11 +1,20 @@
-document.querySelector('a#advanced').onclick = function () {
-	for (var i = document.querySelectorAll('.advanced').length - 1; i >= 0; i--) {
-		document.querySelectorAll('.advanced')[i].style.display = 'block';
-	}
+var select = function (selectors) {
+	return document.querySelector(selectors);
+};
 
-	for (var i = document.querySelectorAll('input').length - 1; i >= 0; i--) {
-		document.querySelectorAll('input')[i].tabIndex = '0';
-	}
+var selectAll = function (selectors) {
+	return document.querySelectorAll(selectors);
+};
 
-	document.querySelector('a#advanced').style.display = 'none';
+select('a#advanced').onclick = function () {
+	[].map.call(selectAll('.advanced'), function(obj) {
+		obj.style.display = 'block';
+	});
+
+	[].map.call(selectAll('input'), function(obj) {
+		obj.tabIndex = '0';
+	});
+
+	select('hr.advanced').style.height = '0';
+	select('a#advanced').style.display = 'none';
 };

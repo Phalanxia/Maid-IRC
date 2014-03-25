@@ -1,6 +1,5 @@
-@brightBlue: #52C1FF; // Alt: 1BA8ED
-@midBlue: #213246;
-@darkBlue: #182432;
+@blue: #52c1ff; // Alt: 1BA8ED
+@darkBlue: darken(@blue, 10%);
 @green: #3C9067;
 @red: #903C3C;
 
@@ -14,13 +13,13 @@
 }
 
 ::-moz-selection {
-	background: @brightBlue;
+	background: @blue;
 	text-shadow: none;
 	color: #efefef;
 }
 
 ::selection {
-	background: @brightBlue;
+	background: @blue;
 	text-shadow: none;
 	color: #efefef;
 }
@@ -35,12 +34,12 @@ html, body {
 
 a, a:visited {
 	text-decoration: none;
-	color: @brightBlue;
+	color: @blue;
 }
 
 a:hover{
 	text-decoration: underline;
-	color: @brightBlue;
+	color: @blue;
 }
 
 a:active {
@@ -73,7 +72,7 @@ form {
 		display: block;
 		width: inherit;
 		height: 32px;
-		color: @brightBlue;
+		color: @blue;
 		font-size: 23px;
 		font-weight: 200;
 		line-height: 32px;
@@ -88,57 +87,102 @@ form {
 	}
 
 	section:not(.checkbox) {
-		width: 248px;
+		width: 290px;
+	}
+
+	input:not([type="checkbox"]) {
+		display: inline-block;
+		width: 218px;
+		height: 44px;
 		margin: 0 20px 16px 20px;
+		padding: 0 16px;
 		background: #fbfbfb;
 		border: 1px solid #efefef;
 		border-radius: 4px;
+		line-height: 20px;
+		color: #1b1b1b;
+		font-size: 14px;
+		box-shadow: inset 0 1px 2px rgba(240,240,240,0.8);
 		-webkit-transition: all ease-in-out 0.15s;
-		transition: border-color ease-in-out 0.15s;
-
-		input {
-			font-size: 14px;
+		transition: all ease-in-out 0.15s;
+		&:focus {
+			border: 1px solid @blue;
+			box-shadow: 0 0 0 1px @blue;
 		}
-
-		input[type="text"], input[type="number"], input[type="password"] {
-			display: inline-block;
-			width: 218px;
-			height: 44px;
-			padding: 0 16px;
-			border: none;
-			background: none;
-			border-radius: 4px;
-			line-height: 20px;
-			color: #1b1b1b;
-			&:before {
-				color: #3c3c3c;
-			}
+		&:before {
+			color: #3c3c3c;
 		}
-
-		input[name="server"] {
-			width: 150px;
-			padding: 0 0 0 16px;
-		}
-
-		input[name="port"] {
-			width: 47px;
-			height: 34px;
-			padding: 0 16px;
-			margin: 5px 0;
-			border-left: 1px dashed #d1d1d1;
-			border-top-left-radius: 0;
-			border-bottom-left-radius: 0;
-		}
-
 		&.advanced {
 			display: none;
 		}
+	}
 
-		&.selected {
-			border: transparent;
-			padding: 1px;
-			box-shadow: 0 0 0 2px @brightBlue;
+	input[name="server"] {
+		width: 150px;
+		padding: 0 0 0 16px;
+		margin: 0 0 16px 20px;
+		border-top-right-radius: 0px;
+		border-bottom-right-radius: 0px;
+		border-right: none;
+	}
+
+	input[name="port"] {
+		width: 47px;
+		height: 44px;
+		padding: 0 16px;
+		margin: 5px 0;
+		border-left: 1px dashed #d1d1d1;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+
+	input[type="checkbox"] {
+		-webkit-appearance: none;
+		appearance: none;
+		display: block;
+		width: 22px;
+		height: 22px;
+		margin: 3px 0 0 16px;
+		background: none;
+		background-color: #fbfbfb;
+		border-radius: 4px;
+		border: 1px solid #efefef;
+		box-shadow: inset 0 1px 2px rgba(240,240,240,0.8);
+		font: 10px FontAwesome;
+		&:after {
+			display: none;
+			content: '\f00c';
+			left: 0;
+			width: 22px;
+			height: 22px;
+			margin: 0;
+			color: @blue;
 		}
+		&:checked {
+			&:after {
+				display: block;
+				content: '\f00c';
+				left: 0;
+				width: 20px;
+				height: 20px;
+				margin: 0;
+				background-color: @blue;
+				border-radius: 3px;
+				color: #efefef;
+				text-align: center;
+				line-height: 20px;
+				font-size: 14px;
+			}
+		}
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	&.selected {
+		border: transparent;
+		padding: 1px;
+		box-shadow: 0 0 0 2px @blue;
 	}
 
 	section.checkbox {
@@ -151,7 +195,7 @@ form {
 			margin: 3px 0 0 16px;
 		}
 		span {
-			color: @brightBlue;
+			color: @blue;
 			line-height: 28px;
 		}
 		&.advanced {
@@ -175,71 +219,29 @@ form {
 		padding: 20px;
 		background-color: #F6F9FD;
 		border-top: 1px solid #efefef;
-		border-bottom-right-radius: 10px;
-		border-bottom-left-radius: 10px;
-		input[type="submit"] {
+		border-bottom-right-radius: 4px;
+		border-bottom-left-radius: 4px;
+		button {
 			width: 250px;
 			height: 44px;
-			background: @brightBlue;
-			border: none;
-			//box-shadow: 0 4px 0 0 darken(@brightBlue, 20%);
+			background: @blue;
+			border: 1px solid darken(@blue, 16%);
 			border-radius: 4px;
+			box-shadow: inset 0 1px lighten(@blue, 12%);
 			color: #fafbfb;
 			font-size: 14px;
 			line-height: 34px;
 			font-weight: bold;
+			text-shadow: 0px -1px darken(@blue, 16%);
 			&:hover {
 				cursor: pointer;
-				background-color: @brightBlue;
-				color: #fafbfb;
 			}
 			&:active {
-				cursor: pointer;
-				background-color: @brightBlue;
-				box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
+				box-shadow: inset 0 1px lighten(@blue, 5%);
+				background-color: darken(@blue, 6%);
 				color: #fafbfb;
 			}
 		}
-	}
-}
-
-input[type="checkbox"] {
-	-webkit-appearance: none;
-	appearance: none;
-	display: block;
-	width: 22px;
-	height: 22px;
-	margin: 3px 0 0 16px;
-	background: none;
-	background-color: #fbfbfb;
-	border-radius: 4px;
-	border: 1px solid #efefef;
-	font-size: 10px;
-	&:after {
-		display: none;
-		content: '\2713';
-		left: 0;
-		width: 22px;
-		height: 22px;
-		margin: 0;
-		color: @brightBlue;
-	}
-	&:checked {
-		&:after {
-			display: block;
-			content: '\2713';
-			left: 0;
-			width: 20px;
-			height: 20px;
-			margin: 0;
-			color: @brightBlue;
-			text-align: center;
-			line-height: 22px;
-			font-size: 14px;
-		}
-	}
-	&:hover {
-		cursor: pointer;
 	}
 }
 
@@ -248,11 +250,26 @@ a#advanced, a#github {
 	bottom: 30px;
 	font-size: 16px;
 	font-family: 'Open Sans', Helvetica, sans-serif;
-	color: @brightBlue;
+	color: @blue;
 	&:active, &:visited, &:hover {
-		color: @brightBlue !important;
+		color: @blue !important;
 		text-decoration: none;
 		cursor: pointer;
+	}
+	span {
+		display: block;
+		height: 2px;
+		width: 1px;
+		margin: 0 auto;
+		opacity: 0;
+		background-color: @blue;
+		transition: all 0.4s ease-in-out;
+			-webkit-transition: all 0.4s ease-in-out;
+			-moz-transition: all 0.4s ease-in-out;
+	}
+	&:hover span {
+		width: 100%;
+		opacity: 1;
 	}
 }
 
@@ -268,23 +285,5 @@ a#advanced {
 	right: 32px;
 	span {
 		margin: 2px auto 0 auto;
-	}
-}
-
-a {
-	span {
-		display: block;
-		height: 2px;
-		width: 1px;
-		margin: 0 auto;
-		opacity: 0;
-		background-color: @brightBlue;
-		transition: all 0.4s ease-in-out;
-			-webkit-transition: all 0.4s ease-in-out;
-			-moz-transition: all 0.4s ease-in-out;
-	}
-	&:hover span {
-		width: 100%;
-		opacity: 1;
 	}
 }

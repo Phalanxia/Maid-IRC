@@ -11,12 +11,9 @@ html(lang='en')
 	body
 		form(action='/client', method='post')
 			h1 Maid IRC
-			section
-				input#name(type='text', placeholder='Nickname', name='name', spellcheck="false", autofocus, required)
-			section.advanced
-				input#nicknamePassword(type='password', name='nicknamePassword', placeholder='Password', tabIndex='-1')
-			section.advanced
-				input#realName(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
+			input#name(type='text', placeholder='Nickname', name='name', spellcheck="false", autofocus, required)
+			input#nicknamePassword.advanced(type='password', name='nicknamePassword', placeholder='Password', tabIndex='-1')
+			input#realName.advanced(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
 			hr.advanced
 			section
 				input#server(type='text', placeholder='Server', name='server', spellcheck="false", required)
@@ -24,10 +21,9 @@ html(lang='en')
 			section.checkbox.advanced
 				input#ssl(type='checkbox', name='sslToggle', tabIndex='-1')
 				span.checkboxLabel SSL
-			section
-				input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
+			input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
 			footer
-				input#submit(type='submit', placeholder='Submit', name='submit')
+				button#submit(type='submit', name='submit') Submit
 		a(href='//github.com/Phalanxia/Maid-IRC')#github
 			i.fa.fa-github
 			| Github
