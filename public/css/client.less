@@ -91,7 +91,8 @@ a:active {
 		height: 40px;
 		background-color: @brightBlue;
 		h1 {
-			width: 186px;
+			float: left;
+			width: 68px;
 			margin: 0;
 			padding: 0 0 0 14px;
 			font-size: 16px;
@@ -103,6 +104,62 @@ a:active {
 				font-weight: 800;
 				color: @midBlue;
 			}
+		}
+		button {
+			float: right;
+			height: 30px;
+			width: 30px;
+			margin: 5px 14px 5px 0;
+			background: none;
+			border: none;
+			border-radius: 4px;
+			color: #efefef;
+		}
+		ul {
+			display: none;
+			z-index: 1;
+			position: absolute;
+			top: 50px;
+			left: 113px;
+			height: 40px;
+			padding: 0;
+			margin: 0;
+			background-color: #efefef;
+			border-radius: 4px;
+			list-style: none;
+			&:before {
+				content: '';
+				position: absolute;
+				left: 53px;
+				bottom: 40px;
+				border: 6px solid transparent;
+				border-bottom: 6px solid #efefef;
+			}
+			li {
+				overflow: hidden;
+				float: left;
+				width: 40px;
+				height: 40px;
+				line-height: 40px;
+				text-align: center;
+				color: #1b1b1b;
+				border-radius: 4px;
+				-webkit-transition: background-color 0.2s ease-in-out;
+				-moz-transition: background-color 0.2s ease-in-out;
+				transition: background-color 0.2s ease-in-out;
+				&:hover {
+					cursor: pointer;
+					background-color: #fafafa;
+				}
+			}
+		}
+		span#status {
+			float: left;
+			height: 12px;
+			width: 12px;
+			margin: 14px 8px 8px 52px;
+			background-color: @red;
+			border-radius: 6px;
 		}
 	}
 	h2 {
@@ -191,34 +248,33 @@ a:active {
 		width: inherit;
 		height: 40px;
 		background-color: @darkBlue;
-		ul {
-			margin: 0;
+		button {
+			float: left;
+			background: none;
 			padding: 0;
-			display: inline-block;
-			list-style: none;
-			li {
-				width: 14px;
+			margin: 0;
+			border: 0;
+			span {
+				display: block;
+				margin: 14px 14px;
 				height: 14px;
-				padding: 13px 14px;
-				color: #d1d1d1;
-				-webkit-transition: background-color 0.2s ease-in-out;
-				-moz-transition: background-color 0.2s ease-in-out;
-				transition: background-color 0.2s ease-in-out;
-				&:hover {
-					cursor: pointer;
-					background-color: lighten(@darkBlue, 10%);
-				}
+				width: 14px;
+				border-radius: 7px;
+				background-color: @green;
+				box-shadow: inset 0 2px 0 0 darken(@green, 5%);
 			}
 		}
-		span {
+		input {
 			float: right;
-			background-color: @red;
-			line-height: 30px;
-			padding: 0 5px;
-			margin: 5px 7px 5px 5px;
+			width: 132px;
+			height: 28px;
+			margin: 6px 14px 0 0;
+			padding: 0 6px;
+			background: none;
 			border-radius: 4px;
-			font-size: 14px;
+			border: none;
 			color: #efefef;
+			text-align: right;
 		}
 	}
 }
@@ -403,28 +459,6 @@ a:active {
 		order: 2;
 		height: 40px;
 		border-left: 1px solid #d1d1d1;
-		button {
-			float: left;
-			background: none;
-			padding: 0;
-			margin: 0;
-			border: 0;
-			i {
-				display: block;
-				background-color: @green;
-				margin: 14px 14px;
-				height: 14px;
-				width: 14px;
-				border-radius: 7px;
-			}
-		}
-		p {
-			float: right;
-			margin: 0;
-			padding: 0 14px 0 0;
-			line-height: 40px;
-			color: @brightBlue;
-		}
 	}
 }
 
@@ -463,7 +497,7 @@ a:active {
 	width: 364px;
 	height: 160px;
 	border-radius: 4px;
-	box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 	background-color: #efefef;
 	p {
 		display: block;
@@ -569,7 +603,7 @@ a:active {
 			margin: 0;
 			padding: 0;
 			background-color: @midBlue;
-			border-bottom-left-radius: 4px;
+			border-bottom-left-radius: 3px;
 			list-style: none;
 			li {
 				width: 144px;
