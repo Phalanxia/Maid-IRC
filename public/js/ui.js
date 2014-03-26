@@ -30,12 +30,21 @@ select("#shutdown.modal.alert button").onclick = function () {
 };
 
 selectAll("#shutdown.modal.alert button")[1].onclick = function () {
-	socket.emit('shutdown', "Kittens are kawaii.");
+	socket.emit('shutdown', {});
 	window.onbeforeunload = null;
 	window.location.href = document.location.origin;
 };
 
+select('html').onclick = function () {
+	select('#sidebar header ul').style.display = 'none';
+};
+
+select('#sidebar header ul').onclick = function (event) {
+	event.stopPropagation();
+};
+
 select('#sidebar header button').onclick = function () {
+	event.stopPropagation();
 	if (select('#sidebar header ul').style.display == 'none' || select('#sidebar header ul').style.display === '') {
 		select('#sidebar header ul').style.display = 'block';
 	} else {

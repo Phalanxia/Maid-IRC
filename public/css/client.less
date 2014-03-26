@@ -2,11 +2,10 @@
 @midBlue: #213246;
 @darkBlue: #182432;
 @green: #3C9067;
+@yellow: #908B3C;
 @red: #903C3C;
 
-*:focus {
-	outline: 0;
-}
+*:focus { outline: 0; }
 
 ::-moz-selection {
 	background: @brightBlue;
@@ -20,7 +19,8 @@
 	color: #efefef;
 }
 
-html, body {
+html,
+body {
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -31,7 +31,8 @@ html, body {
 	flex-flow: row nowrap;
 }
 
-a, a:visited {
+a,
+a:visited {
 	text-decoration: none;
 	color: @brightBlue;
 }
@@ -60,10 +61,8 @@ a:active {
 	color: #fafbfb;
 	font-size: 14px;
 	font-weight: bold;
-	text-shadow: 0px -1px darken(@brightBlue, 16%);
-	&:hover {
-		cursor: pointer;
-	}
+	text-shadow: 0 -1px darken(@brightBlue, 16%);
+	&:hover { cursor: pointer; }
 	&:active {
 		box-shadow: inset 0 1px lighten(@brightBlue, 5%);
 		background-color: darken(@brightBlue, 6%);
@@ -82,8 +81,8 @@ a:active {
 	height: 100%;
 	background-color: @midBlue;
 	-webkit-user-select: none;
-	-moz-user-select: none;
-	user-select: none;
+	   -moz-user-select: none;
+			user-select: none;
 	header {
 		flex: 0 1 auto;
 		order: 0;
@@ -114,6 +113,9 @@ a:active {
 			border: none;
 			border-radius: 4px;
 			color: #efefef;
+			&:active {
+				color: darken(#efefef, 10%)
+			}
 		}
 		ul {
 			display: none;
@@ -145,8 +147,8 @@ a:active {
 				color: #1b1b1b;
 				border-radius: 4px;
 				-webkit-transition: background-color 0.2s ease-in-out;
-				-moz-transition: background-color 0.2s ease-in-out;
-				transition: background-color 0.2s ease-in-out;
+				   -moz-transition: background-color 0.2s ease-in-out;
+						transition: background-color 0.2s ease-in-out;
 				&:hover {
 					cursor: pointer;
 					background-color: #fafafa;
@@ -187,12 +189,10 @@ a:active {
 			height: 40px;
 			line-height: 40px;
 			color: #efefef;
-			transition: background-color 0.1s ease-in-out;
-				-webkit-transition: background-color 0.1s ease-in-out;
-				-moz-transition: background-color 0.1s ease-in-out;
-			&:nth-child(odd) {
-				background-color: darken(@midBlue, 2%);
-			}
+			-webkit-transition: background-color 0.1s ease-in-out;
+			   -moz-transition: background-color 0.1s ease-in-out;
+					transition: background-color 0.1s ease-in-out;
+			&:nth-child(odd) { background-color: darken(@midBlue, 2%); }
 			i {
 				padding: 0 14px;
 				color: #efefef;
@@ -207,15 +207,13 @@ a:active {
 					position: absolute;
 					top: 12px;
 					right: 0;
-					height: 0px;
+					height: 0;
 					border-top: 7px solid transparent;
 					border-bottom: 7px solid transparent;
 					border-right: 7px solid #fafafa;
 				}
 			}
-			&.focusedChannel:hover {
-				background-color: @darkBlue;
-			}
+			&.focusedChannel:hover { background-color: @darkBlue; }
 			&[data-alert] {
 				&:after {
 					float: right;
@@ -233,13 +231,9 @@ a:active {
 				}
 			}
 			&[data-alert=""] {
-				&:after {
-					display: none;
-				}
+				&:after { display: none; }
 			}
-			span {
-				font-size: 14px;
-			}
+			span { font-size: 14px; }
 		}
 	}
 	footer {
@@ -261,7 +255,7 @@ a:active {
 				width: 14px;
 				border-radius: 7px;
 				background-color: @green;
-				box-shadow: inset 0 2px 0 0 darken(@green, 5%);
+				box-shadow: inset 0 2px 0 0 rgba(80,80,80,0.5);
 			}
 		}
 		input {
@@ -321,9 +315,7 @@ a:active {
 			float: left;
 			width: 100%;
 			line-height: 25px;
-			&:hover {
-				 background-color: #eeeeee;
-			}
+			&:hover { background-color: #eeeeee; }
 			aside {
 				float: left;
 				width: 220px;
@@ -363,11 +355,8 @@ a:active {
 				// display: block;
 				height: 100%;
 				display: none; // Not done.
-				p {
-				}
-				&:hover {
-					background: none;
-				}
+				p { }
+				&:hover { background: none; }
 			}
 		}
 	}
@@ -416,8 +405,8 @@ a:active {
 	height: 100%;
 	background-color: #efefef;
 	-webkit-user-select: none;
-	-moz-user-select: none;
-	user-select: none;
+	   -moz-user-select: none;
+			user-select: none;
 	header {
 		flex: 0 1 auto;
 		order: 0;
@@ -471,33 +460,33 @@ a:active {
 	/* End */
 	height: 100%;
 	width: 100%;
-	background-color: rgba(0, 0, 0, 0.8);
-	transition: all 0.4s ease-in-out;
-		-webkit-transition: all 0.4s ease-in-out;
-		-moz-transition: all 0.4s ease-in-out;
+	background-color: rgba(0,0,0,.8);
+	-webkit-transition: all 0.4s ease-in-out;
+	   -moz-transition: all 0.4s ease-in-out;
+			transition: all 0.4s ease-in-out;
 }
 
 .modal {
 	z-index: 3;
 	position: absolute;
-	transition: all 0.4s ease-in-out;
-		-webkit-transition: all 0.4s ease-in-out;
-		-moz-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	   -moz-transition: all 0.4s ease-in-out;
+			transition: all 0.4s ease-in-out;
 	/* Will Tranition */
 	visibility: hidden;
 	top: -50%;
 	left: 50%;
 	/* End */
-	transform: translate(-50%, -50%);
-		-webkit-transform: translate(-50%, -50%);
-		-moz-transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	   -moz-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
 }
 
 .modal.alert {
 	width: 364px;
 	height: 160px;
 	border-radius: 4px;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	background-color: #efefef;
 	p {
 		display: block;
@@ -531,8 +520,8 @@ a:active {
 			text-shadow: 0 1px 1px darken(#39C082, 10%);
 		}
 		button {
-			display: inline-block;
 			float: left;
+			display: inline-block;
 			width: 122px;
 			height: 42px;
 			border: none;
@@ -541,22 +530,18 @@ a:active {
 			border-radius: 4px;
 			background: transparent;
 			color: #efefef;
-			&:hover {
-				cursor: pointer;
-			}
-			&:active {
-				box-shadow: inset 0 2px 6px rgba(60, 60, 60, 0.4);
-			}
+			&:hover { cursor: pointer; }
+			&:active { box-shadow: inset 0 2px 6px rgba(60,60,60,.4); }
 		}
 	}
 }
 
 #settings {
-	background-color: #efefef;
 	width: 600px;
 	height: 400px;
+	background-color: #efefef;
 	border-radius: 4px;
-	box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 2px 2px 1px rgba(0,0,0,.5);
 	header {
 		height: 40px;
 		width: 100%;
@@ -580,17 +565,15 @@ a:active {
 			background: none;
 			color: #efefef;
 			font-size: 20px;
-			transition: background-color 0.2s ease-in-out;
-				-webkit-transition: background-color 0.2s ease-in-out;
-				-moz-transition: background-color 0.2s ease-in-out;
+			-webkit-transition: background-color 0.2s ease-in-out;
+			   -moz-transition: background-color 0.2s ease-in-out;
+					transition: background-color 0.2s ease-in-out;
 			&:hover {
 				cursor: pointer;
 				background-color: darken(@brightBlue, 10%);
 				border-top-right-radius: 4px;
 			}
-			&:active {
-				background-color: darken(@brightBlue, 20%);
-			}
+			&:active { background-color: darken(@brightBlue, 20%); }
 		}
 	}
 	nav {

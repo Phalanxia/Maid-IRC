@@ -15,7 +15,7 @@ console.log("Starting Maid IRC.\nEnviroment: " + process.env.NODE_ENV);
 
 if (process.env.NODE_ENV === undefined) {
 	console.warn("Please define the NODE_ENV.");
-} else if (process.env.NODE_ENV !== "production" || process.env.NODE_ENV !== "development") {
+} else if (process.env.NODE_ENV != "production" || process.env.NODE_ENV != "development") {
 	console.warn('Sorry! NODE_ENV: "' + process.env.NODE_ENV + '" is not recognized. Try "development" or "production".');
 }
 
@@ -292,11 +292,14 @@ app.post('/client', function (req, res) {
 					client.part(data.content);
 					socket.emit('ircInfo', client.chans);
 					break;
-				case "me":
-					client.action(data.channel, data.content);
+				case "action":
+					client.action(data.channel, data.message);
 					break;
 				case "notice":
-					client.action(data.channel, data.content);
+					client.action(data.channel, data.message);
+					break;
+				case "away":
+					client.send('AWAY', data.message);
 					break;
 			}
 		});
