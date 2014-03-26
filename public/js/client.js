@@ -2,13 +2,17 @@ var client = {
 	server: document.domain,
 	status: {
 		connection: false,
-		pastDisconnect: false
+		pastDisconnect: false,
+		away: false
 	},
 	focusedChannel: undefined,
 	channels: [],
 	nickname: "",
 	highlights: [],
-	channelList: ""
+	channelList: "",
+	settings: {
+		awayMessage: "Away"
+	}
 };
 
 var socket = io.connect('http://' + client.server + ':4848', {
@@ -336,7 +340,7 @@ var irc = {
 
 			var command = data.split(" ")[0],
 				_message = data.substring(command.length+=1, data.length),
-				commandList = ['me', 'join', 'part', 'whois', 'notice'],
+				commandList = ['me', 'join', 'part', 'whois', 'notice', 'away'],
 				commandFound = false;
 
 			// Check to see if the command is in commandList.
@@ -360,9 +364,9 @@ var irc = {
 			switch (command) {
 				case "me":
 					socket.emit('sendCommand', {
-						type: "me",
+						type: "action",
 						channel: client.focusedChannel,
-						content: _message
+						message: _message
 					});
 					displayMessage({
 						messageType: "action",
@@ -392,12 +396,31 @@ var irc = {
 					socket.emit('sendCommand', {
 						type: "notice",
 						channel: client.focusedChannel,
-						content: _message
+						message: _message
 					});
 					displayMessage({
 						messageType: "notice",
 						head: "-" + client.nickname + "-",
 						message: client.nickname + " " + _message
+					});
+					break;
+				case "away":
+					socket.emit('sendCommand', {
+						type: "away",
+						message: _message
+					});
+					break;
+				case "help":
+					socket.emit('sendCommand', {
+						type: "away",
+						message: _message
+					});
+					break;
+				case "topic":
+					socket.emit('sendCommand', {
+						type: "topic",
+						channel: client.focusedChannel,
+						message: _message
 					});
 					break;
 			}
@@ -418,7 +441,7 @@ select('#channelConsole footer input').onkeydown = function (event) {
 			event.preventDefault();
 			// TODO: Tab completion.
 			break;
-		case 13:
+		case 13: // Enter
 			irc.sendMessage(select('#channelConsole footer input').value);
 			break;
 	}
@@ -426,4 +449,23 @@ select('#channelConsole footer input').onkeydown = function (event) {
 
 select('#channelConsole footer button').onclick = function () {
 	irc.sendMessage(select('#channelConsole footer input').value);
+};
+
+select('#sidebar footer > button').onclick = function () {
+
+	if (!client.away) {
+		select('#sidebar footer > button span').style.backgroundColor = '#908B3C';
+		socket.emit('sendCommand', {
+			type: "away",
+			message: client.settings.awayMessage
+		});
+	} else {
+		select('#sidebar footer > button span').style.backgroundColor = '#3C9067';
+		socket.emit('sendCommand', {
+			type: "away",
+			message: ''
+		});
+	}
+
+	client.away = !client.away;
 };
