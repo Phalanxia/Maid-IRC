@@ -55,9 +55,9 @@ app.configure(function () {
 	app.use(app.router);
 
 	// Set up less.css middleware
-	app.use(lessMiddleware({
-		src: __dirname + '/public',
-		compress: true
+	app.use(lessMiddleware(__dirname + '/public', {
+		compress: true,
+		optimization: 2
 	}));
 
 	app.use(express.static(__dirname + '/public'));
@@ -240,13 +240,24 @@ app.post('/client', function (req, res) {
 			socket.emit('ircInfo', client.chans);
 		});
 
-		client.addListener('topic', function (channel, topic, nick) {
-			socket.emit('topic', {
-				type: 'topicChange',
-				channel: channel,
-				topic: topic,
-				nick: nick
-			});
+		client.addListener('topic', function (channel, topic, nick, message) {
+			console.log(message.command);
+			if (message.command == 333) {
+				socket.emit('recieveMessage', {
+					type: 'topic',
+					channel: channel,
+					topic: topic,
+					nick: nick,
+					args: message.args
+				});
+			} else {
+				socket.emit('recieveMessage', {
+					type: 'topicChange',
+					channel: channel,
+					topic: topic,
+					nick: nick
+				});
+			}
 			// Send channel info to the client.
 			socket.emit('ircInfo', client.chans);
 		});
@@ -300,6 +311,9 @@ app.post('/client', function (req, res) {
 					break;
 				case "away":
 					client.send('AWAY', data.message);
+					break;
+				case "topic":
+					client.send('TOPIC', data.channel, data.message);
 					break;
 			}
 		});

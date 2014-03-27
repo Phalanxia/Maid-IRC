@@ -122,28 +122,6 @@ socket.on('ircInfo', function (data) {
 
 	client.channelList.forEach(updateChannelMenu);
 
-	if (client.focusedChannel === undefined) {
-		client.focusedChannel = client.channelList[0].toLowerCase();
-		if (client.channelList[0] !== undefined) {
-			select('#sidebar > ul li[data-channelNumber="0"]').classList.add('focusedChannel');
-			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]'), function(obj) {
-				obj.style.display = '';
-			});
-		}
-	} else {
-		select('#sidebar > ul li[data-channelNumber="' + client.channelList.indexOf(client.focusedChannel) + '"').classList.add('focusedChannel');
-	}
-
-	if (client.channels[client.focusedChannel].topic !== undefined) {
-		select('#channelConsole header input').value = client.channels[client.focusedChannel].topic;
-	} else {
-		select('#channelConsole header input').value = '';
-	}
-
-	channelSetup();
-});
-
-select('#sidebar > ul').onclick = function(event) {
 	var items = select('#sidebar > ul').getElementsByTagName('li');
 	for (i = 0; i < items.length; i++) {
 		items[i].i = i;
@@ -177,7 +155,27 @@ select('#sidebar > ul').onclick = function(event) {
 			channelSetup();
 		};
 	}
-};
+
+	if (client.focusedChannel === undefined) {
+		client.focusedChannel = client.channelList[0].toLowerCase();
+		if (client.channelList[0] !== undefined) {
+			select('#sidebar > ul li[data-channelNumber="0"]').classList.add('focusedChannel');
+			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.focusedChannel + '"]'), function(obj) {
+				obj.style.display = '';
+			});
+		}
+	} else {
+		select('#sidebar > ul li[data-channelNumber="' + client.channelList.indexOf(client.focusedChannel) + '"').classList.add('focusedChannel');
+	}
+
+	if (client.channels[client.focusedChannel].topic !== undefined) {
+		select('#channelConsole header input').value = client.channels[client.focusedChannel].topic;
+	} else {
+		select('#channelConsole header input').value = '';
+	}
+
+	channelSetup();
+});
 
 function displayMessage (data) {
 	var message = data.message
@@ -310,6 +308,15 @@ socket.on('recieveMessage', function (data) {
 				select('#sidebar footer p').innerHTML = client.nickname;
 			}
 			break;
+		case "topic":
+			var topicDate = new Date(data.args[3]*1000);
+			displayMessage({
+				messageType: "topic",
+				head: "&gt;",
+				channel: data.channel,
+				message: 'Topic for ' + data.channel + ' set by ' + data.args[2] + ' at ' + topicDate
+			});
+			break;
 		case "topicChange":
 			displayMessage({
 				messageType: "topicChange",
@@ -340,7 +347,7 @@ var irc = {
 
 			var command = data.split(" ")[0],
 				_message = data.substring(command.length+=1, data.length),
-				commandList = ['me', 'join', 'part', 'whois', 'notice', 'away'],
+				commandList = ['me', 'join', 'part', 'whois', 'notice', 'away', 'topic'],
 				commandFound = false;
 
 			// Check to see if the command is in commandList.
@@ -412,16 +419,24 @@ var irc = {
 					break;
 				case "help":
 					socket.emit('sendCommand', {
-						type: "away",
+						type: "help",
 						message: _message
 					});
 					break;
 				case "topic":
-					socket.emit('sendCommand', {
-						type: "topic",
-						channel: client.focusedChannel,
-						message: _message
-					});
+					if (_message.split(" ")[0].charAt(0) === "#") {
+						socket.emit('sendCommand', {
+							type: "topic",
+							channel: _message.split(" ")[0],
+							message: _message.substring(_message.split(" ")[0].length+1)
+						});
+					} else {
+						socket.emit('sendCommand', {
+							type: "topic",
+							channel: client.focusedChannel,
+							message: _message
+						});
+					}
 					break;
 			}
 		}
@@ -452,7 +467,6 @@ select('#channelConsole footer button').onclick = function () {
 };
 
 select('#sidebar footer > button').onclick = function () {
-
 	if (!client.away) {
 		select('#sidebar footer > button span').style.backgroundColor = '#908B3C';
 		socket.emit('sendCommand', {
