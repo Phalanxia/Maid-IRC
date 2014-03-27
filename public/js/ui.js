@@ -3,6 +3,7 @@ window.onbeforeunload = function () {
 };
 
 selectAll('#sidebar header ul li')[0].onclick = function () {
+	select('#sidebar header ul').classList.remove('displayed');
 	select("#pageCover").classList.toggle("displayed");
 	select("#settings").classList.toggle("displayed");
 };
@@ -13,6 +14,7 @@ selectAll('#settings.modal header button')[0].onclick = function () {
 };
 
 selectAll('#sidebar header ul li')[1].onclick = function () {
+	select('#sidebar header ul').classList.remove('displayed');
 	select("#pageCover").classList.toggle("displayed");
 	select("#shutdown").classList.toggle("displayed");
 };
@@ -36,7 +38,7 @@ selectAll("#shutdown.modal.alert button")[1].onclick = function () {
 };
 
 select('html').onclick = function () {
-	select('#sidebar header ul').style.display = 'none';
+	select('#sidebar header ul').classList.remove("displayed");
 };
 
 select('#sidebar header ul').onclick = function (event) {
@@ -45,9 +47,25 @@ select('#sidebar header ul').onclick = function (event) {
 
 select('#sidebar header button').onclick = function () {
 	event.stopPropagation();
-	if (select('#sidebar header ul').style.display == 'none' || select('#sidebar header ul').style.display === '') {
-		select('#sidebar header ul').style.display = 'block';
-	} else {
-		select('#sidebar header ul').style.display = 'none';
-	}
+	select('#sidebar header ul').classList.toggle('displayed');
 };
+
+// Settings
+var settingsItems = select('#settings.modal nav > ul').getElementsByTagName('li');
+for (i = 0; i < settingsItems.length; i++) {
+	settingsItems[i].i = i;
+	settingsItems[i].onclick = function () {
+		var theNumber = this.i;
+		[].map.call(selectAll('#settings.modal nav > ul li'), function(obj) {
+			obj.classList.remove('focused');
+		});
+
+		select('#settings.modal nav > ul li:nth-of-type(' + (theNumber+1) + ')').classList.add('focused');
+
+		[].map.call(selectAll('#settings.modal .page'), function(obj) {
+			obj.style.display = 'none';
+		});
+
+		selectAll('#settings.modal .page:nth-of-type(' + (theNumber+1) + ')')[0].style.display = 'block';
+	};
+}
