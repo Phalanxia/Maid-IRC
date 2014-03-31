@@ -4,6 +4,21 @@ A web IRC client based on node.js and socket.io
 
 [![Dependency Status](https://gemnasium.com/Phalanxia/Maid-IRC.png)](https://gemnasium.com/Phalanxia/Maid-IRC)
 
+## Installation
+
+1. Download dependencies:
+	`$ npm install`
+
+2. Edit config.js
+
+## Running
+
+1. Please define the node enviroment varible:
+	Supported varibles are `development` and `production`.
+
+2. Run Maid IRC:
+	Use this command in the main directory of Maid IRC: `node app.js`
+
 ## Screenshots
 
 Login screen

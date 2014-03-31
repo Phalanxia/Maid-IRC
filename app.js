@@ -15,7 +15,7 @@ console.log("Starting Maid IRC.\nEnviroment: " + process.env.NODE_ENV);
 
 if (process.env.NODE_ENV === undefined) {
 	console.warn("Please define the NODE_ENV.");
-} else if (process.env.NODE_ENV != "production" || process.env.NODE_ENV != "development") {
+} else if (process.env.NODE_ENV != "production" && process.env.NODE_ENV != "development") {
 	console.warn('Sorry! NODE_ENV: "' + process.env.NODE_ENV + '" is not recognized. Try "development" or "production".');
 }
 
@@ -29,7 +29,7 @@ var ircLib = require('irc'),
 var devMode = false;
 
 // Get config
-var config = require('./configs/config.js');
+var config = require('./config.js');
 
 // Set up express
 var app = express();
@@ -86,9 +86,15 @@ function log (name, content) {
 	});
 }
 
+function getMask (message) {
+	return message.nick + '!' + message.user + '@' + message.host;
+}
+
 // Client
 app.post('/client', function (req, res) {
 	// I feel like this might be a messy way of doing it but it will be fine for now.
+
+	// Update: It doesn't work at all.
 
 	res.render("client", {
 		server: req.body.server,
@@ -178,7 +184,8 @@ app.post('/client', function (req, res) {
 				type: "message",
 				nick: nick,
 				channel: to,
-				message: text
+				message: text,
+				mask: getMask(message)
 			});
 		});
 
@@ -202,6 +209,8 @@ app.post('/client', function (req, res) {
 				message: message,
 				info: message
 			});
+
+			console.log(message.host);
 			// Send channel info to the client.
 			socket.emit('ircInfo', client.chans);
 		});
@@ -211,7 +220,7 @@ app.post('/client', function (req, res) {
 			socket.emit('recieveMessage', {
 				type: "quit",
 				nick: nick,
-				channel: channels,
+				channels: channels,
 				message: reason,
 				info: message
 			});
@@ -224,7 +233,8 @@ app.post('/client', function (req, res) {
 				type: "notice",
 				nick: nick,
 				channel: to,
-				message: text
+				message: text,
+				mask: getMask(message)
 			});
 		});
 
@@ -241,7 +251,6 @@ app.post('/client', function (req, res) {
 		});
 
 		client.addListener('topic', function (channel, topic, nick, message) {
-			console.log(message.command);
 			if (message.command == 333) {
 				socket.emit('recieveMessage', {
 					type: 'topic',
