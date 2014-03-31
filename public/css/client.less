@@ -26,20 +26,21 @@
 
 ::-webkit-scrollbar-track {
 	background-color: fade(@midBlue, 20%);
-	-webkit-border-radius: 5px;
+	border-radius: 5px;
 	background-clip: padding-box;
 	border: 3px solid rgba(0,0,0,0);
 }
+
 ::-webkit-scrollbar-thumb:vertical {
 	background-color: fade(@midBlue, 80%);
-	-webkit-border-radius: 5px;
+	border-radius: 5px;
 	background-clip: padding-box;
 	border: 3px solid rgba(0,0,0,0);
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
 	background-color: fade(@midBlue, 80%);
-	-webkit-border-radius: 5px;
+	border-radius: 5px;
 	background-clip: padding-box;
 	border: 3px solid rgba(0,0,0,0);
 }
@@ -343,24 +344,33 @@ a:active {
 			height: 30px;
 			margin: 5px 0;
 			padding: 0 8px;
+			background-color: #fafafa;
 			border: none;
 			border-radius: 4px;
 			font-size: 14px;
 			line-height: 17px;
+			color: @darkBlue;
 		}
 	}
 	output {
 		flex: 1 1 auto;
 		order: 1;
 
+		display: flex;
+		flex-direction: column;
+
 		width: 100%;
 		height: 100%;
 		overflow-y: scroll;
 		position: relative;
 		article {
+			flex: 0 0 auto;
 			float: left;
 			width: 100%;
 			line-height: 25px;
+			-webkit-transition: background-color 0.1s ease-in-out;
+			   -moz-transition: background-color 0.1s ease-in-out;
+					transition: background-color 0.1s ease-in-out;
 			&:hover { background-color: #eeeeee; }
 			aside {
 				float: left;
@@ -368,12 +378,13 @@ a:active {
 				min-width: 20px;
 				height: 100%;
 				margin: 0 8px 0 0;
+				line-height: 24px;
 				time {
 					float: left;
 					width: 80px;
 					text-align: center;
 					font-size: 14px;
-					color: #1b1b1b;
+					color: @darkBlue;
 				}
 				span {
 					float: right;
@@ -387,9 +398,10 @@ a:active {
 				padding: 0 8px;
 				border-left: 1px solid #d9d9d9;
 				font-size: 14px;
-				color: #1b1b1b;
+				color: @darkBlue;
 				white-space: pre-wrap;
 				word-wrap: break-word;
+				line-height: 24px;
 				.highlighted {
 					padding: 2px;
 					background-color: @brightBlue;
@@ -397,11 +409,21 @@ a:active {
 					color: #ffffff;
 				}
 			}
-			&.filler {
-				// display: block;
+			&#filler {
+				display: flex !important;
+				flex: 1;
 				height: 100%;
-				display: none; // Not done.
-				p { }
+				div {
+					flex: 1;
+					display: block;
+					margin: 0 0 0 220px;
+					padding: 0 8px;
+					border-left: 1px solid #d9d9d9;
+					font-size: 14px;
+					color: #1b1b1b;
+					white-space: pre-wrap;
+					word-wrap: break-word;
+				}
 				&:hover { background: none; }
 			}
 		}
@@ -473,19 +495,46 @@ a:active {
 		order: 1;
 
 		width: 199px;
+		height: ~"calc(100% - 40px)";
 		margin: 0;
 		padding: 0;
 		border-left: 1px solid #d1d1d1;
 		list-style: none;
+		overflow-y: scroll;
+		overflow-x: hide;
 		li {
 			height: 24px;
 			color: @midBlue;
-			line-height: 24px;
+			-webkit-transition: background-color 0.1s ease-in-out;
+			   -moz-transition: background-color 0.1s ease-in-out;
+					transition: background-color 0.1s ease-in-out;
+			&:nth-child(odd) { background-color: darken(#efefef, 2%); }
+			&:hover {
+				cursor: pointer;
+				background-color: darken(#efefef, 4%);
+			}
 			span {
 				display: inline-block;
+				float: left;
 				width: 16px;
 				padding: 0 8px;
+				height: 24px;
+				width: 24px;
 				color: @brightBlue;
+				text-align: center;
+				line-height: 24px;
+				font-size: 14px;
+				&.rank0 { color: spin(@brightBlue, 40); }
+				&.rank1 { color: spin(@brightBlue, 100); }
+				&.rank2 { color: spin(@brightBlue, 160); }
+			}
+			p {
+				float: left;
+				margin: 0;
+				padding: 0;
+				line-height: 24px;
+				font-size: 14px;
+				color: @darkBlue;
 			}
 		}
 	}

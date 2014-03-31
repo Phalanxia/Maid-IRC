@@ -11,7 +11,8 @@ var client = {
 	highlights: [],
 	channelList: "",
 	settings: {
-		awayMessage: "Away"
+		awayMessage: "Away",
+		ignoreList: []
 	}
 };
 
@@ -81,7 +82,7 @@ function channelSetup() {
 		_userList.push(k);
 	}
 
-	_userList.sort(function(a,b) {
+	_userList.sort(function(a, b) {
 		var rankString = "\r+~@";
 		var rankA = rankString.indexOf(_users[a]),
 			rankB = rankString.indexOf(_users[b]);
@@ -94,7 +95,18 @@ function channelSetup() {
 	});
 
 	for (var i = 0; i < _userList.length; i++) {
-		select('#users ul').insertAdjacentHTML('beforeend', '<li><span>' + _users[_userList[i]] + '</span>' + _userList[i] + '</li>');
+		var identifyer = '';
+		if (_users[_userList[i]] == "@") {
+			identifyer = '<span class="fa fa-circle rank0"></span>';
+		} else if (_users[_userList[i]] == "+") {
+			identifyer = '<span class="fa fa-circle rank1"></span>';
+		} else if (_users[_userList[i]] == "~") {
+			identifyer = '<span class="fa fa-circle rank1"></span>';
+		} else {
+			identifyer = '<span></span>';
+		}
+
+		select('#users ul').insertAdjacentHTML('beforeend', '<li>' + identifyer + '<p>' + _userList[i] + '</p></li>');
 
 		// Get the op count.
 		if (_users[_userList[i]] === "@" || _users[_userList[i]] === "~") {
@@ -228,7 +240,10 @@ function displayMessage (data) {
 		scrollInfoView = true;
 	}
 
-	select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.messageType + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span>' + data.head + '</span></aside><p>' + message + '</p></article>');
+	select('#channelConsole output').removeChild(select('#channelConsole output #filler'));
+
+	select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.messageType + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span> ' + data.head + '</span></aside><p>' + message + '</p></article><article id="filler"><div></div></article>');
+
 
 	// Hide messages not from the focused channel
 	[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.focusedChannel + '"])'), function(obj) {
@@ -243,88 +258,94 @@ function displayMessage (data) {
 }
 
 socket.on('recieveMessage', function (data) {
-	switch (data.type) {
-		case "message":
-			displayMessage({
-				messageType: "message",
-				head: data.nick,
-				channel: data.channel,
-				message: data.message
-			});
-			break;
-		case "serverMessage":
-			displayMessage({
-				messageType: "serverMessage",
-				head: "*",
-				channel: "server",
-				message: data.message
-			});
-			break;
-		case "join":
-			displayMessage({
-				messageType: "join",
-				head: "*",
-				channel: data.channel,
-				message: data.nick + " (" + data.info.host + ") has joined " + data.channel
-			});
-			break;
-		case "part":
-			displayMessage({
-				messageType: "part",
-				head: "*",
-				channel: data.channel,
-				message: data.nick + " (" + data.info.host + ") has left " + data.channel
-			});
-			break;
-		case "quit":
-			displayMessage({
-				messageType: "quit",
-				head: "*",
-				channel: data.channel,
-				message: data.nick + " (" + data.info.host + ") has quit " + data.channels + " (" + data.reason + ")"
-			});
-			break;
-		case "notice":
-			displayMessage({
-				messageType: "notice",
-				head: "-" + data.nick + "-",
-				channel: data.channel,
-				message: data.message
-			});
-			break;
-		case "nickChange":
-			for (var i = data.channels.length - 1; i >= 0; i--) {
+	if (client.settings.ignoreList.indexOf(data.mask) != -1) {
+		return;
+	} else {
+		switch (data.type) {
+			case "message":
 				displayMessage({
-					messageType: "nickChange",
-					head: "&gt;",
-					channel: data.channels[i],
-					message: data.oldNick + " is now known as " + data.newNick
+					messageType: "message",
+					head: data.nick,
+					channel: data.channel,
+					message: data.message
 				});
-			}
+				break;
+			case "serverMessage":
+				displayMessage({
+					messageType: "serverMessage",
+					head: "*",
+					channel: "server",
+					message: data.message
+				});
+				break;
+			case "join":
+				displayMessage({
+					messageType: "join",
+					head: "*",
+					channel: data.channel,
+					message: data.nick + " (" + data.info.host + ") has joined " + data.channel
+				});
+				break;
+			case "part":
+				displayMessage({
+					messageType: "part",
+					head: "*",
+					channel: data.channel,
+					message: data.nick + " (" + data.info.host + ") has left " + data.channel
+				});
+				break;
+			case "quit":
+				for (var i = data.channels.length - 1; i >= 0; i--) {
+					displayMessage({
+						messageType: "quit",
+						head: "*",
+						channel: data.channels,
+						message: data.nick + " (" + data.info.host + ") has quit " + data.channels[i] + " (" + data.reason + ")"
+					});
+				}
+				break;
+			case "notice":
+				displayMessage({
+					messageType: "notice",
+					head: "-" + data.nick + "-",
+					channel: data.channel,
+					message: data.message
+				});
+				break;
+			case "nickChange":
+				for (var i = data.channels.length - 1; i >= 0; i--) {
+					displayMessage({
+						messageType: "nickChange",
+						head: "&gt;",
+						channel: data.channels[i],
+						message: data.oldNick + " is now known as " + data.newNick
+					});
+				}
 
-			// Check to see if it's you that changed nick and update it on the client.
-			if (data.oldNick === client.nickname) {
-				client.nickname = data.newNick;
-				select('#sidebar footer p').innerHTML = client.nickname;
-			}
-			break;
-		case "topic":
-			var topicDate = new Date(data.args[3]*1000);
-			displayMessage({
-				messageType: "topic",
-				head: "&gt;",
-				channel: data.channel,
-				message: 'Topic for ' + data.channel + ' set by ' + data.args[2] + ' at ' + topicDate
-			});
-			break;
-		case "topicChange":
-			displayMessage({
-				messageType: "topicChange",
-				head: "&gt;",
-				channel: data.channel,
-				message: data.nick + ' has changed the topic to: "' + data.topic + '"'
-			});
-			break;
+				// Check to see if it's you that changed nick and update it on the client.
+				if (data.oldNick === client.nickname) {
+					client.nickname = data.newNick;
+					select('#sidebar footer p').innerHTML = client.nickname;
+				}
+				break;
+			case "topic":
+				var topicDate = new Date(data.args[3]*1000);
+				displayMessage({
+					messageType: "topic",
+					head: "&gt;",
+					channel: data.channel,
+					message: 'Topic for ' + data.channel + ' set by ' + data.args[2] + ' at ' + topicDate
+				});
+				break;
+			case "topicChange":
+				displayMessage({
+					messageType: "topicChange",
+					head: "&gt;",
+					channel: data.channel,
+					message: data.nick + ' has changed the topic to: "' + data.topic + '"'
+				});
+				break;
+		}
 	}
 });
 
