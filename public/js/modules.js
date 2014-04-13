@@ -4,7 +4,49 @@ var UpdateInterface = (function () {
 	var module = function () {};
 
 	// Update channel/PM user list
-	module.prototype.updateDirectory = function () {
+	module.prototype.directory = function () {
+		var channelList = Object.keys(client.channels);
+		select('#sidebar > ul').innerHTML = '';
+
+		function updateChannelMenu (element, index) {
+			select('#sidebar > ul').insertAdjacentHTML('beforeend', '<li data-type="channel" data-alert="" data-channelNumber="' + index + '"><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
+		}
+
+		channelList.forEach(updateChannelMenu);
+
+		// Now lets update the navigation for the directory.
+		function buildIt (i) {
+			client.info.focusedChannel = channelList[i].toLowerCase();
+
+			if (client.info.channels[channelList[i]].topic !== undefined) {
+				select('#channelConsole header input').value = client.info.channels[channelList[i]].topic;
+			} else {
+				select('#channelConsole header input').value = '';
+			}
+
+			[].map.call(selectAll('#sidebar > ul li'), function(obj) {
+				obj.classList.remove('focusedChannel');
+			});
+
+			select('#sidebar > ul li:nth-of-type(' + (i+=1) + ')').classList.add('focusedChannel');
+			select('#users ul').innerHTML = '';
+
+			// Show messages that are from the focused channel.
+			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.info.focusedChannel + '"]'), function(obj) {
+				obj.style.display = '';
+			});
+
+			// Hide messages that are not from the focused channel.
+			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function(obj) {
+				obj.style.display = 'none';
+			});
+		};
+
+		var items = select('#sidebar > ul').getElementsByTagName('li');
+		for (i = 0; i < items.length; i++) {
+			items[i].i = i;
+			items[i].onclick = buildIt(i);
+		}
 	};
 
 	// Update console
@@ -18,7 +60,8 @@ var UpdateInterface = (function () {
 			.replace(/>/g, "&gt;");
 
 		// Create get the time for the timestamp
-		var rawTime = new Date();
+		var rawTime = new Date(),
+		scrollInfoView; // And this varible for later
 		// Lets format the timestamp
 		var timestamp = "[" + ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2) + "]";
 
@@ -61,9 +104,19 @@ var UpdateInterface = (function () {
 	};
 
 	// Update topic
-	module.prototype.updateTopic = function () {
+	module.prototype.topic = function (topic) {
+		select('#channelConsole header input').value = '';
+		select('#channelConsole header input').value = topic;
+	};
+
+	// Update users
+	module.prototype.users = function (channel) {
+		// Clear interface.
+		select('#users > ul').innerHTML = '';
+		select('#users header p').innerHTML = '';
+
 		// Set up userlist.
-		var _channel = client.info.channels[client.info.focusedChannel],
+		var _channel = client.info.channels[channel],
 			_userList = [],
 			_opCount = 0,
 			_users = _channel.users;
@@ -106,12 +159,7 @@ var UpdateInterface = (function () {
 		}
 
 		// Get user count
-		select('#users header p').innerHTML = '';
 		select('#users header p').innerHTML = _opCount + " ops, " + Object.keys(_channel.users).length + " total";
-	};
-
-	// Update users
-	module.prototype.updateUsers = function () {
 	};
 
 	return module;
@@ -120,17 +168,20 @@ var UpdateInterface = (function () {
 var Messaging = (function () {
 	"use strict";
 
-	var module = function () {};
+	var module = function (socket, updateInterface) {
+		this.socket = socket;
+		this.updateInterface = updateInterface;
+	};
 
 	// Update channel/PM user list
-	module.prototype.send = function (socket, data) {
+	module.prototype.send = function (data) {
 		if (data === '') {
 			return;
 		} else if (data.substring(0, 1) != "/") {
 			// It's not a command.
 			socket.emit('sendMessage', [client.focusedChannel, data]);
 			// Display it in the client.
-			displayMessage({
+			this.updateInterface.message({
 				messageType: "message",
 				head: client.nickname,
 				message: data
@@ -153,7 +204,7 @@ var Messaging = (function () {
 
 			// It's not a command.
 			if (!commandFound) {
-				updateInterface.message({
+				this.updateInterface.message({
 					messageType: "log",
 					head: "**",
 					message: 'Sorry, "' + command + '" is not a recognized command.'
@@ -169,7 +220,7 @@ var Messaging = (function () {
 						channel: client.focusedChannel,
 						message: _message
 					});
-					updateInterface.message({
+					this.updateInterface.message({
 						messageType: "action",
 						head: "&raquo;",
 						message: client.nickname + " " + _message
@@ -199,7 +250,7 @@ var Messaging = (function () {
 						channel: client.focusedChannel,
 						message: _message
 					});
-					updateInterface.message({
+					this.updateInterface.message({
 						messageType: "notice",
 						head: "-" + client.nickname + "-",
 						message: client.nickname + " " + _message
@@ -243,7 +294,7 @@ var Messaging = (function () {
 
 		switch (data.type) {
 			case "message":
-				updateInterface.message(
+				this.updateInterface.message(
 					"message",
 					data.nick,
 					data.channel,
@@ -251,7 +302,7 @@ var Messaging = (function () {
 				);
 				break;
 			case "serverMessage":
-				updateInterface.message(
+				this.updateInterface.message(
 					"serverMessage",
 					"*",
 					"server",
@@ -259,7 +310,7 @@ var Messaging = (function () {
 				);
 				break;
 			case "join":
-				updateInterface.message(
+				this.updateInterface.message(
 					"join",
 					"*",
 					data.channel,
@@ -267,7 +318,7 @@ var Messaging = (function () {
 				);
 				break;
 			case "part":
-				updateInterface.message(
+				this.updateInterface.message(
 					"part",
 					"*",
 					data.channel,
@@ -276,7 +327,7 @@ var Messaging = (function () {
 				break;
 			case "quit":
 				for (i = data.channels.length - 1; i >= 0; i--) {
-					updateInterface.message(
+					this.updateInterface.message(
 						"quit",
 						"*",
 						data.channels,
@@ -285,7 +336,7 @@ var Messaging = (function () {
 				}
 				break;
 			case "notice":
-				updateInterface.message(
+				this.updateInterface.message(
 					"notice",
 					"-" + data.nick + "-",
 					data.channel,
@@ -294,7 +345,7 @@ var Messaging = (function () {
 				break;
 			case "nickChange":
 				for (i = data.channels.length - 1; i >= 0; i--) {
-					updateInterface.message(
+					this.updateInterface.message(
 						"nickChange",
 						"&gt;",
 						data.channels[i],
@@ -310,7 +361,7 @@ var Messaging = (function () {
 				break;
 			case "topic":
 				var topicDate = new Date(data.args[3]*1000);
-				updateInterface.message(
+				this.updateInterface.message(
 					"topic",
 					"&gt;",
 					data.channel,
@@ -318,7 +369,7 @@ var Messaging = (function () {
 				);
 				break;
 			case "topicChange":
-				updateInterface.message(
+				this.updateInterface.message(
 					"topicChange",
 					"&gt;",
 					data.channel,

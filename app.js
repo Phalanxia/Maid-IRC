@@ -174,9 +174,26 @@ app.post('/client', function (req, res) {
 			});
 		});
 
-		client.addListener('names', function (data) {
-			// This happens every time the client joins a channel so I will use this for sending channel data to the client.
-			socket.emit('ircInfo', client.chans);
+		client.addListener('names', function (channel, nicks) {
+			socket.emit('updateInfo', {
+				type: "channel",
+				action: "join",
+				channel: channel,
+				channelInfo: client.chans[channel]
+			});
+
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: client.chans[channel].users
+			});
+
+			socket.emit('updateInfo', {
+				type: "topic",
+				channel: channel,
+				topic: client.chans[channel].topic
+			});
+
 		});
 
 		client.addListener('message', function (nick, to, text, message) {
@@ -197,8 +214,12 @@ app.post('/client', function (req, res) {
 				message: message,
 				info: message
 			});
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: client.chans[channel].users
+			});
 		});
 
 		client.addListener('part', function (channel, nick, message) {
@@ -210,9 +231,11 @@ app.post('/client', function (req, res) {
 				info: message
 			});
 
-			console.log(message.host);
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: client.chans[channel].users
+			});
 		});
 
 
@@ -224,8 +247,12 @@ app.post('/client', function (req, res) {
 				message: reason,
 				info: message
 			});
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: client.chans[channel].users
+			});
 		});
 
 		client.addListener('notice', function (nick, to, text, message) {
@@ -246,8 +273,12 @@ app.post('/client', function (req, res) {
 				channels: channels,
 				message: message
 			});
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: client.chans[channel].users
+			});
 		});
 
 		client.addListener('topic', function (channel, topic, nick, message) {
@@ -267,8 +298,12 @@ app.post('/client', function (req, res) {
 					nick: nick
 				});
 			}
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+
+			socket.emit('updateInfo', {
+				type: "topic",
+				channel: channel,
+				topic: client.chans[channel].topic
+			});
 		});
 
 		client.addListener('error', function (message) {
@@ -306,11 +341,21 @@ app.post('/client', function (req, res) {
 			switch(data.type) {
 				case "join":
 					client.join(data.content);
-					socket.emit('ircInfo', client.chans);
+					socket.emit('updateInfo', {
+						type: "channel",
+						action: "join",
+						channel: data.content,
+						channelInfo: client.chans[channel]
+					});
 					break;
 				case "part":
 					client.part(data.content);
-					socket.emit('ircInfo', client.chans);
+					socket.emit('updateInfo', {
+						type: "channel",
+						action: "part",
+						channel: data.content,
+						channelInfo: client.chans[channel]
+					});
 					break;
 				case "action":
 					client.action(data.channel, data.message);
