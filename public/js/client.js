@@ -73,6 +73,7 @@ var client = {
 			console.log(JSON.stringify(data));
 			switch (data.type) {
 				case "channels":
+					console.log("CHANNELS: " JSON.stringify(data));
 					if (data.action == "join") {
 						data.channels[data.channel] = channelInfo;
 					} else { // If the user parted a channel
@@ -81,6 +82,7 @@ var client = {
 					updateInterface.directory[data.channel];
 					break;
 				case "users":
+					console.log("USERS: " JSON.stringify(data));
 					client.info.channels[data.channel].users = data.users;
 					// Lets update the interface if its the channel the user is focused on.
 					if (client.info.focusedChannel == data.channel) {
@@ -88,12 +90,13 @@ var client = {
 					}
 					break;
 				case "topic":
+					console.log("TOPIC: " JSON.stringify(data));
 					client.info.channels[data.channel].topic = data.topic;
 					// Lets update the interface if its the channel the user is focused on.
 					if (client.info.focusedChannel == data.channel) {
 						updateInterface.topic[data.topic];
 					}
-				break;
+					break;
 			}
 		});
 
