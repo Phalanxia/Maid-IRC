@@ -15,7 +15,7 @@ var client = {
 	},
 
 	info: {
-		nickname: "",
+		nick: "",
 		channels: [],
 		channelList: "",
 		focusedChannel: ""
@@ -53,8 +53,8 @@ var client = {
 
 		// IRC specific.
 		socket.on('initialInfo', function (data) {
-			client.info.nickname = data;
-			client.settings.highlights[0] = client.info.nickname;
+			client.info.nick = data;
+			client.settings.highlights[0] = client.info.nick;
 		});
 
 		socket.on('recieveMessage', function (data) {
@@ -70,33 +70,33 @@ var client = {
 		});
 
 		socket.on('updateInfo', function (data) {
-			console.log(JSON.stringify(data));
-			switch (data.type) {
-				case "channels":
-					console.log("CHANNELS: " JSON.stringify(data));
-					if (data.action == "join") {
-						data.channels[data.channel] = channelInfo;
-					} else { // If the user parted a channel
-						delete data.channels[data.channel];
-					}
-					updateInterface.directory[data.channel];
-					break;
-				case "users":
-					console.log("USERS: " JSON.stringify(data));
-					client.info.channels[data.channel].users = data.users;
-					// Lets update the interface if its the channel the user is focused on.
-					if (client.info.focusedChannel == data.channel) {
-						updateInterface.users[data.channel];
-					}
-					break;
-				case "topic":
-					console.log("TOPIC: " JSON.stringify(data));
-					client.info.channels[data.channel].topic = data.topic;
-					// Lets update the interface if its the channel the user is focused on.
-					if (client.info.focusedChannel == data.channel) {
-						updateInterface.topic[data.topic];
-					}
-					break;
+			if ((client.info.channels[data.channel] == undefined && data.type == "users") || (client.info.channels[data.channel] == undefined && data.type == "topic") ) {
+				return;
+			} else {
+				switch (data.type) {
+					case "channel":
+						if (data.action == "join") {
+							client.info.channels[data.channel] = data.channelInfo;
+						} else { // If the user parted a channel
+							delete client.info.channels[data.channel];
+						}
+						updateInterface.directory();
+						break;
+					case "users":
+						client.info.channels[data.channel].users = data.users;
+						// Lets update the interface if its the channel the user is focused on.
+						if (client.info.focusedChannel == data.channel) {
+							updateInterface.users(data.channel);
+						}
+						break;
+					case "topic":
+						client.info.channels[data.channel].topic = data.topic;
+						// Lets update the interface if its the channel the user is focused on.
+						if (client.info.focusedChannel == data.channel) {
+							updateInterface.topic(data.topic);
+						}
+						break;
+				}
 			}
 		});
 
@@ -135,4 +135,4 @@ var client = {
 	}
 };
 
-client.init();
+document.onload = client.init();

@@ -5,7 +5,7 @@ var UpdateInterface = (function () {
 
 	// Update channel/PM user list
 	module.prototype.directory = function () {
-		var channelList = Object.keys(client.channels);
+		var channelList = Object.keys(client.info.channels);
 		select('#sidebar > ul').innerHTML = '';
 
 		function updateChannelMenu (element, index) {
@@ -43,6 +43,8 @@ var UpdateInterface = (function () {
 		};
 
 		var items = select('#sidebar > ul').getElementsByTagName('li');
+
+		var i;
 		for (i = 0; i < items.length; i++) {
 			items[i].i = i;
 			items[i].onclick = buildIt(i);
@@ -61,7 +63,7 @@ var UpdateInterface = (function () {
 
 		// Create get the time for the timestamp
 		var rawTime = new Date(),
-		scrollInfoView; // And this varible for later
+			scrollInfoView; // And this varible for later
 		// Lets format the timestamp
 		var timestamp = "[" + ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2) + "]";
 
@@ -179,57 +181,51 @@ var Messaging = (function () {
 			return;
 		} else if (data.substring(0, 1) != "/") {
 			// It's not a command.
-			socket.emit('sendMessage', [client.focusedChannel, data]);
+			this.socket.emit('sendMessage', [client.info.focusedChannel, data]);
 			// Display it in the client.
-			this.updateInterface.message({
-				messageType: "message",
-				head: client.nickname,
-				message: data
-			});
+			this.updateInterface.message(
+				"message",
+				client.info.nick,
+				client.info.focusedChannel,
+				data
+			);
 		} else {
 			// It's a command.
 			data = data.substring(1, data.length);
 
-			var command = data.split(" ")[0],
-				_message = data.substring(command.length+=1, data.length),
-				commandList = ['me', 'join', 'part', 'whois', 'notice', 'away', 'topic'],
-				commandFound = false;
+			var _command = data.split(" ")[0],
+				_message = data.substring(_command.length + 1, data.length),
+				_commandList = ['me', 'join', 'part', 'whois', 'notice', 'away', 'topic'],
+				_commandFound = false,
+				_focusedChannel = client.info.focusedChannel;
 
 			// Check to see if the command is in commandList.
-			for (var i = 0; i < commandList.length && !commandFound; i++) {
-				if (commandList[i] == command) {
-					commandFound = true;
+			for (var i = 0; i < _commandList.length && !_commandFound; i++) {
+				if (_commandList[i] == _command) {
+					_commandFound = true;
 				}
 			}
 
 			// It's not a command.
-			if (!commandFound) {
-				this.updateInterface.message({
-					messageType: "log",
-					head: "**",
-					message: 'Sorry, "' + command + '" is not a recognized command.'
-				});
+			if (!_commandFound) {
+				this.updateInterface.message("log", "**", _focusedChannel, 'Sorry, "' + _command + '" is not a recognized command.');
 				return;
 			}
 
 			// It is a command so lets run it!
-			switch (command) {
+			switch (_command) {
 				case "me":
-					socket.emit('sendCommand', {
+					this.socket.emit('sendCommand', {
 						type: "action",
-						channel: client.focusedChannel,
+						channel: _focusedChannel,
 						message: _message
 					});
-					this.updateInterface.message({
-						messageType: "action",
-						head: "&raquo;",
-						message: client.nickname + " " + _message
-					});
+					this.updateInterface.message("action", "&raquo;", _focusedChannel, client.info.nick + " " + _message);
 					break;
 				case "join":
 					var _channels = _message.split(" ");
 					for (var i = 0; i < _channels.length; i+=1) {
-						socket.emit('sendCommand', {
+						this.socket.emit('sendCommand', {
 							type: "join",
 							content: _channels[i]
 						});
@@ -238,47 +234,43 @@ var Messaging = (function () {
 				case "part":
 					var _channels = _message.split(" ");
 					for (var i = 0; i < _channels.length; i+=1) {
-						socket.emit('sendCommand', {
+						this.socket.emit('sendCommand', {
 							type: "part",
 							content: _channels[i]
 						});
 					}
 					break;
 				case "notice":
-					socket.emit('sendCommand', {
+					this.socket.emit('sendCommand', {
 						type: "notice",
-						channel: client.focusedChannel,
+						channel: _focusedChannel,
 						message: _message
 					});
-					this.updateInterface.message({
-						messageType: "notice",
-						head: "-" + client.nickname + "-",
-						message: client.nickname + " " + _message
-					});
+					this.updateInterface.message("notice", "-" + client.info.nick + "-", _focusedChannel, client.info.nick + " " + _message);
 					break;
 				case "away":
-					socket.emit('sendCommand', {
+					this.socket.emit('sendCommand', {
 						type: "away",
 						message: _message
 					});
 					break;
 				case "help":
-					socket.emit('sendCommand', {
+					this.socket.emit('sendCommand', {
 						type: "help",
 						message: _message
 					});
 					break;
 				case "topic":
 					if (_message.split(" ")[0].charAt(0) === "#") {
-						socket.emit('sendCommand', {
+						this.socket.emit('sendCommand', {
 							type: "topic",
 							channel: _message.split(" ")[0],
 							message: _message.substring(_message.split(" ")[0].length+1)
 						});
 					} else {
-						socket.emit('sendCommand', {
+						this.socket.emit('sendCommand', {
 							type: "topic",
-							channel: client.focusedChannel,
+							channel: _focusedChannel,
 							message: _message
 						});
 					}
@@ -294,87 +286,43 @@ var Messaging = (function () {
 
 		switch (data.type) {
 			case "message":
-				this.updateInterface.message(
-					"message",
-					data.nick,
-					data.channel,
-					data.message
-				);
+				this.updateInterface.message("message",	data.nick, data.channel, data.message );
 				break;
 			case "serverMessage":
-				this.updateInterface.message(
-					"serverMessage",
-					"*",
-					"server",
-					data.message
-				);
+				this.updateInterface.message("serverMessage", "*", "server", data.message);
 				break;
 			case "join":
-				this.updateInterface.message(
-					"join",
-					"*",
-					data.channel,
-					data.nick + " (" + data.info.host + ") has joined " + data.channel
-				);
+				this.updateInterface.message("join", "*", data.channel, data.nick + " (" + data.info.host + ") has joined " + data.channel);
 				break;
 			case "part":
-				this.updateInterface.message(
-					"part",
-					"*",
-					data.channel,
-					data.nick + " (" + data.info.host + ") has left " + data.channel
-				);
+				this.updateInterface.message("part", "*", data.channel, data.nick + " (" + data.info.host + ") has left " + data.channel);
 				break;
 			case "quit":
 				for (i = data.channels.length - 1; i >= 0; i--) {
-					this.updateInterface.message(
-						"quit",
-						"*",
-						data.channels,
-						data.nick + " (" + data.info.host + ") has quit " + data.channels[i] + " (" + data.reason + ")"
-					);
+					this.updateInterface.message("quit", "*", data.channels, data.nick + " (" + data.info.host + ") has quit " + data.channels[i] + " (" + data.reason + ")");
 				}
 				break;
 			case "notice":
-				this.updateInterface.message(
-					"notice",
-					"-" + data.nick + "-",
-					data.channel,
-					data.message
-				);
+				this.updateInterface.message("notice", "-" + data.nick + "-", data.channel,	data.message);
 				break;
 			case "nickChange":
 				for (i = data.channels.length - 1; i >= 0; i--) {
-					this.updateInterface.message(
-						"nickChange",
-						"&gt;",
-						data.channels[i],
-						data.oldNick + " is now known as " + data.newNick
+					this.updateInterface.message("nickChange", "&gt;", data.channels[i], data.oldNick + " is now known as " + data.newNick
 					);
 				}
 
 				// Check to see if it's you that changed nick and update it on the client.
-				if (data.oldNick === client.data.nickname) {
-					client.nickname = data.newNick;
-					select('#sidebar footer p').innerHTML = client.data.nickname;
+				if (data.oldNick === client.info.nick) {
+					client.info.nick = data.newNick;
+					select('#sidebar footer p').innerHTML = client.info.nick;
 				}
 				break;
 			case "topic":
 				var topicDate = new Date(data.args[3]*1000);
-				this.updateInterface.message(
-					"topic",
-					"&gt;",
-					data.channel,
-					'Topic for ' + data.channel + ' set by ' + data.args[2] + ' at ' + topicDate
-				);
+				this.updateInterface.message("topic", "&gt;", data.channel, 'Topic for ' + data.channel + ' set by ' + data.args[2] + ' at ' + topicDate);
 				break;
 			case "topicChange":
-				this.updateInterface.message(
-					"topicChange",
-					"&gt;",
-					data.channel,
-					data.nick + ' has changed the topic to: "' + data.topic + '"'
-				);
+				this.updateInterface.message("topicChange",	"&gt;", data.channel, data.nick + ' has changed the topic to: "' + data.topic + '"');
 				break;
 		}
 	}
