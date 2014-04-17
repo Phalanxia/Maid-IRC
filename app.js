@@ -116,7 +116,7 @@ app.post('/client', function (req, res) {
 		req.body.sslToggle = false;
 	}
 
-	var client = new ircLib.Client(req.body.server, req.body.name, {
+	var irc = new ircLib.Client(req.body.server, req.body.name, {
 		channels: [req.body.channel],
 		userName: req.body.name,
 		password: req.body.nicknamePassword,
@@ -144,7 +144,7 @@ app.post('/client', function (req, res) {
 		// IRC Listeners
 
 		// Get the network name.
-		client.addListener('raw', function (data) {
+		irc.addListener('raw', function (data) {
 			if (data.rawCommand == '005') {
 				for (var i = data.args.length - 1; i >= 0; i--) {
 					if (data.args[i].indexOf("NETWORK") != -1) {
@@ -155,7 +155,7 @@ app.post('/client', function (req, res) {
 			}
 		});
 
-		client.addListener('registered', function (message) {
+		irc.addListener('registered', function (message) {
 			if (devMode) {
 				console.log('Server: ' + message.server);
 				console.log(message.args[1]);
@@ -167,19 +167,36 @@ app.post('/client', function (req, res) {
 			});
 		});
 
-		client.addListener('motd', function (motd) {
+		irc.addListener('motd', function (motd) {
 			socket.emit('recieveMessage', {
 				type: "serverMessage",
 				message: motd
 			});
 		});
 
-		client.addListener('names', function (data) {
-			// This happens every time the client joins a channel so I will use this for sending channel data to the client.
-			socket.emit('ircInfo', client.chans);
+		irc.addListener('names', function (channel, nicks) {
+			socket.emit('updateInfo', {
+				type: "channel",
+				action: "join",
+				channel: channel,
+				channelInfo: irc.chans[channel]
+			});
+
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: irc.chans[channel].users
+			});
+
+			socket.emit('updateInfo', {
+				type: "topic",
+				channel: channel,
+				topic: irc.chans[channel].topic
+			});
+
 		});
 
-		client.addListener('message', function (nick, to, text, message) {
+		irc.addListener('message', function (nick, to, text, message) {
 			socket.emit('recieveMessage', {
 				type: "message",
 				nick: nick,
@@ -189,7 +206,7 @@ app.post('/client', function (req, res) {
 			});
 		});
 
-		client.addListener('join', function (channel, nick, message) {
+		irc.addListener('join', function (channel, nick, message) {
 			socket.emit('recieveMessage', {
 				type: "join",
 				nick: nick,
@@ -197,11 +214,15 @@ app.post('/client', function (req, res) {
 				message: message,
 				info: message
 			});
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: irc.chans[channel].users
+			});
 		});
 
-		client.addListener('part', function (channel, nick, message) {
+		irc.addListener('part', function (channel, nick, message) {
 			socket.emit('recieveMessage', {
 				type: "part",
 				nick: nick,
@@ -210,13 +231,15 @@ app.post('/client', function (req, res) {
 				info: message
 			});
 
-			console.log(message.host);
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: irc.chans[channel].users
+			});
 		});
 
 
-		client.addListener('quit', function (nick, reason, channels, message) {
+		irc.addListener('quit', function (nick, reason, channels, message) {
 			socket.emit('recieveMessage', {
 				type: "quit",
 				nick: nick,
@@ -224,11 +247,15 @@ app.post('/client', function (req, res) {
 				message: reason,
 				info: message
 			});
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: irc.chans[channel].users
+			});
 		});
 
-		client.addListener('notice', function (nick, to, text, message) {
+		irc.addListener('notice', function (nick, to, text, message) {
 			socket.emit('recieveMessage', {
 				type: "notice",
 				nick: nick,
@@ -238,7 +265,7 @@ app.post('/client', function (req, res) {
 			});
 		});
 
-		client.addListener('nick', function (oldNick, newNick, channels, message) {
+		irc.addListener('nick', function (oldNick, newNick, channels, message) {
 			socket.emit('recieveMessage', {
 				type: "nickChange",
 				oldNick: oldNick,
@@ -246,11 +273,15 @@ app.post('/client', function (req, res) {
 				channels: channels,
 				message: message
 			});
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+
+			socket.emit('updateInfo', {
+				type: "users",
+				channel: channel,
+				users: irc.chans[channel].users
+			});
 		});
 
-		client.addListener('topic', function (channel, topic, nick, message) {
+		irc.addListener('topic', function (channel, topic, nick, message) {
 			if (message.command == 333) {
 				socket.emit('recieveMessage', {
 					type: 'topic',
@@ -267,11 +298,15 @@ app.post('/client', function (req, res) {
 					nick: nick
 				});
 			}
-			// Send channel info to the client.
-			socket.emit('ircInfo', client.chans);
+
+			socket.emit('updateInfo', {
+				type: "topic",
+				channel: channel,
+				topic: irc.chans[channel].topic
+			});
 		});
 
-		client.addListener('error', function (message) {
+		irc.addListener('error', function (message) {
 			console.log('error: ', message);
 		});
 
@@ -279,7 +314,7 @@ app.post('/client', function (req, res) {
 
 		// Recieved
 		socket.on('shutdown', function (data) {
-			client.disconnect("Quit");
+			irc.disconnect("Quit");
 			if (devMode) {
 				setTimeout(function () {
 					console.log('Exiting.');
@@ -290,7 +325,7 @@ app.post('/client', function (req, res) {
 
 		socket.on('disconnect', function () {
 			console.log("Client disconnected");
-			client.disconnect("Quit");
+			irc.disconnect("Quit");
 		});
 
 		// IRC Recieve
@@ -299,30 +334,40 @@ app.post('/client', function (req, res) {
 		});
 
 		socket.on('sendMessage', function (data) {
-			client.say(data[0], data[1]);
+			irc.say(data[0], data[1]);
 		});
 
 		socket.on('sendCommand', function (data) {
 			switch(data.type) {
 				case "join":
-					client.join(data.content);
-					socket.emit('ircInfo', client.chans);
+					irc.join(data.content);
+					socket.emit('updateInfo', {
+						type: "channel",
+						action: "join",
+						channel: data.content,
+						channelInfo: irc.chans[channel]
+					});
 					break;
 				case "part":
-					client.part(data.content);
-					socket.emit('ircInfo', client.chans);
+					irc.part(data.content);
+					socket.emit('updateInfo', {
+						type: "channel",
+						action: "part",
+						channel: data.content,
+						channelInfo: irc.chans[channel]
+					});
 					break;
 				case "action":
-					client.action(data.channel, data.message);
+					irc.action(data.channel, data.message);
 					break;
 				case "notice":
-					client.action(data.channel, data.message);
+					irc.action(data.channel, data.message);
 					break;
 				case "away":
-					client.send('AWAY', data.message);
+					irc.send('AWAY', data.message);
 					break;
 				case "topic":
-					client.send('TOPIC', data.channel, data.message);
+					irc.send('TOPIC', data.channel, data.message);
 					break;
 			}
 		});
