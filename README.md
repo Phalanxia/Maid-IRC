@@ -1,6 +1,6 @@
-# ![Maid IRC](public/img/logo.png)
+[![Maid IRC](public/img/logo.png)](https://github.com/Phalanxia/Maid-IRC)
 
-A web IRC client based on node.js and socket.io
+A modern web IRC client.
 
 [![Dependency Status](https://gemnasium.com/Phalanxia/Maid-IRC.png)](https://gemnasium.com/Phalanxia/Maid-IRC)
 
@@ -21,15 +21,9 @@ A web IRC client based on node.js and socket.io
 
 ## Screenshots
 
-Login screen
-
 ![Login Screen](screenshots/login.png)
 
-Client
-
 ![Login Screen](screenshots/client.png)
-
-More screenshots will be added later as this client becomes closer to being fully functional.
 
 ## Community
 
