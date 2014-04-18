@@ -1,53 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Maid-irc by Phalanxia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    <title>Maid-irc by Phalanxia</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
+    <header>
+      <div class="inner">
         <h1>Maid-irc</h1>
-        <p>A web IRC client using node.js and socket.io.</p>
+        <h2>A web IRC client using node.js and socket.io.</h2>
+        <a href="https://github.com/Phalanxia/Maid-IRC" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
 
-        <p class="view"><a href="https://github.com/Phalanxia/Maid-IRC">View the Project on GitHub <small>Phalanxia/Maid-IRC</small></a></p>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p><a href="https://github.com/Phalanxia/Maid-IRC"><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/public/img/logo.png" alt="Maid IRC"></a></p>
 
-
-        <ul>
-          <li><a href="https://github.com/Phalanxia/Maid-IRC/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/Phalanxia/Maid-IRC/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/Phalanxia/Maid-IRC">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a name="" class="anchor" href="#"><span class="octicon octicon-link"></span></a><img src="https://raw2.github.com/Phalanxia/Maid-IRC/master/public/img/logo.png" alt="Maid IRC">
-</h1>
-
-<p>A web IRC client based on node.js and socket.io</p>
+<p>A modern web IRC client.</p>
 
 <p><a href="https://gemnasium.com/Phalanxia/Maid-IRC"><img src="https://gemnasium.com/Phalanxia/Maid-IRC.png" alt="Dependency Status"></a></p>
 
 <h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<ol>
+<li><p>Download dependencies:
+<code>$ npm install</code></p></li>
+<li><p>Edit config.js</p></li>
+</ol><h2>
+<a name="running" class="anchor" href="#running"><span class="octicon octicon-link"></span></a>Running</h2>
+
+<ol>
+<li><p>Please define the node enviroment varible:
+Supported varibles are <code>development</code> and <code>production</code>.</p></li>
+<li><p>Run Maid IRC:
+Use this command in the main directory of Maid IRC: <code>node app.js</code></p></li>
+</ol><h2>
 <a name="screenshots" class="anchor" href="#screenshots"><span class="octicon octicon-link"></span></a>Screenshots</h2>
 
-<p>Login screen</p>
+<p><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/screenshots/login.png" alt="Login Screen"></p>
 
-<p><img src="https://raw2.github.com/Phalanxia/Maid-IRC/master/screenshots/client.png" alt="Login Screen"></p>
-
-<p>Client</p>
-
-<p><img src="https://raw2.github.com/Phalanxia/Maid-IRC/master/screenshots/login.png" alt="Login Screen"></p>
-
-<p>More screenshots will be added later as this client becomes closer to being fully functional.</p>
+<p><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/screenshots/client.png" alt="Login Screen"></p>
 
 <h2>
 <a name="community" class="anchor" href="#community"><span class="octicon octicon-link"></span></a>Community</h2>
@@ -81,23 +88,35 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/Phalanxia">Phalanxia</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/Phalanxia/Maid-IRC/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/Phalanxia/Maid-IRC/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/Phalanxia/Maid-IRC"></a> is maintained by <a href="https://github.com/Phalanxia">Phalanxia</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-47697258-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
-  <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-47697258-1', 'phalanxia.github.io');
-  ga('send', 'pageview');
-
-</script>
 </html>
