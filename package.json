@@ -1,5 +1,5 @@
 {	"name": "maidirc",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"description": "A web IRC client based on node.js and socket.io.",
 	"author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
 	"private": true,
