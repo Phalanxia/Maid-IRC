@@ -1,4 +1,4 @@
-@brightBlue: #52C1FF; // Alt: 1BA8ED
+@brightBlue: #52C1FF;
 @midBlue: #213246;
 @darkBlue: #182432;
 @green: #3C9067;
@@ -8,15 +8,15 @@
 *:focus { outline: 0; }
 
 ::-moz-selection {
-	background: @brightBlue;
-	text-shadow: none;
 	color: #efefef;
+	text-shadow: none;
+	background: @brightBlue;
 }
 
 ::selection {
-	background: @brightBlue;
-	text-shadow: none;
 	color: #efefef;
+	text-shadow: none;
+	background: @brightBlue;
 }
 
 ::-webkit-scrollbar {
@@ -26,41 +26,41 @@
 
 ::-webkit-scrollbar-track {
 	background-color: fade(@midBlue, 20%);
+	border: 3px solid rgba(0,0,0,0);
 	border-radius: 5px;
 	background-clip: padding-box;
-	border: 3px solid rgba(0,0,0,0);
 }
 
 ::-webkit-scrollbar-thumb:vertical {
 	background-color: fade(@midBlue, 80%);
+	border: 3px solid rgba(0,0,0,0);
 	border-radius: 5px;
 	background-clip: padding-box;
-	border: 3px solid rgba(0,0,0,0);
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
 	background-color: fade(@midBlue, 80%);
+	border: 3px solid rgba(0,0,0,0);
 	border-radius: 5px;
 	background-clip: padding-box;
-	border: 3px solid rgba(0,0,0,0);
 }
 
 ::-webkit-scrollbar-thumb:vertical:hover,
 ::-webkit-scrollbar-thumb:horizontal:hover {
 	background: @midBlue;
-	background-clip: padding-box;
 	border: 1px solid rgba(0,0,0,0);
+	background-clip: padding-box;
 }
 
 html,
 body {
 	position: absolute;
+	display: flex;
 	width: 100%;
 	height: 100%;
+	overflow: hidden;
 	font-family: 'Open Sans', Helvetica, sans-serif;
 	background: #fafafa;
-	overflow: hidden;
-	display: flex;
 	flex-flow: row nowrap;
 }
 
@@ -81,57 +81,55 @@ a:active {
 }
 
 .btn {
-	padding: 0;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	user-select: none;
 	width: 250px;
 	height: 44px;
+	padding: 0;
+	font-size: 14px;
+	font-weight: bold;
+	color: #fafbfb;
+	text-shadow: 0 -1px darken(@brightBlue, 16%);
 	background: @brightBlue;
 	border: 1px solid darken(@brightBlue, 16%);
 	border-radius: 4px;
 	box-shadow: inset 0 1px lighten(@brightBlue, 12%);
-	color: #fafbfb;
-	font-size: 14px;
-	font-weight: bold;
-	text-shadow: 0 -1px darken(@brightBlue, 16%);
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 	&:hover { cursor: pointer; }
 	&:active {
-		box-shadow: inset 0 1px lighten(@brightBlue, 5%);
-		background-color: darken(@brightBlue, 6%);
 		color: #fafbfb;
+		background-color: darken(@brightBlue, 6%);
+		box-shadow: inset 0 1px lighten(@brightBlue, 5%);
 	}
 }
 
 #sidebar {
-	flex: 0 0 auto;
-	order: 0;
-
 	display: flex;
-	flex-flow: column wrap;
-
 	width: 200px;
 	height: 100%;
 	background-color: @midBlue;
 	-webkit-user-select: none;
 	   -moz-user-select: none;
 			user-select: none;
+	flex: 0 0 auto;
+	order: 0;
+	flex-flow: column wrap;
 	header {
-		flex: 0 1 auto;
-		order: 0;
 		width: inherit;
 		height: 40px;
 		background-color: @brightBlue;
+		flex: 0 1 auto;
+		order: 0;
 		h1 {
 			float: left;
 			width: 68px;
-			margin: 0;
 			padding: 0 0 0 14px;
+			margin: 0;
 			font-size: 16px;
 			font-weight: 200;
-			text-align: left;
 			line-height: 40px;
 			color: #efefef;
+			text-align: left;
 			span {
 				font-weight: 800;
 				color: @midBlue;
@@ -139,59 +137,59 @@ a:active {
 		}
 		button {
 			float: right;
-			height: 30px;
 			width: 30px;
+			height: 30px;
 			margin: 5px 14px 5px 0;
+			color: #efefef;
 			background: none;
 			border: none;
 			border-radius: 4px;
-			color: #efefef;
 			&:active {
 				color: darken(#efefef, 10%)
 			}
 		}
 		ul {
-			z-index: 1;
 			position: absolute;
 			top: 50px;
 			left: 113px;
+			z-index: 1;
 			height: 40px;
 			padding: 0;
 			margin: 0;
+			list-style: none;
+			pointer-events: none;
 			background-color: #efefef;
 			border-radius: 4px;
 			opacity: 0;
 			-webkit-transition: all .2s ease-in-out;
 			   -moz-transition: all .2s ease-in-out;
 					transition: all .2s ease-in-out;
-			list-style: none;
 			-webkit-transform: translateY(10px);
 			   -moz-transform: translateY(10px);
 					transform: translateY(10px);
-			pointer-events: none;
 			&:before {
-				content: '';
 				position: absolute;
-				left: 53px;
 				bottom: 40px;
+				left: 53px;
 				border: 6px solid transparent;
 				border-bottom: 6px solid #efefef;
+				content: '';
 			}
 			&.displayed {
-				opacity: 1;
 				pointer-events: auto;
+				opacity: 1;
 				-webkit-transform: translateY(0px);
 				   -moz-transform: translateY(0px);
 						transform: translateY(0px);
 			}
 			li {
-				overflow: hidden;
 				float: left;
 				width: 40px;
 				height: 40px;
+				overflow: hidden;
 				line-height: 40px;
-				text-align: center;
 				color: #1b1b1b;
+				text-align: center;
 				border-radius: 4px;
 				-webkit-transition: background-color 0.2s ease-in-out;
 				   -moz-transition: background-color 0.2s ease-in-out;
@@ -202,10 +200,10 @@ a:active {
 				}
 			}
 		}
-		span#status {
+		#status {
 			float: left;
-			height: 12px;
 			width: 12px;
+			height: 12px;
 			margin: 14px 8px 8px 52px;
 			background-color: @red;
 			border-radius: 6px;
@@ -214,22 +212,21 @@ a:active {
 	h2 {
 		padding: 10px 8px 10px 13px;
 		margin: 0;
-		color: #efefef;
 		font-size: 16px;
 		font-weight: 200;
+		color: #efefef;
 		&:hover {
 			cursor: pointer;
 			background-color: @darkBlue;
 		}
 	}
-	ul#channelList {
+	#channelList {
+		width: inherit;
+		padding: 0;
+		margin: 0;
+		list-style: none;
 		flex: 1 1 auto;
 		order: 1;
-
-		width: inherit;
-		margin: 0;
-		padding: 0;
-		list-style: none;
 		li {
 			position: relative;
 			width: inherit;
@@ -250,7 +247,6 @@ a:active {
 			}
 			&.focusedChannel {
 				&:before {
-					content: "";
 					position: absolute;
 					top: 12px;
 					right: 0;
@@ -258,23 +254,24 @@ a:active {
 					border-top: 7px solid transparent;
 					border-bottom: 7px solid transparent;
 					border-right: 7px solid #fafafa;
+					content: "";
 				}
 			}
 			&.focusedChannel:hover { background-color: @darkBlue; }
 			&[data-alert] {
 				&:after {
 					float: right;
-					min-width: 16px;
 					height: 20px;
+					min-width: 16px;
 					padding: 0 2px;
-					text-align: center;
 					margin: 10px 16px 0 10px;
-					background: @brightBlue;
-					content: attr(data-alert);
-					border-radius: 4px;
 					font-size: 12px;
 					line-height: 20px;
 					color: #efefef;
+					text-align: center;
+					background: @brightBlue;
+					border-radius: 4px;
+					content: attr(data-alert);
 				}
 			}
 			&[data-alert=""] {
@@ -284,24 +281,24 @@ a:active {
 		}
 	}
 	footer {
-		flex: 0 1 auto;
-		order: 2;
 		width: inherit;
 		height: 40px;
 		background-color: @darkBlue;
+		flex: 0 1 auto;
+		order: 2;
 		button {
 			float: left;
-			background: none;
 			padding: 0;
 			margin: 0;
+			background: none;
 			border: 0;
 			span {
 				display: block;
-				margin: 14px 14px;
 				height: 14px;
 				width: 14px;
-				border-radius: 7px;
+				margin: 14px 14px;
 				background-color: @green;
+				border-radius: 7px;
 				box-shadow: inset 0 2px 0 0 rgba(80,80,80,0.5);
 			}
 		}
@@ -309,82 +306,76 @@ a:active {
 			float: right;
 			width: 132px;
 			height: 28px;
-			margin: 6px 14px 0 0;
 			padding: 0 6px;
-			background: none;
-			border-radius: 4px;
-			border: none;
+			margin: 6px 14px 0 0;
 			color: #efefef;
 			text-align: right;
+			background: none;
+			border: none;
+			border-radius: 4px;
 		}
 	}
 }
 
 #channelConsole {
+	display: flex;
 	flex: 1 1 auto;
 	order: 1;
-
-	display: flex;
 	flex-flow: column wrap;
 	header {
-		flex: 0 1 auto;
-		order: 0;
-
 		display: flex;
-		flex-flow: row wrap;
-
 		width: 100%;
 		height: 40px;
 		background-color: @brightBlue;
+		flex: 0 1 auto;
+		order: 0;
+		flex-flow: row wrap;
 		input {
-			flex: 1 1 auto;
-			order: 0;
-
 			width: 100%;
 			height: 30px;
-			margin: 5px 0;
 			padding: 0 8px;
-			background-color: #fafafa;
-			border: none;
-			border-radius: 4px;
+			margin: 5px 0;
 			font-size: 14px;
 			line-height: 17px;
 			color: @darkBlue;
+			background-color: #fafafa;
+			border: none;
+			border-radius: 4px;
+			flex: 1 1 auto;
+			order: 0;
 		}
 	}
 	output {
-		flex: 1 1 auto;
-		order: 1;
-
+		position: relative;
 		display: flex;
-		flex-direction: column;
-
 		width: 100%;
 		height: 100%;
 		overflow-y: scroll;
-		position: relative;
+		flex: 1 1 auto;
+		order: 1;
+		flex-direction: column;
 		article {
-			flex: 0 0 auto;
 			float: left;
 			width: 100%;
 			line-height: 25px;
 			-webkit-transition: background-color 0.1s ease-in-out;
 			   -moz-transition: background-color 0.1s ease-in-out;
 					transition: background-color 0.1s ease-in-out;
+			flex: 0 0 auto;
 			&:hover { background-color: #eeeeee; }
 			aside {
 				float: left;
 				width: 220px;
-				min-width: 20px;
 				height: 100%;
+				min-width: 20px;
 				margin: 0 8px 0 0;
 				line-height: 24px;
 				time {
 					float: left;
 					width: 80px;
-					text-align: center;
 					font-size: 14px;
 					color: @darkBlue;
+					text-align: center;
 				}
 				span {
 					float: right;
@@ -394,114 +385,107 @@ a:active {
 				}
 			}
 			p {
-				margin: 0 0 0 220px;
 				padding: 0 8px;
-				border-left: 1px solid #d9d9d9;
+				margin: 0 0 0 220px;
 				font-size: 14px;
-				color: @darkBlue;
-				white-space: pre-wrap;
-				word-wrap: break-word;
 				line-height: 24px;
+				color: @darkBlue;
+				word-wrap: break-word;
+				white-space: pre-wrap;
+				border-left: 1px solid #d9d9d9;
 				.highlighted {
 					padding: 2px;
+					color: #ffffff;
 					background-color: @brightBlue;
 					border-radius: 2px;
-					color: #ffffff;
 				}
 			}
 			&#filler {
 				display: flex !important;
-				flex: 1;
 				height: 100%;
+				flex: 1;
 				div {
-					flex: 1;
 					display: block;
-					margin: 0 0 0 220px;
 					padding: 0 8px;
-					border-left: 1px solid #d9d9d9;
+					margin: 0 0 0 220px;
 					font-size: 14px;
 					color: #1b1b1b;
-					white-space: pre-wrap;
 					word-wrap: break-word;
+					white-space: pre-wrap;
+					border-left: 1px solid #d9d9d9;
+					flex: 1;
 				}
 				&:hover { background: none; }
 			}
 		}
 	}
 	footer {
-		flex: 0 1 auto;
-		order: 2;
-
 		display: flex;
-		flex-flow: row nowrap;
-
 		width: 100%;
 		height: 40px;
 		background-color: #ffffff;
 		border-top: 1px solid #d1d1d1;
+		flex: 0 1 auto;
+		order: 2;
+		flex-flow: row nowrap;
 		input {
-			flex: 1 1 auto;
-			order: 0;
-
 			width: 100%;
 			height: 40px;
 			padding: 0 5px;
-			background-color: #ffffff;
-			border: none;
 			font-size: 16px;
 			line-height: 16px;
+			background-color: #ffffff;
+			border: none;
+			flex: 1 1 auto;
+			order: 0;
 		}
 		button {
-			flex: 0 1 auto;
-			order: 1;
-
+			width: 80px;
 			height: 30px;
 			margin: 5px;
-			width: 80px;
+			flex: 0 1 auto;
+			order: 1;
 		}
 	}
 }
 
 #users {
-	flex: 0 0 auto;
-	order: 2;
-
 	display: flex;
-	flex-flow: column wrap;
-
 	width: 200px;
 	height: 100%;
 	background-color: #efefef;
 	-webkit-user-select: none;
 	   -moz-user-select: none;
 			user-select: none;
+	flex: 0 0 auto;
+	order: 2;
+	flex-flow: column wrap;
 	header {
-		flex: 0 1 auto;
-		order: 0;
 		height: 40px;
 		background-color: @brightBlue;
+		flex: 0 1 auto;
+		order: 0;
 		p {
-			margin: 0;
-			padding: 0;
 			width: inherit;
-			line-height: 40px;
-			text-align: center;
+			padding: 0;
+			margin: 0;
 			font-size: 14px;
+			line-height: 40px;
 			color: #efefef;
+			text-align: center;
 		}
 	}
 	ul {
-		flex: 1 1 auto;
-		order: 1;
-
 		width: 199px;
 		height: ~"calc(100% - 40px)";
-		margin: 0;
 		padding: 0;
-		border-left: 1px solid #d1d1d1;
-		list-style: none;
+		margin: 0;
 		overflow-y: scroll;
 		overflow-x: hide;
+		list-style: none;
+		border-left: 1px solid #d1d1d1;
+		flex: 1 1 auto;
+		order: 1;
 		li {
 			height: 24px;
 			color: @midBlue;
@@ -516,43 +500,42 @@ a:active {
 			span {
 				display: inline-block;
 				float: left;
-				width: 16px;
-				padding: 0 8px;
-				height: 24px;
 				width: 24px;
+				height: 24px;
+				padding: 0 8px;
+				font-size: 14px;
+				line-height: 24px;
 				color: @brightBlue;
 				text-align: center;
-				line-height: 24px;
-				font-size: 14px;
 				&.rank0 { color: spin(@brightBlue, 40); }
 				&.rank1 { color: spin(@brightBlue, 100); }
 				&.rank2 { color: spin(@brightBlue, 160); }
 			}
 			p {
 				float: left;
-				margin: 0;
 				padding: 0;
-				line-height: 24px;
+				margin: 0;
 				font-size: 14px;
+				line-height: 24px;
 				color: @darkBlue;
 			}
 		}
 	}
 	footer {
-		flex: 0 1 auto;
-		order: 2;
 		height: 40px;
 		border-left: 1px solid #d1d1d1;
+		flex: 0 1 auto;
+		order: 2;
 	}
 }
 
 #pageCover {
 	z-index: 2;
-	/* Will Tranition */
+	// Will Tranition
 	visibility: hidden;
 	opacity: 0;
 	position: absolute;
-	/* End */
+	// End
 	height: 100%;
 	width: 100%;
 	background-color: fade(@darkBlue, 80%);
@@ -567,11 +550,11 @@ a:active {
 	-webkit-transition: all 0.4s ease-in-out;
 	   -moz-transition: all 0.4s ease-in-out;
 			transition: all 0.4s ease-in-out;
-	/* Will Tranition */
+	// Will Tranition
 	visibility: hidden;
 	top: -50%;
 	left: 50%;
-	/* End */
+	// End
 	-webkit-transform: translate(-50%, -50%);
 	   -moz-transform: translate(-50%, -50%);
 			transform: translate(-50%, -50%);
@@ -581,17 +564,17 @@ a:active {
 .modal.alert {
 	width: 364px;
 	height: 160px;
-	border-radius: 4px;
 	background-color: #efefef;
+	border-radius: 4px;
 	p {
 		display: block;
-		margin: 0;
 		padding: 30px 0 0 0;
-		text-align: center;
-		color: #919191;
+		margin: 0;
 		font-size: 16px;
 		font-weight: bold;
 		line-height: 18px;
+		color: #919191;
+		text-align: center;
 	}
 	footer {
 		position: absolute;
@@ -601,30 +584,30 @@ a:active {
 		width: 284px;
 		height: 40px;
 		margin: 0 auto;
-		border-bottom-left-radius: 3px;
 		border-bottom-right-radius: 3px;
+		border-bottom-left-radius: 3px;
 		button:first-child {
-			background-color: #DE5555;
 			margin: 0 40px 0 0;
-			border-bottom: 2px solid darken(#DE5555, 10%);
 			text-shadow: 0 1px 1px darken(#DE5555, 10%);
+			background-color: #DE5555;
+			border-bottom: 2px solid darken(#DE5555, 10%);
 		}
 		button:last-child {
+			text-shadow: 0 1px 1px darken(#39C082, 10%);
 			background-color: #39C082;
 			border-bottom: 2px solid darken(#39C082, 10%);
-			text-shadow: 0 1px 1px darken(#39C082, 10%);
 		}
 		button {
-			float: left;
 			display: inline-block;
+			float: left;
 			width: 122px;
 			height: 42px;
-			border: none;
-			text-align: center;
 			line-height: 42px;
-			border-radius: 4px;
-			background: transparent;
 			color: #efefef;
+			text-align: center;
+			background: transparent;
+			border: none;
+			border-radius: 4px;
 			&:hover { cursor: pointer; }
 			&:active { box-shadow: inset 0 2px 6px rgba(60,60,60,.4); }
 		}
@@ -637,8 +620,8 @@ a:active {
 	background-color: #efefef;
 	border-radius: 4px;
 	header {
-		height: 40px;
 		width: 100%;
+		height: 40px;
 		background-color: @brightBlue;
 		border-top-left-radius: 4px;
 		border-top-right-radius: 4px;
@@ -647,21 +630,21 @@ a:active {
 				user-select: none;
 		h1 {
 			float: left;
-			margin: 0;
 			padding: 0 0 0 16px;
-			line-height: 40px;
-			font-weight: 400;
+			margin: 0;
 			font-size: 16px;
+			font-weight: 400;
+			line-height: 40px;
 			color: #efefef;
 		}
 		button {
 			float: right;
 			width: 40px;
 			height: 40px;
-			border: none;
-			background: none;
-			color: #efefef;
 			font-size: 20px;
+			color: #efefef;
+			background: none;
+			border: none;
 			-webkit-transition: background-color 0.2s ease-in-out;
 			   -moz-transition: background-color 0.2s ease-in-out;
 					transition: background-color 0.2s ease-in-out;
@@ -684,18 +667,18 @@ a:active {
 			display: inline-block;
 			width: 140px;
 			height: 360px;
-			margin: 0;
 			padding: 0;
+			margin: 0;
+			list-style: none;
 			background-color: @midBlue;
 			border-bottom-left-radius: 3px;
-			list-style: none;
 			li {
 				position: relative;
 				width: 124px;
 				height: 40px;
 				padding: 0 0 0 16px;
-				line-height: 40px;
 				font-size: 14px;
+				line-height: 40px;
 				color: #efefef;
 				-webkit-transition: background-color 0.2s ease-in-out;
 				   -moz-transition: background-color 0.2s ease-in-out;
@@ -707,14 +690,14 @@ a:active {
 				}
 				&.focused {
 					&:before {
-						content: "";
 						position: absolute;
 						top: 12px;
 						right: 0;
 						height: 0;
 						border-top: 7px solid transparent;
-						border-bottom: 7px solid transparent;
 						border-right: 7px solid #efefef;
+						border-bottom: 7px solid transparent;
+						content: "";
 					}
 				}
 			}
@@ -736,32 +719,32 @@ a:active {
 
 	.page#about {
 		h1 {
-			margin: 0;
 			padding: 14px 0 0 0;
-			line-height: 60px;
-			text-align: center;
-			color: @darkBlue;
-			font-weight: 800;
+			margin: 0;
 			font-size: 60px;
+			font-weight: 800;
+			line-height: 60px;
+			color: @darkBlue;
+			text-align: center;
 			span {
-				color: @brightBlue;
 				font-weight: 200;
+				color: @brightBlue;
 			}
 		}
 		p {
 			padding: 0 0 0 92px;
 			margin: 0;
-			color: @midBlue;
 			font-size: 12px;
 			font-weight: 200;
+			color: @midBlue;
 		}
 		#container {
 			width: 236px;
-			margin: 0 auto;
 			padding: 14px 0 0 0;
+			margin: 0 auto;
 			a {
-				font-size: 14px;
 				margin: 0 17px 0 0;
+				font-size: 14px;
 				&:hover {
 					cursor: pointer;
 				}
@@ -775,11 +758,11 @@ a:active {
 
 .modal.displayed {
 	top: 50% !important;
-	visibility: visible !important;
 	opacity: 1 !important;
+	visibility: visible !important;
 }
 
 #pageCover.displayed {
-	visibility: visible;
 	opacity: 1;
+	visibility: visible;
 }

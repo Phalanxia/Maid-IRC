@@ -1,4 +1,4 @@
-@blue: #52c1ff; // Alt: 1BA8ED
+@blue: #52c1ff;
 @darkBlue: darken(@blue, 10%);
 @green: #3C9067;
 @red: #903C3C;
@@ -13,18 +13,19 @@
 }
 
 ::-moz-selection {
-	background: @blue;
-	text-shadow: none;
 	color: #efefef;
+	text-shadow: none;
+	background: @blue;
 }
 
 ::selection {
-	background: @blue;
-	text-shadow: none;
 	color: #efefef;
+	text-shadow: none;
+	background: @blue;
 }
 
-html, body {
+html,
+body {
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -32,19 +33,20 @@ html, body {
 	background: #ecf0f5;
 }
 
-a, a:visited {
-	text-decoration: none;
+a,
+a:visited {
 	color: @blue;
+	text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
 	color: @blue;
+	text-decoration: underline;
 }
 
 a:active {
-	text-decoration: none;
 	color: @darkBlue;
+	text-decoration: none;
 }
 
 input:-webkit-autofill {
@@ -56,28 +58,26 @@ form {
 	top: 50%;
 	left: 50%;
 	width: 290px;
-	transform: translate(-50%, -50%);
-		-webkit-transform: translate(-50%, -50%);
-		-moz-transform: translate(-50%, -50%);
-	-webkit-transition: all 2s ease-in-out;
-	-moz-transition: all 2s ease-in-out;
-	transition: all 2s ease-in-out;
 	background-color: #ffffff;
 	border-radius: 4px;
-	// box-shadow: 0 2px 2px 0px rgba(196, 200, 205, 0.5);
+	-webkit-transform: translate(-50%, -50%);
+	   -moz-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
-
+	-webkit-transition: all 2s ease-in-out;
+	   -moz-transition: all 2s ease-in-out;
+			transition: all 2s ease-in-out;
 	h1 {
 		display: block;
 		width: inherit;
 		height: 32px;
-		color: @blue;
+		margin: 0 0 16 0;
 		font-size: 23px;
+		-webkit-font-smoothing: subpixel-antialiased;
 		font-weight: 200;
 		line-height: 32px;
-		margin: 0 0 16 0;
+		color: @blue;
 		text-align: center;
-		-webkit-font-smoothing: subpixel-antialiased;
 	}
 
 	section {
@@ -93,17 +93,18 @@ form {
 		display: inline-block;
 		width: 218px;
 		height: 44px;
-		margin: 0 20px 16px 20px;
 		padding: 0 16px;
+		margin: 0 20px 16px 20px;
+		font-size: 14px;
+		line-height: 20px;
+		color: #1b1b1b;
 		background: #fbfbfb;
 		border: 1px solid #efefef;
 		border-radius: 4px;
-		line-height: 20px;
-		color: #1b1b1b;
-		font-size: 14px;
 		box-shadow: inset 0 1px 2px rgba(240,240,240,.8);
 		-webkit-transition: all ease-in-out 0.15s;
-		transition: all ease-in-out 0.15s;
+		   -moz-transition: all ease-in-out 0.15s;
+				transition: all ease-in-out 0.15s;
 		&:focus {
 			border: 1px solid @blue;
 			box-shadow: 0 0 0 1px @blue;
@@ -120,9 +121,9 @@ form {
 		width: 150px;
 		padding: 0 0 0 16px;
 		margin: 0 0 16px 20px;
-		border-top-right-radius: 0px;
-		border-bottom-right-radius: 0px;
 		border-right: none;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
 	}
 
 	input[name="port"] {
@@ -131,46 +132,47 @@ form {
 		padding: 0 16px;
 		margin: 5px 0;
 		border-left: 1px dashed #d1d1d1;
-		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
+		border-top-left-radius: 0;
 	}
 
 	input[type="checkbox"] {
-		-webkit-appearance: none;
-		appearance: none;
 		display: block;
 		width: 22px;
 		height: 22px;
 		margin: 3px 0 0 16px;
+		font: 10px FontAwesome;
 		background: none;
 		background-color: #fbfbfb;
-		border-radius: 4px;
 		border: 1px solid #efefef;
+		border-radius: 4px;
 		box-shadow: inset 0 1px 2px rgba(240,240,240,.8);
-		font: 10px FontAwesome;
+		-webkit-appearance: none;
+		   -moz-appearance: none;
+				appearance: none;
 		&:after {
-			display: none;
-			content: '\f00c';
 			left: 0;
+			display: none;
 			width: 22px;
 			height: 22px;
 			margin: 0;
 			color: @blue;
+			content: '\f00c';
 		}
 		&:checked {
 			&:after {
-				display: block;
-				content: '\f00c';
 				left: 0;
+				display: block;
 				width: 20px;
 				height: 20px;
 				margin: 0;
-				background-color: @blue;
-				border-radius: 3px;
+				font-size: 14px;
+				line-height: 20px;
 				color: #efefef;
 				text-align: center;
-				line-height: 20px;
-				font-size: 14px;
+				background-color: @blue;
+				border-radius: 3px;
+				content: '\f00c';
 			}
 		}
 		&:hover {
@@ -179,8 +181,8 @@ form {
 	}
 
 	&.selected {
-		border: transparent;
 		padding: 1px;
+		border: transparent;
 		box-shadow: 0 0 0 2px @blue;
 	}
 
@@ -195,8 +197,8 @@ form {
 			margin: 3px 0 0 16px;
 		}
 		span {
-			color: @blue;
 			line-height: 28px;
+			color: @blue;
 		}
 		&.advanced {
 			display: none;
@@ -205,11 +207,11 @@ form {
 
 	hr {
 		display: block;
-		height: 0;
 		width: 250px;
+		height: 0;
+		margin: 0 20px 20px 20px;
 		border: none;
 		border-top: 1px dashed #d1d1d1;
-		margin: 0 20px 20px 20px;
 		&.advanced {
 			display: none;
 		}
@@ -224,33 +226,33 @@ form {
 		button {
 			width: 250px;
 			height: 44px;
+			font-size: 14px;
+			font-weight: bold;
+			line-height: 34px;
+			color: #fafbfb;
+			text-shadow: 0 -1px darken(@blue, 16%);
 			background: @blue;
 			border: 1px solid darken(@blue, 16%);
 			border-radius: 4px;
 			box-shadow: inset 0 1px lighten(@blue, 12%);
-			color: #fafbfb;
-			font-size: 14px;
-			line-height: 34px;
-			font-weight: bold;
-			text-shadow: 0px -1px darken(@blue, 16%);
 			&:hover {
 				cursor: pointer;
 			}
 			&:active {
-				box-shadow: inset 0 1px lighten(@blue, 5%);
-				background-color: darken(@blue, 6%);
 				color: #fafbfb;
+				background-color: darken(@blue, 6%);
+				box-shadow: inset 0 1px lighten(@blue, 5%);
 			}
 		}
 	}
 }
 
-a#advanced,
-a#github {
+#advanced,
+#github {
 	position: absolute;
 	bottom: 30px;
-	font-size: 16px;
 	font-family: 'Open Sans', Helvetica, sans-serif;
+	font-size: 16px;
 	color: @blue;
 	&:active,
 	&:visited,
@@ -261,14 +263,14 @@ a#github {
 	}
 	span {
 		display: block;
-		height: 2px;
 		width: 1px;
+		height: 2px;
 		margin: 0 auto;
-		opacity: 0;
 		background-color: @blue;
-		transition: all 0.4s ease-in-out;
-			-webkit-transition: all 0.4s ease-in-out;
-			-moz-transition: all 0.4s ease-in-out;
+		opacity: 0;
+		-webkit-transition: all 0.4s ease-in-out;
+		   -moz-transition: all 0.4s ease-in-out;
+				transition: all 0.4s ease-in-out;
 	}
 	&:hover span {
 		width: 100%;
@@ -276,7 +278,7 @@ a#github {
 	}
 }
 
-a#github {
+#github {
 	left: 32px;
 	i {
 		margin: 0 8px 0 0;
@@ -284,7 +286,7 @@ a#github {
 	}
 }
 
-a#advanced {
+#advanced {
 	right: 32px;
 	span {
 		margin: 2px auto 0 auto;
