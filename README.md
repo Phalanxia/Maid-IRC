@@ -1,6 +1,8 @@
 [![Maid IRC](public/img/logo.png)](https://github.com/Phalanxia/Maid-IRC)
 
-A modern web IRC client. [![Dependency Status](https://gemnasium.com/Phalanxia/Maid-IRC.png)](https://gemnasium.com/Phalanxia/Maid-IRC)
+A modern web IRC client.
+
+[![Dependency Status](https://gemnasium.com/Phalanxia/Maid-IRC.png)](https://gemnasium.com/Phalanxia/Maid-IRC)
 
 ## Installation
 
