@@ -11,11 +11,11 @@ Yb, `88'  `88'  `88                            8I       d8   8bYb,  88      `8b 
      88    88    `Y8P"Y8888P"`Y88P""Y8P"Y8888P"`Y8   "Y88P" "Y8     88        Y8  `"Y8888888
 */
 
-var env = process.env.NODE_ENV || "development";
+var env = process.env.NODE_ENV || 'development';
 
-console.log("Starting Maid IRC.\nEnviroment: " + env);
+console.log('Starting Maid IRC.\nEnviroment: ' + env);
 
-if (env != "production" && env != "development") {
+if (env != 'production' && env != 'development') {
 	console.warn('Sorry! NODE_ENV: "' + process.env.NODE_ENV + '" is not recognized. Try "development" or "production".');
 }
 
@@ -24,8 +24,10 @@ var ircLib = require('irc'),
 	io = require('socket.io'),
 	http = require('http'),
 	fs = require('fs'),
+	// Middleware
 	favicon = require('static-favicon'),
-	connect = require('connect'),
+	bodyParser = require('body-parser'),
+	methodOverride = require('method-override'),
 	lessMiddleware = require('less-middleware');
 
 // Get config
@@ -35,20 +37,23 @@ var config = require('./config.js');
 var app = express();
 
 if (env == 'development') {
-	app.use(connect.errorHandler());
-	app.use(connect.logger('dev'));
+	var morgan = require('morgan');
+
+	app.use(morgan('dev'));
 };
 
 if (env == 'production') {
 	var minify = require('express-minify');
+
 	app.use(minify());
 };
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-app.use(connect.bodyParser());
-app.use(connect.methodOverride());
+app.use(require('errorhandler')());
+app.use(bodyParser());
+app.use(methodOverride());
 
 // Set up less.css middleware
 app.use(lessMiddleware(__dirname + '/public', {
@@ -59,19 +64,10 @@ app.use(lessMiddleware(__dirname + '/public', {
 app.use(express.static(__dirname + '/public'));
 app.use(favicon(__dirname + '/public/img/favicon.ico'));
 
-var server = http.createServer(app)
-	.listen(config.http_port, config.http_host);
+var server = http.createServer(app).listen(config.http_port, config.http_host),
+	// Set up socket.io
+	io = require('socket.io').listen(server);
 
-app.get('/', function (req, res) {
-	res.render('index', {});
-});
-
-app.get('/preview', function (req, res) {
-	res.render("client", {}); // Go to /preview to preview the client without connecting to IRC.
-});
-
-// Set up socket.io
-var io = require('socket.io').listen(server);
 io.set('log level', 1);
 
 // Logging to file.
@@ -85,13 +81,22 @@ function getMask (message) {
 	return message.nick + '!' + message.user + '@' + message.host;
 }
 
+// Routing
+app.route('/').get(function (req, res) {
+	res.render('index', {});
+});
+
+app.route('/preview').get(function (req, res) {
+	res.render('client', {}); // Go to /preview to preview the client without connecting to IRC.
+});
+
 // Client
 app.post('/client', function (req, res) {
 	// I feel like this might be a messy way of doing it but it will be fine for now.
 
 	// Update: It doesn't work at all.
 
-	res.render("client", {
+	res.render('client', {
 		server: req.body.server,
 		name: req.body.name,
 	});
@@ -100,12 +105,12 @@ app.post('/client', function (req, res) {
 		console.log(JSON.stringify(req.body));
 	}
 
-	if (!req.body.realName) req.body.realName = "MaidIRC";
-	if (!req.body.port)	req.body.port = 6667;
+	if (!req.body.realName) req.body.realName = 'MaidIRC';
+	if (!req.body.port) req.body.port = 6667;
 
-	if (!req.body.sslToggle || req.body.sslToggle == "undefined") {
+	if (!req.body.sslToggle || req.body.sslToggle == 'undefined') {
 		req.body.sslToggle = false;
-	} else if (req.body.sslToggle == "on") {
+	} else if (req.body.sslToggle == 'on') {
 		req.body.sslToggle = true;
 	} else {
 		req.body.sslToggle = false;
@@ -133,7 +138,7 @@ app.post('/client', function (req, res) {
 	};
 
 	io.sockets.on('connection', function (socket) {
-		console.log("Client connected from: " + socket.handshake.address.address + ":" + socket.handshake.address.port);
+		console.log('Client connected from: ' + socket.handshake.address.address + ":" + socket.handshake.address.port);
 		socket.emit('initialInfo', req.body.name);
 
 		// IRC Listeners
@@ -157,21 +162,21 @@ app.post('/client', function (req, res) {
 			}
 
 			socket.emit('recieveMessage', {
-				type: "serverMessage",
+				type: 'serverMessage',
 				message: message.args[1]
 			});
 		});
 
 		irc.addListener('motd', function (motd) {
 			socket.emit('recieveMessage', {
-				type: "serverMessage",
+				type: 'serverMessage',
 				message: motd
 			});
 		});
 
 		irc.addListener('names', function (channel, nicks) {
 			socket.emit('updateInfo', {
-				type: "channel",
+				type: 'channel',
 				action: "join",
 				channel: channel,
 				channelInfo: irc.chans[channel]
@@ -184,7 +189,7 @@ app.post('/client', function (req, res) {
 			});
 
 			socket.emit('updateInfo', {
-				type: "topic",
+				type: 'topic',
 				channel: channel,
 				topic: irc.chans[channel].topic
 			});
@@ -193,7 +198,7 @@ app.post('/client', function (req, res) {
 
 		irc.addListener('message', function (nick, to, text, message) {
 			socket.emit('recieveMessage', {
-				type: "message",
+				type: 'message',
 				nick: nick,
 				channel: to,
 				message: text,
@@ -203,7 +208,7 @@ app.post('/client', function (req, res) {
 
 		irc.addListener('join', function (channel, nick, message) {
 			socket.emit('recieveMessage', {
-				type: "join",
+				type: 'join',
 				nick: nick,
 				channel: channel,
 				message: message,
@@ -211,7 +216,7 @@ app.post('/client', function (req, res) {
 			});
 
 			socket.emit('updateInfo', {
-				type: "users",
+				type: 'users',
 				channel: channel,
 				users: irc.chans[channel].users
 			});
@@ -219,7 +224,7 @@ app.post('/client', function (req, res) {
 
 		irc.addListener('part', function (channel, nick, message) {
 			socket.emit('recieveMessage', {
-				type: "part",
+				type: 'part',
 				nick: nick,
 				channel: channel,
 				message: message,
@@ -227,7 +232,7 @@ app.post('/client', function (req, res) {
 			});
 
 			socket.emit('updateInfo', {
-				type: "users",
+				type: 'users',
 				channel: channel,
 				users: irc.chans[channel].users
 			});
@@ -236,7 +241,7 @@ app.post('/client', function (req, res) {
 
 		irc.addListener('quit', function (nick, reason, channels, message) {
 			socket.emit('recieveMessage', {
-				type: "quit",
+				type: 'quit',
 				nick: nick,
 				channels: channels,
 				message: reason,
@@ -244,7 +249,7 @@ app.post('/client', function (req, res) {
 			});
 
 			socket.emit('updateInfo', {
-				type: "users",
+				type: 'users',
 				channel: channel,
 				users: irc.chans[channel].users
 			});
@@ -252,7 +257,7 @@ app.post('/client', function (req, res) {
 
 		irc.addListener('notice', function (nick, to, text, message) {
 			socket.emit('recieveMessage', {
-				type: "notice",
+				type: 'notice',
 				nick: nick,
 				channel: to,
 				message: text,
@@ -262,7 +267,7 @@ app.post('/client', function (req, res) {
 
 		irc.addListener('nick', function (oldNick, newNick, channels, message) {
 			socket.emit('recieveMessage', {
-				type: "nickChange",
+				type: 'nickChange',
 				oldNick: oldNick,
 				newNick: newNick,
 				channels: channels,
@@ -270,7 +275,7 @@ app.post('/client', function (req, res) {
 			});
 
 			socket.emit('updateInfo', {
-				type: "users",
+				type: 'users',
 				channel: channel,
 				users: irc.chans[channel].users
 			});
@@ -295,7 +300,7 @@ app.post('/client', function (req, res) {
 			}
 
 			socket.emit('updateInfo', {
-				type: "topic",
+				type: 'topic',
 				channel: channel,
 				topic: irc.chans[channel].topic
 			});
@@ -309,7 +314,7 @@ app.post('/client', function (req, res) {
 
 		// Recieved
 		socket.on('shutdown', function (data) {
-			irc.disconnect("Quit");
+			irc.disconnect('Quit');
 			if (env == 'development') {
 				setTimeout(function () {
 					console.log('Exiting.');
@@ -319,8 +324,8 @@ app.post('/client', function (req, res) {
 		});
 
 		socket.on('disconnect', function () {
-			console.log("Client disconnected");
-			irc.disconnect("Quit");
+			console.log('Client disconnected');
+			irc.disconnect('Quit');
 		});
 
 		// IRC Recieve
@@ -334,34 +339,34 @@ app.post('/client', function (req, res) {
 
 		socket.on('sendCommand', function (data) {
 			switch(data.type) {
-				case "join":
+				case 'join':
 					irc.join(data.content);
 					socket.emit('updateInfo', {
-						type: "channel",
-						action: "join",
+						type: 'channel',
+						action: 'join',
 						channel: data.content,
 						channelInfo: irc.chans[channel]
 					});
 					break;
-				case "part":
+				case 'part':
 					irc.part(data.content);
 					socket.emit('updateInfo', {
-						type: "channel",
-						action: "part",
+						type: 'channel',
+						action: 'part',
 						channel: data.content,
 						channelInfo: irc.chans[channel]
 					});
 					break;
-				case "action":
+				case 'action':
 					irc.action(data.channel, data.message);
 					break;
-				case "notice":
+				case 'notice':
 					irc.action(data.channel, data.message);
 					break;
-				case "away":
+				case 'away':
 					irc.send('AWAY', data.message);
 					break;
-				case "topic":
+				case 'topic':
 					irc.send('TOPIC', data.channel, data.message);
 					break;
 			}

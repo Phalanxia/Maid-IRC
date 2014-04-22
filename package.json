@@ -11,7 +11,10 @@
 		"express": "~4.0.0",
 		"express-minify": "~0.0.7",
 		"static-favicon": "1.0.2",
-		"connect": "2.14.4",
+		"body-parser": "1.0.2",
+		"morgan": "1.0.0",
+		"method-override": "1.0.0",
+		"errorhandler": "1.0.0",
 		"less-middleware": "0.2.1-beta"
 	},
 	"devDependencies": {
