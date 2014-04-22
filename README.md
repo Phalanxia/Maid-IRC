@@ -12,7 +12,7 @@ A modern web IRC client.
 
 ## Running
 
-1. Please define the node enviroment varible. Supported varibles are `development` and `production`. If no varible is defined it will assume its development.
+1. Please define the node enviroment varible. Supported varibles are `development` and `production`. If not defined it will assume it's development.
 
 2. Run Maid IRC. Use this command in the main directory of Maid IRC: `node app.js`
 
