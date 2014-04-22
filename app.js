@@ -11,11 +11,11 @@ Yb, `88'  `88'  `88                            8I       d8   8bYb,  88      `8b 
      88    88    `Y8P"Y8888P"`Y88P""Y8P"Y8888P"`Y8   "Y88P" "Y8     88        Y8  `"Y8888888
 */
 
-console.log("Starting Maid IRC.\nEnviroment: " + process.env.NODE_ENV);
+var env = process.env.NODE_ENV || "development";
 
-if (process.env.NODE_ENV === undefined) {
-	console.warn("Please define the NODE_ENV.");
-} else if (process.env.NODE_ENV != "production" && process.env.NODE_ENV != "development") {
+console.log("Starting Maid IRC.\nEnviroment: " + env);
+
+if (env != "production" && env != "development") {
 	console.warn('Sorry! NODE_ENV: "' + process.env.NODE_ENV + '" is not recognized. Try "development" or "production".');
 }
 
@@ -24,9 +24,9 @@ var ircLib = require('irc'),
 	io = require('socket.io'),
 	http = require('http'),
 	fs = require('fs'),
+	favicon = require('static-favicon'),
+	connect = require('connect'),
 	lessMiddleware = require('less-middleware');
-
-var devMode = false;
 
 // Get config
 var config = require('./config.js');
@@ -34,35 +34,30 @@ var config = require('./config.js');
 // Set up express
 var app = express();
 
-app.configure('development', function() {
-	app.use(express.errorHandler());
-	app.use(express.logger('dev'));
-	devMode = true;
-});
+if (env == 'development') {
+	app.use(connect.errorHandler());
+	app.use(connect.logger('dev'));
+};
 
-app.configure('production', function() {
+if (env == 'production') {
 	var minify = require('express-minify');
 	app.use(minify());
-});
+};
 
-app.configure(function () {
-	app.set('views', __dirname + '/views');
-	app.set('view engine', 'jade');
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
 
-	app.use(express.json());
-	app.use(express.urlencoded());
-	app.use(express.methodOverride());
-	app.use(app.router);
+app.use(connect.bodyParser());
+app.use(connect.methodOverride());
 
-	// Set up less.css middleware
-	app.use(lessMiddleware(__dirname + '/public', {
-		compress: true,
-		optimization: 2
-	}));
+// Set up less.css middleware
+app.use(lessMiddleware(__dirname + '/public', {
+	compress: true,
+	optimization: 2
+}));
 
-	app.use(express.static(__dirname + '/public'));
-	app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
-});
+app.use(express.static(__dirname + '/public'));
+app.use(favicon(__dirname + '/public/img/favicon.ico'));
 
 var server = http.createServer(app)
 	.listen(config.http_port, config.http_host);
@@ -101,7 +96,7 @@ app.post('/client', function (req, res) {
 		name: req.body.name,
 	});
 
-	if (devMode) {
+	if (env == 'development') {
 		console.log(JSON.stringify(req.body));
 	}
 
@@ -156,7 +151,7 @@ app.post('/client', function (req, res) {
 		});
 
 		irc.addListener('registered', function (message) {
-			if (devMode) {
+			if (env == 'development') {
 				console.log('Server: ' + message.server);
 				console.log(message.args[1]);
 			}
@@ -315,7 +310,7 @@ app.post('/client', function (req, res) {
 		// Recieved
 		socket.on('shutdown', function (data) {
 			irc.disconnect("Quit");
-			if (devMode) {
+			if (env == 'development') {
 				setTimeout(function () {
 					console.log('Exiting.');
 					process.exit(0);
