@@ -6,18 +6,15 @@ A modern web IRC client.
 
 ## Installation
 
-1. Download dependencies:
-	`$ npm install`
+1. Download dependencies. `$ npm install` for development, and `$ npm install --production` for production.
 
 2. Edit config.js
 
 ## Running
 
-1. Please define the node enviroment varible:
-	Supported varibles are `development` and `production`.
+1. Please define the node enviroment varible. Supported varibles are `development` and `production`. If no varible is defined it will assume its development.
 
-2. Run Maid IRC:
-	Use this command in the main directory of Maid IRC: `node app.js`
+2. Run Maid IRC. Use this command in the main directory of Maid IRC: `node app.js`
 
 ## Screenshots
 

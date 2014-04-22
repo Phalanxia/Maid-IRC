@@ -1,22 +1,31 @@
 {	"name": "maidirc",
 	"version": "0.0.7",
-	"description": "A web IRC client based on node.js and socket.io.",
+	"description": "A web IRC client.",
 	"author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
+	"homepage": "https://phalanxia.github.io/Maid-IRC/",
 	"private": true,
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Phalanxia/Maid-IRC.git"
-	},
-	"keywords": [
-		"IRC"
-	],
 	"dependencies": {
 		"irc": "~0.3.6",
 		"socket.io": "~0.9.16",
 		"jade": "~1.3.0",
-		"express": "~3.4.3",
-		"less-middleware": "0.2.1-beta",
-		"express-minify": "~0.0.7"
+		"express": "~4.0.0",
+		"express-minify": "~0.0.7",
+		"static-favicon": "1.0.2",
+		"connect": "2.14.4",
+		"less-middleware": "0.2.1-beta"
+	},
+	"devDependencies": {
+	},
+	"keywords": [
+		"IRC",
+		"web",
+		"web",
+		"client",
+		"app"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Phalanxia/Maid-IRC.git"
 	},
 	"license": "The MIT License (MIT)",
 	"engines": {
@@ -25,5 +34,6 @@
 	"scripts": {
 		"start": "node app.js"
 	},
+	"readmeFilename": "Readme.md",
 	"bugs": "https://github.com/Phalanxia/Maid-IRC/issues"
 }
