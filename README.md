@@ -12,9 +12,9 @@ A modern web IRC client. Built on [Node](http://nodejs.org).
 
 ## Running
 
-1. Please define the node enviroment varible. Supported varibles are `development` and `production`. If not defined it will assume it's development.
+1. Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's development.
 
-2. Run Maid IRC. Use this command in the main directory of Maid IRC: `node app.js`
+2. Run Maid IRC. Use this command in the main directory of Maid IRC: `$ node app.js`
 
 ## Screenshots
 
@@ -23,6 +23,8 @@ A modern web IRC client. Built on [Node](http://nodejs.org).
 ![Login Screen](screenshots/client.png)
 
 ## Community
+
+Found a bug? Have a feature request? Please [submit an issue.](https://github.com/Phalanxia/Maid-IRC/issues)
 
 Need support? Want to chat? Join our channel on the Freenode IRC network.
 
