@@ -13,7 +13,7 @@ Yb, `88'  `88'  `88                            8I       d8   8bYb,  88      `8b 
 
 var env = process.env.NODE_ENV || 'development';
 
-console.log('Starting Maid IRC.\nEnviroment: ' + env);
+console.log('Starting Maid IRC.\nEnvironment: ' + env);
 
 if (env != 'production' && env != 'development') {
 	console.warn('Sorry! NODE_ENV: "' + process.env.NODE_ENV + '" is not recognized. Try "development" or "production".');
@@ -312,7 +312,7 @@ app.post('/client', function (req, res) {
 
 		// And now the rest of the Socket.io code.
 
-		// Recieved
+		// Received
 		socket.on('shutdown', function (data) {
 			irc.disconnect('Quit');
 			if (env == 'development') {
@@ -328,7 +328,7 @@ app.post('/client', function (req, res) {
 			irc.disconnect('Quit');
 		});
 
-		// IRC Recieve
+		// IRC Receive
 		socket.on('sendServer', function (data) {
 			console.log(data);
 		});

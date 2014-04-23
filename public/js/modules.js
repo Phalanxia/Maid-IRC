@@ -63,7 +63,7 @@ var UpdateInterface = (function () {
 
 		// Create get the time for the timestamp
 		var rawTime = new Date(),
-			scrollInfoView; // And this varible for later
+			scrollInfoView; // And this variable for later
 		// Lets format the timestamp
 		var timestamp = "[" + ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2) + "]";
 
@@ -117,7 +117,7 @@ var UpdateInterface = (function () {
 		select('#users > ul').innerHTML = '';
 		select('#users header p').innerHTML = '';
 
-		// Set up userlist.
+		// Set up user list.
 		var _channel = client.info.channels[channel],
 			_userList = [],
 			_opCount = 0,
@@ -127,7 +127,7 @@ var UpdateInterface = (function () {
 			_userList.push(k);
 		}
 
-		// Lets sort the userlist based on rank and alphabatizing.
+		// Lets sort the user list based on rank and alphabetizing.
 		_userList.sort(function(a, b) {
 			var rankString = "\r+~@";
 			var rankA = rankString.indexOf(_users[a]),
