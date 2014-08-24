@@ -212,29 +212,34 @@ app.post('/client', function (req, res) {
 				nick: nick,
 				channel: channel,
 				message: message,
-				info: message
+				info: message.host
 			});
 
 			socket.emit('updateInfo', {
 				type: 'users',
+				action: 'part',
 				channel: channel,
 				users: irc.chans[channel].users
 			});
 		});
 
-		irc.addListener('part', function (channel, nick, message) {
+		irc.addListener('part', function (channel, nick, reason, message) {
+			console.log("meow");
+
 			socket.emit('recieveMessage', {
 				type: 'part',
 				nick: nick,
 				channel: channel,
 				message: message,
-				info: message
+				info: message.host
 			});
 
 			socket.emit('updateInfo', {
 				type: 'users',
+				action: 'part',
+				nick: nick,
 				channel: channel,
-				users: irc.chans[channel].users
+				users: irc.chans[channel].users[nick]
 			});
 		});
 
@@ -245,11 +250,12 @@ app.post('/client', function (req, res) {
 				nick: nick,
 				channels: channels,
 				message: reason,
-				info: message
+				info: message.host
 			});
 
 			socket.emit('updateInfo', {
 				type: 'users',
+				action: 'part',
 				channel: channel,
 				users: irc.chans[channel].users
 			});
@@ -340,21 +346,21 @@ app.post('/client', function (req, res) {
 		socket.on('sendCommand', function (data) {
 			switch(data.type) {
 				case 'join':
-					irc.join(data.content);
+					irc.join(data.channels);
 					socket.emit('updateInfo', {
 						type: 'channel',
 						action: 'join',
-						channel: data.content,
-						channelInfo: irc.chans[channel]
+						channel: data.channels,
+						channelInfo: irc.chans[data.channels]
 					});
 					break;
 				case 'part':
-					irc.part(data.content);
+					irc.part(data.channels);
 					socket.emit('updateInfo', {
 						type: 'channel',
 						action: 'part',
-						channel: data.content,
-						channelInfo: irc.chans[channel]
+						channel: data.channels,
+						channelInfo: irc.chans[data.channels]
 					});
 					break;
 				case 'action':

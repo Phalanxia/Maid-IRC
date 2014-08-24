@@ -83,7 +83,20 @@ var client = {
 						updateInterface.directory();
 						break;
 					case "users":
-						client.info.channels[data.channel].users = data.users;
+						if (typeof data.action !== "undefined") {
+							switch (data.action) {
+								case "join":
+									client.info.channels[data.channel].users = data.users;
+									break;
+								case "part":
+									delete client.info.channels[data.channel].users[data.nick];
+									break;
+							}
+						} else {
+						}
+
+
+						console.log(JSON.stringify(client.info.channels[data.channel].users = data.users));
 						// Lets update the interface if its the channel the user is focused on.
 						if (client.info.focusedChannel == data.channel) {
 							updateInterface.users(data.channel);
