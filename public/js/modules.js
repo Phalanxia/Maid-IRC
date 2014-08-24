@@ -18,7 +18,7 @@ var UpdateInterface = (function () {
 		function buildIt (i) {
 			client.info.focusedChannel = channelList[i].toLowerCase();
 
-			if (client.info.channels[channelList[i]].topic !== undefined) {
+			if (typeof client.info.channels[channelList[i]].topic === 'undefined') {
 				select('#channelConsole header input').value = client.info.channels[channelList[i]].topic;
 			} else {
 				select('#channelConsole header input').value = '';
@@ -107,6 +107,7 @@ var UpdateInterface = (function () {
 
 	// Update topic
 	module.prototype.topic = function (topic) {
+		topic = topic || '';
 		select('#channelConsole header input').value = '';
 		select('#channelConsole header input').value = topic;
 	};
@@ -142,14 +143,20 @@ var UpdateInterface = (function () {
 
 		for (var i = 0; i < _userList.length; i++) {
 			var identifyer = '';
-			if (_users[_userList[i]] == "@") {
-				identifyer = '<span class="fa fa-circle rank0"></span>';
-			} else if (_users[_userList[i]] == "+") {
-				identifyer = '<span class="fa fa-circle rank1"></span>';
-			} else if (_users[_userList[i]] == "~") {
-				identifyer = '<span class="fa fa-circle rank1"></span>';
-			} else {
-				identifyer = '<span></span>';
+
+			switch (_users[_userList[i]]) {
+				case "@":
+					identifyer = '<span class="fa fa-circle rank0"></span>';
+					break;
+				case "+":
+					identifyer = '<span class="fa fa-circle rank1"></span>';
+					break;
+				case "~":
+					identifyer = '<span class="fa fa-circle rank1"></span>';
+					break;
+				default:
+					identifyer = '<span></span>';
+					break;
 			}
 
 			select('#users ul').insertAdjacentHTML('beforeend', '<li>' + identifyer + '<p>' + _userList[i] + '</p></li>');
@@ -227,7 +234,7 @@ var Messaging = (function () {
 					for (var i = 0; i < _channels.length; i+=1) {
 						this.socket.emit('sendCommand', {
 							type: "join",
-							content: _channels[i]
+							channels: _channels[i]
 						});
 					}
 					break;
@@ -236,7 +243,7 @@ var Messaging = (function () {
 					for (var i = 0; i < _channels.length; i+=1) {
 						this.socket.emit('sendCommand', {
 							type: "part",
-							content: _channels[i]
+							channels: _channels[i]
 						});
 					}
 					break;
@@ -292,14 +299,14 @@ var Messaging = (function () {
 				this.updateInterface.message("serverMessage", "*", "server", data.message);
 				break;
 			case "join":
-				this.updateInterface.message("join", "*", data.channel, data.nick + " (" + data.info.host + ") has joined " + data.channel);
+				this.updateInterface.message("join", "*", data.channel, data.nick + " (" + data.info + ") has joined " + data.channel);
 				break;
 			case "part":
-				this.updateInterface.message("part", "*", data.channel, data.nick + " (" + data.info.host + ") has left " + data.channel);
+				this.updateInterface.message("part", "*", data.channel, data.nick + " (" + data.info + ") has left " + data.channel);
 				break;
 			case "quit":
 				for (i = data.channels.length - 1; i >= 0; i--) {
-					this.updateInterface.message("quit", "*", data.channels, data.nick + " (" + data.info.host + ") has quit " + data.channels[i] + " (" + data.reason + ")");
+					this.updateInterface.message("quit", "*", data.channels, data.nick + " (" + data.info + ") has quit " + data.channels[i] + " (" + data.reason + ")");
 				}
 				break;
 			case "notice":
