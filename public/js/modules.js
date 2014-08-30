@@ -291,6 +291,18 @@ var Messaging = (function () {
 	module.prototype.recieve = function (data) {
 		var i;
 
+		console.log(data.rawCommand);
+
+		switch (data.rawCommand) {
+			case "001":
+				break;
+			case "PRIVMSG":
+				this.updateInterface.message("message",	data.nick, data.channel, data.message );
+				break;
+		}
+
+		/*
+
 		switch (data.type) {
 			case "message":
 				this.updateInterface.message("message",	data.nick, data.channel, data.message );
@@ -331,6 +343,8 @@ var Messaging = (function () {
 			case "topicChange":
 				this.updateInterface.message("topicChange",	"&gt;", data.channel, data.nick + ' has changed the topic to: "' + data.topic + '"');
 				break;
+
+			*/
 		}
 	}
 

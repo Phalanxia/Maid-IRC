@@ -57,6 +57,10 @@ var client = {
 			client.settings.highlights[0] = client.info.nick;
 		});
 
+		socket.on('raw', function (data) {
+			messaging.recieve(data);
+		});
+
 		socket.on('recieveMessage', function (data) {
 			if (client.settings.ignoreList.indexOf(data.mask) != -1) {
 				return;
