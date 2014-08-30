@@ -1,7 +1,21 @@
+// Variables
+// ----------------------------
 @blue: #52c1ff;
 @darkBlue: darken(@blue, 10%);
 @green: #3C9067;
 @red: #903C3C;
+
+// Mixins
+// ----------------------------
+
+.transition(@transition) {
+	-webkit-transition: @transition;
+	   -moz-transition: @transition;
+		-ms-transition: @transition;
+		 -o-transition: @transition;
+			transition: @transition;
+}
+
 
 *:focus {
 	outline: none;
@@ -64,20 +78,43 @@ form {
 	   -moz-transform: translate(-50%, -50%);
 			transform: translate(-50%, -50%);
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	-webkit-transition: all 2s ease-in-out;
-	   -moz-transition: all 2s ease-in-out;
-			transition: all 2s ease-in-out;
-	h1 {
-		display: block;
-		width: inherit;
+	.transition(all 2s ease-in-out);
+
+	header {
 		height: 32px;
 		margin: 0 0 16 0;
-		font-size: 23px;
-		-webkit-font-smoothing: subpixel-antialiased;
-		font-weight: 200;
-		line-height: 32px;
-		color: @blue;
-		text-align: center;
+		h1 {
+			float: left;
+			display: block;
+			width: inherit;
+			margin: 16px 0 16px 20px;
+			font-size: 23px;
+			-webkit-font-smoothing: subpixel-antialiased;
+			font-weight: 200;
+			line-height: 32px;
+			color: @blue;
+			span {
+				color: #213246;
+				font-weight: 800;
+			}
+		}
+		a {
+			float: right;
+			height: 32px;
+			width: 20px;
+			margin: 16px 8px;
+			color: @blue;
+			line-height: 32px !important; // Sorry
+			font-size: 22px;
+			&:hover {
+				text-decoration: none;
+				cursor: pointer;
+			}
+
+			&.fa-gear {
+				margin: 16px 20px 16px 8px;
+			}
+		}
 	}
 
 	section {
@@ -102,9 +139,7 @@ form {
 		border: 1px solid #efefef;
 		border-radius: 4px;
 		box-shadow: inset 0 1px 2px rgba(240,240,240,.8);
-		-webkit-transition: all ease-in-out 0.15s;
-		   -moz-transition: all ease-in-out 0.15s;
-				transition: all ease-in-out 0.15s;
+		.transition(all ease-in-out 0.15s)
 		&:focus {
 			border: 1px solid @blue;
 			box-shadow: 0 0 0 1px @blue;
@@ -244,51 +279,5 @@ form {
 				box-shadow: inset 0 1px lighten(@blue, 5%);
 			}
 		}
-	}
-}
-
-#advanced,
-#github {
-	position: absolute;
-	bottom: 30px;
-	font-family: 'Open Sans', Helvetica, sans-serif;
-	font-size: 16px;
-	color: @blue;
-	&:active,
-	&:visited,
-	&:hover {
-		color: @blue !important;
-		text-decoration: none;
-		cursor: pointer;
-	}
-	span {
-		display: block;
-		width: 1px;
-		height: 2px;
-		margin: 0 auto;
-		background-color: @blue;
-		opacity: 0;
-		-webkit-transition: all 0.4s ease-in-out;
-		   -moz-transition: all 0.4s ease-in-out;
-				transition: all 0.4s ease-in-out;
-	}
-	&:hover span {
-		width: 100%;
-		opacity: 1;
-	}
-}
-
-#github {
-	left: 32px;
-	i {
-		margin: 0 8px 0 0;
-		font-size: 24px;
-	}
-}
-
-#advanced {
-	right: 32px;
-	span {
-		margin: 2px auto 0 auto;
 	}
 }
