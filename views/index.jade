@@ -10,7 +10,12 @@ html(lang='en')
 		script(src='/socket.io/socket.io.js')
 	body
 		form(action='/client', method='post')
-			h1 Maid IRC
+			header
+				h1
+					span Maid
+					| IRC
+				a.fa.fa-gear
+				a.fa.fa-github(href='//github.com/Phalanxia/Maid-IRC')
 			input#name(type='text', placeholder='Nickname', name='name', spellcheck="false", autofocus, required)
 			input#nicknamePassword.advanced(type='password', name='nicknamePassword', placeholder='Password', tabIndex='-1')
 			input#realName.advanced(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
@@ -23,11 +28,5 @@ html(lang='en')
 				span.checkboxLabel SSL
 			input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
 			footer
-				button#submit(type='submit', name='submit') Submit
-		a(href='//github.com/Phalanxia/Maid-IRC')#github
-			i.fa.fa-github
-			| Github
-			span
-		a#advanced Advanced
-			span
+				button#submit(type='submit', name='submit') Connect
 	script(src='js/index.js')

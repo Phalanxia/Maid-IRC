@@ -6,15 +6,26 @@ var selectAll = function (selectors) {
 	return document.querySelectorAll(selectors);
 };
 
-select('a#advanced').onclick = function () {
-	[].map.call(selectAll('.advanced'), function(obj) {
-		obj.style.display = 'block';
-	});
+var advanced = false;
+select('a.fa.fa-gear').onclick = function () {
+	if (advanced) {
+		[].map.call(selectAll('.advanced'), function(obj) {
+			obj.style.display = 'none';
+		});
 
-	[].map.call(selectAll('input'), function(obj) {
-		obj.tabIndex = '0';
-	});
+		[].map.call(selectAll('input'), function(obj) {
+			obj.tabIndex = '1';
+		});
 
-	select('hr.advanced').style.height = '0';
-	select('a#advanced').style.display = 'none';
+	} else {
+		[].map.call(selectAll('.advanced'), function(obj) {
+			obj.style.display = 'block';
+		});
+
+		[].map.call(selectAll('input'), function(obj) {
+			obj.tabIndex = '0';
+		});
+	}
+
+	advanced = !advanced;
 };
