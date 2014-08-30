@@ -52,7 +52,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.use(require('errorhandler')());
-app.use(bodyParser());
+app.use(bodyParser.json());
 app.use(methodOverride());
 
 // Set up less.css middleware
@@ -67,8 +67,6 @@ app.use(favicon(__dirname + '/public/img/favicon.ico'));
 var server = http.createServer(app).listen(config.http_port, config.http_host),
 	// Set up socket.io
 	io = require('socket.io').listen(server);
-
-io.set('log level', 1);
 
 // Logging to file.
 function log (name, content) {
@@ -92,10 +90,6 @@ app.route('/preview').get(function (req, res) {
 
 // Client
 app.post('/client', function (req, res) {
-	// I feel like this might be a messy way of doing it but it will be fine for now.
-
-	// Update: It doesn't work at all.
-
 	res.render('client', {
 		server: req.body.server,
 		name: req.body.name,
@@ -137,6 +131,8 @@ app.post('/client', function (req, res) {
 		nickname: req.body.name,
 	};
 
+	console.log(irc);
+
 	io.sockets.on('connection', function (socket) {
 		console.log('Client connected from: ' + socket.handshake.address.address + ":" + socket.handshake.address.port);
 		socket.emit('initialInfo', req.body.name);
@@ -145,6 +141,7 @@ app.post('/client', function (req, res) {
 
 		// Get the network name.
 		irc.addListener('raw', function (data) {
+			console.log(data);
 			if (data.rawCommand == '005') {
 				for (var i = data.args.length - 1; i >= 0; i--) {
 					if (data.args[i].indexOf("NETWORK") != -1) {
