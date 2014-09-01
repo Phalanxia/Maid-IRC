@@ -289,62 +289,69 @@ var Messaging = (function () {
 	};
 
 	module.prototype.recieve = function (data) {
-		var i;
+		console.log(data);
 
-		console.log(data.rawCommand);
-
-		switch (data.rawCommand) {
-			case "001":
-				break;
+		// Lets check each message based on the command. All incomming messages should have command, but not all seem to have rawCommand. (node-irc)
+		switch (data.command.toLowerCase()) {
+			// Commands
 			case "PRIVMSG":
-				this.updateInterface.message("message",	data.nick, data.channel, data.message );
+				this.updateInterface({
+					type: "PRIVMSG",
+					head: data.nick,
+					nick: data.nick,
+					channel: data.args[0],
+					message: data.args[1]
+				});
 				break;
-		}
-
-		/*
-
-		switch (data.type) {
-			case "message":
-				this.updateInterface.message("message",	data.nick, data.channel, data.message );
+			case "NOTICE":
+				this.updateInterface({
+					type: "NOTICE",
+					nick: data.nick,
+					nick: data.nick,
+					channel: data.args[0],
+					message: data.args[1]
+				});
 				break;
-			case "serverMessage":
-				this.updateInterface.message("serverMessage", "*", "server", data.message);
+			case "MODE":
 				break;
-			case "join":
-				this.updateInterface.message("join", "*", data.channel, data.nick + " (" + data.info + ") has joined " + data.channel);
+			case "JOIN":
 				break;
-			case "part":
-				this.updateInterface.message("part", "*", data.channel, data.nick + " (" + data.info + ") has left " + data.channel);
+			case "PART":
 				break;
-			case "quit":
-				for (i = data.channels.length - 1; i >= 0; i--) {
-					this.updateInterface.message("quit", "*", data.channels, data.nick + " (" + data.info + ") has quit " + data.channels[i] + " (" + data.reason + ")");
-				}
+			case "QUIT":
 				break;
-			case "notice":
-				this.updateInterface.message("notice", "-" + data.nick + "-", data.channel,	data.message);
-				break;
-			case "nickChange":
-				for (i = data.channels.length - 1; i >= 0; i--) {
-					this.updateInterface.message("nickChange", "&gt;", data.channels[i], data.oldNick + " is now known as " + data.newNick
-					);
-				}
-
-				// Check to see if it's you that changed nick and update it on the client.
-				if (data.oldNick === client.info.nick) {
-					client.info.nick = data.newNick;
-					select('#sidebar footer p').innerHTML = client.info.nick;
-				}
-				break;
-			case "topic":
+			case "TOPIC":
 				var topicDate = new Date(data.args[3]*1000);
-				this.updateInterface.message("topic", "&gt;", data.channel, 'Topic for ' + data.channel + ' set by ' + data.args[2] + ' at ' + topicDate);
+				this.updateInterface({
+					type: "TOPIC",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: data.args[0],
+					message: 'Topic for ' + data.args[0] + ' set by ' + data.args[2] + ' at ' + topicDate)
+				})
 				break;
-			case "topicChange":
-				this.updateInterface.message("topicChange",	"&gt;", data.channel, data.nick + ' has changed the topic to: "' + data.topic + '"');
+			case "NICK":
 				break;
 
-			*/
+			// Numerics
+			case "001":
+				this.updateInterface({
+					type: "RPL_WELCOME",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1]
+				});
+				break;
+			case "002":
+				this.updateInterface({
+					type: "RPL_CREATED",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1]
+				});
+				break;
 		}
 	}
 
