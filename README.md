@@ -14,7 +14,7 @@ A modern web IRC client. Built on [Node](http://nodejs.org).
 
 1. Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's development.
 
-2. Run Maid IRC. Use this command in the main directory of Maid IRC: `$ node app.js`
+2. Run Maid IRC. Use this command in the main directory of Maid IRC: `$ node maid.js`
 
 ## Screenshots
 

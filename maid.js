@@ -17,7 +17,8 @@ var http = require("http"),
 	methodOverride = require('method-override'),
 	lessMiddleware = require('less-middleware'),
 	// Maid IRC libs
-	maidSession = require("./lib/maidSession");
+	maidStatic = require("./lib/maidStatic");
+	maidIrc = require("./lib/maidIrc");
 
 
 // Define express for the next part
@@ -66,5 +67,6 @@ var server = http.createServer(app).listen(config.http_port, config.http_host),
 	// Set up socket.io
 	io = require('socket.io').listen(server);
 
-// Now that thats done with lets pass it of to maidSession.js
-maidSession(app, io);
+// Now that thats done with lets pass it of to maidStatic.js
+maidStatic(app);
+maidIrc(io);
