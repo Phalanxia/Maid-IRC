@@ -306,7 +306,7 @@ var Messaging = (function () {
 			case "NOTICE":
 				this.updateInterface({
 					type: "NOTICE",
-					nick: data.nick,
+					head: data.nick,
 					nick: data.nick,
 					channel: data.args[0],
 					message: data.args[1]
@@ -327,30 +327,70 @@ var Messaging = (function () {
 					head: "&gt;",
 					nick: "SERVER",
 					channel: data.args[0],
-					message: 'Topic for ' + data.args[0] + ' set by ' + data.args[2] + ' at ' + topicDate)
+					message: 'Topic for ' + data.args[0] + ' set by ' + data.args[2] + ' at ' + topicDate
 				})
 				break;
 			case "NICK":
 				break;
 
-			// Numerics
-			case "001":
-				this.updateInterface({
-					type: "RPL_WELCOME",
-					head: "&gt;",
-					nick: "SERVER",
-					channel: "SERVER",
-					message: data.args[1]
-				});
-				break;
-			case "002":
-				this.updateInterface({
-					type: "RPL_CREATED",
-					head: "&gt;",
-					nick: "SERVER",
-					channel: "SERVER",
-					message: data.args[1]
-				});
+			// If it's not in command, lets check for raw commands!
+
+			default:
+				switch (data.rawCommand) {
+					// Numerics
+					case "001":
+						this.updateInterface({
+							type: "RPL_WELCOME",
+							head: "&gt;",
+							nick: "SERVER",
+							channel: "SERVER",
+							message: data.args[1]
+						});
+						break;
+					case "002":
+						this.updateInterface({
+							type: "RPL_YOURHOST",
+							head: "&gt;",
+							nick: "SERVER",
+							channel: "SERVER",
+							message: data.args[1]
+						});
+						break;
+					case "003":
+						this.updateInterface({
+							type: "RPL_CREATED",
+							head: "&gt;",
+							nick: "SERVER",
+							channel: "SERVER",
+							message: data.args[1]
+						});
+						break;
+					case "004":
+						var messages;
+						for (k in data.args) {
+							messages = k + " "; // I think this should work?
+						}
+
+						console.log(messages);
+
+						this.updateInterface({
+							type: "RP_MYINFO",
+							head: "&gt;",
+							nick: "SERVER",
+							chnanel: "SERVER",
+							message: messages
+						});
+						break;
+					case "443":
+						this.updateInterface({
+							type: "ERR_NICKNAMEINUSE",
+							head: "&gt;",
+							nick: "SERVER",
+							channel: "SERVER",
+							message: args[1] + ": " + args[2]
+						});
+						break;
+				}
 				break;
 		}
 	}
