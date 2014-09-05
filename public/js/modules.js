@@ -24,7 +24,7 @@ var UpdateInterface = (function () {
 				select('#channelConsole header input').value = '';
 			}
 
-			[].map.call(selectAll('#sidebar > ul li'), function(obj) {
+			[].map.call(selectAll('#sidebar > ul li'), function (obj) {
 				obj.classList.remove('focusedChannel');
 			});
 
@@ -32,12 +32,12 @@ var UpdateInterface = (function () {
 			select('#users ul').innerHTML = '';
 
 			// Show messages that are from the focused channel.
-			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.info.focusedChannel + '"]'), function(obj) {
+			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.info.focusedChannel + '"]'), function (obj) {
 				obj.style.display = '';
 			});
 
 			// Hide messages that are not from the focused channel.
-			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function(obj) {
+			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function (obj) {
 				obj.style.display = 'none';
 			});
 		};
@@ -95,7 +95,7 @@ var UpdateInterface = (function () {
 
 
 		// Hide messages not from the focused channel
-		[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function(obj) {
+		[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function (obj) {
 			obj.style.display = 'none';
 		});
 
@@ -289,47 +289,116 @@ var Messaging = (function () {
 	};
 
 	module.prototype.recieve = function (data) {
-		var i;
+		console.log(data);
 
-		switch (data.type) {
-			case "message":
-				this.updateInterface.message("message",	data.nick, data.channel, data.message );
+		// Lets check each message based on the command. All incomming messages should have command, but not all seem to have rawCommand. (node-irc)
+		switch (data.command.toLowerCase()) {
+			// Commands
+			case "PRIVMSG":
+				this.updateInterface({
+					type: "PRIVMSG",
+					head: data.nick,
+					nick: data.nick,
+					channel: data.args[0],
+					message: data.args[1]
+				});
 				break;
-			case "serverMessage":
-				this.updateInterface.message("serverMessage", "*", "server", data.message);
+			case "NOTICE":
+				this.updateInterface({
+					type: "NOTICE",
+					head: data.nick,
+					nick: data.nick,
+					channel: data.args[0],
+					message: data.args[1]
+				});
 				break;
-			case "join":
-				this.updateInterface.message("join", "*", data.channel, data.nick + " (" + data.info + ") has joined " + data.channel);
+			case "MODE":
 				break;
-			case "part":
-				this.updateInterface.message("part", "*", data.channel, data.nick + " (" + data.info + ") has left " + data.channel);
+			case "JOIN":
 				break;
-			case "quit":
-				for (i = data.channels.length - 1; i >= 0; i--) {
-					this.updateInterface.message("quit", "*", data.channels, data.nick + " (" + data.info + ") has quit " + data.channels[i] + " (" + data.reason + ")");
-				}
+			case "PART":
 				break;
-			case "notice":
-				this.updateInterface.message("notice", "-" + data.nick + "-", data.channel,	data.message);
+			case "QUIT":
 				break;
-			case "nickChange":
-				for (i = data.channels.length - 1; i >= 0; i--) {
-					this.updateInterface.message("nickChange", "&gt;", data.channels[i], data.oldNick + " is now known as " + data.newNick
-					);
-				}
-
-				// Check to see if it's you that changed nick and update it on the client.
-				if (data.oldNick === client.info.nick) {
-					client.info.nick = data.newNick;
-					select('#sidebar footer p').innerHTML = client.info.nick;
-				}
-				break;
-			case "topic":
+			case "TOPIC":
 				var topicDate = new Date(data.args[3]*1000);
-				this.updateInterface.message("topic", "&gt;", data.channel, 'Topic for ' + data.channel + ' set by ' + data.args[2] + ' at ' + topicDate);
+				this.updateInterface({
+					type: "TOPIC",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: data.args[0],
+					message: 'Topic for ' + data.args[0] + ' set by ' + data.args[2] + ' at ' + topicDate
+				})
 				break;
-			case "topicChange":
-				this.updateInterface.message("topicChange",	"&gt;", data.channel, data.nick + ' has changed the topic to: "' + data.topic + '"');
+			case "NICK":
+				break;
+
+			// If it's not in command, lets check for raw commands!
+
+			default:
+				switch (data.rawCommand) {
+					// Numerics
+					case "001":
+						this.updateInterface({
+							type: "RPL_WELCOME",
+							head: "&gt;",
+							nick: "SERVER",
+							channel: "SERVER",
+							message: data.args[1]
+						});
+						break;
+					case "002":
+						this.updateInterface({
+							type: "RPL_YOURHOST",
+							head: "&gt;",
+							nick: "SERVER",
+							channel: "SERVER",
+							message: data.args[1]
+						});
+						break;
+					case "003":
+						this.updateInterface({
+							type: "RPL_CREATED",
+							head: "&gt;",
+							nick: "SERVER",
+							channel: "SERVER",
+							message: data.args[1]
+						});
+						break;
+					case "004":
+						var messages;
+						for (k in data.args) {
+							messages = k + " "; // I think this should work?
+						}
+
+						console.log(messages);
+
+						this.updateInterface({
+							type: "RP_MYINFO",
+							head: "&gt;",
+							nick: "SERVER",
+							chnanel: "SERVER",
+							message: messages
+						});
+						break;
+					case "005":
+						for (var i = message.args.length - 1; i >= 0; i--) {
+							if (message.args[i].indexOf("NETWORK") != -1) {
+								var networkName = message.args[i].split("NETWORK=")[1];
+								socket.emit('networkName', networkName);
+							}
+						}
+						break;
+					case "443":
+						this.updateInterface({
+							type: "ERR_NICKNAMEINUSE",
+							head: "&gt;",
+							nick: "SERVER",
+							channel: "SERVER",
+							message: args[1] + ": " + args[2]
+						});
+						break;
+				}
 				break;
 		}
 	}
