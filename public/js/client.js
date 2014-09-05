@@ -24,6 +24,8 @@ var client = {
 	init: function (connectInfo) {
 		"use strict";
 
+		console.log(connectInfo);
+
 		var socket = io.connect('http://' + document.domain + ":" + location.port, {
 			'reconnect': true,
 			'reconnection delay': 500
@@ -157,21 +159,32 @@ var client = {
 
 // Handle Login Info
 select('#login form footer button').onclick = function (event) {
-	event.preventDefault;
-
 	var connectInfo = {},
-		name;
+		name,
+		invalid = false;
 
 	[].map.call(selectAll('#login input'), function (obj) {
 		name = obj.name;
 		connectInfo[name] = obj.value;
+
+		if (!obj.validity.valid) {
+			invalid = true;
+		}
 	});
 
-	client.init(connectInfo);
+	if (!invalid) {
+		client.init(connectInfo);
 
-	// Add classes for transition
-	select('#login').classList.add("connected");
-	select('#client').classList.add("connected");
+		// Add classes for transition
+		select('#login').classList.add("connected");
+		select('#client').classList.add("connected");
+	} else {
+		select('#login form').classList.add("invalid");
 
-	return false;
+		setTimeout(function () {
+			select('#login form').classList.remove("invalid");
+		}, 500);
+	}
+
+	event.preventDefault();
 }

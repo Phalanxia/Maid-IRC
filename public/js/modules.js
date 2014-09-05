@@ -381,6 +381,14 @@ var Messaging = (function () {
 							message: messages
 						});
 						break;
+					case "005":
+						for (var i = message.args.length - 1; i >= 0; i--) {
+							if (message.args[i].indexOf("NETWORK") != -1) {
+								var networkName = message.args[i].split("NETWORK=")[1];
+								socket.emit('networkName', networkName);
+							}
+						}
+						break;
 					case "443":
 						this.updateInterface({
 							type: "ERR_NICKNAMEINUSE",
