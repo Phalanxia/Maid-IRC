@@ -17,7 +17,7 @@ var http = require("http"),
 	methodOverride = require('method-override'),
 	lessMiddleware = require('less-middleware'),
 	// Maid IRC libs
-	maidStatic = require("./lib/maidStatic");
+	maidStatic = require("./lib/maidStatic"),
 	maidIrc = require("./lib/maidIrc");
 
 

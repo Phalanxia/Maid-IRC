@@ -19,6 +19,24 @@
 			transition: @transition;
 }
 
+@-webkit-keyframes loginError {
+	8%, 41% {
+		left: ~"calc(50% - 10px)";
+	}
+	25%, 58% {
+		left: ~"calc(50% + 10px)";
+	}
+	75% {
+		left: ~"calc(50% - 5px)";
+	}
+	92% {
+		left: ~"calc(50% + 5px)";
+	}
+	0%, 100% {
+		left: ~"calc(50% - 0px)";
+	}
+}
+
 // Everything else
 // ----------------------------
 
@@ -77,7 +95,7 @@ body {
 	height: 100%;
 	overflow: hidden;
 	font-family: 'Open Sans', Helvetica, sans-serif;
-	background: #fafafa;
+	background: #e7e7e7;
 	flex-flow: row nowrap;
 }
 
@@ -87,7 +105,7 @@ a:visited {
 	color: @brightBlue;
 }
 
-a:hover{
+a:hover {
 	text-decoration: underline;
 	color: @brightBlue;
 }
@@ -95,6 +113,10 @@ a:hover{
 a:active {
 	text-decoration: none;
 	color: @brightBlue;
+}
+
+form:invalid {
+	// border: 2px solid #ff526b;
 }
 
 .btn {
@@ -151,7 +173,10 @@ a:active {
 	   -moz-transform: translate(-50%, -50%);
 			transform: translate(-50%, -50%);
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	.transition(all 2s ease-in-out);
+
+	&.invalid {
+		-webkit-animation: loginError .5s linear;
+	}
 
 	header {
 		height: 32px;
@@ -212,7 +237,7 @@ a:active {
 		border: 1px solid #efefef;
 		border-radius: 4px;
 		box-shadow: inset 0 1px 2px rgba(240,240,240,.8);
-		.transition(all ease-in-out 0.15s)
+		.transition(all ease-in-out .15s)
 		&:focus {
 			border: 1px solid @brightBlue;
 			box-shadow: 0 0 0 1px @brightBlue;
@@ -456,9 +481,9 @@ a:active {
 				color: #1b1b1b;
 				text-align: center;
 				border-radius: 4px;
-				-webkit-transition: background-color 0.2s ease-in-out;
-				   -moz-transition: background-color 0.2s ease-in-out;
-						transition: background-color 0.2s ease-in-out;
+				-webkit-transition: background-color .2s ease-in-out;
+				   -moz-transition: background-color .2s ease-in-out;
+						transition: background-color .2s ease-in-out;
 				&:hover {
 					cursor: pointer;
 					background-color: #fafafa;
@@ -500,9 +525,9 @@ a:active {
 			height: 40px;
 			line-height: 40px;
 			color: #efefef;
-			-webkit-transition: background-color 0.1s ease-in-out;
-			   -moz-transition: background-color 0.1s ease-in-out;
-					transition: background-color 0.1s ease-in-out;
+			-webkit-transition: background-color .1s ease-in-out;
+			   -moz-transition: background-color .1s ease-in-out;
+					transition: background-color .1s ease-in-out;
 			&:nth-child(odd) { background-color: darken(@midBlue, 2%); }
 			i {
 				padding: 0 14px;
@@ -566,7 +591,7 @@ a:active {
 				margin: 14px 14px;
 				background-color: @green;
 				border-radius: 7px;
-				box-shadow: inset 0 2px 0 0 rgba(80,80,80,0.5);
+				box-shadow: inset 0 2px 0 0 rgba(80,80,80,.5);
 			}
 		}
 		input {
@@ -626,9 +651,9 @@ a:active {
 			float: left;
 			width: 100%;
 			line-height: 25px;
-			-webkit-transition: background-color 0.1s ease-in-out;
-			   -moz-transition: background-color 0.1s ease-in-out;
-					transition: background-color 0.1s ease-in-out;
+			-webkit-transition: background-color .1s ease-in-out;
+			   -moz-transition: background-color .1s ease-in-out;
+					transition: background-color .1s ease-in-out;
 			flex: 0 0 auto;
 			&:hover { background-color: #eeeeee; }
 			aside {
@@ -757,9 +782,9 @@ a:active {
 		li {
 			height: 28px;
 			color: @midBlue;
-			-webkit-transition: background-color 0.1s ease-in-out;
-			   -moz-transition: background-color 0.1s ease-in-out;
-					transition: background-color 0.1s ease-in-out;
+			-webkit-transition: background-color .1s ease-in-out;
+			   -moz-transition: background-color .1s ease-in-out;
+					transition: background-color .1s ease-in-out;
 			&:nth-child(odd) { background-color: darken(#efefef, 2%); }
 			&:hover {
 				cursor: pointer;
@@ -811,17 +836,17 @@ a:active {
 	height: 100%;
 	width: 100%;
 	background-color: fade(@darkBlue, 80%);
-	-webkit-transition: all 0.4s ease-in-out;
-	   -moz-transition: all 0.4s ease-in-out;
-			transition: all 0.4s ease-in-out;
+	-webkit-transition: all .4s ease-in-out;
+	   -moz-transition: all .4s ease-in-out;
+			transition: all .4s ease-in-out;
 }
 
 .modal {
 	z-index: 3;
 	position: absolute;
-	-webkit-transition: all 0.4s ease-in-out;
-	   -moz-transition: all 0.4s ease-in-out;
-			transition: all 0.4s ease-in-out;
+	-webkit-transition: all .4s ease-in-out;
+	   -moz-transition: all .4s ease-in-out;
+			transition: all .4s ease-in-out;
 	// Will Tranition
 	visibility: hidden;
 	top: -50%;
@@ -917,9 +942,9 @@ a:active {
 			color: #efefef;
 			background: none;
 			border: none;
-			-webkit-transition: background-color 0.2s ease-in-out;
-			   -moz-transition: background-color 0.2s ease-in-out;
-					transition: background-color 0.2s ease-in-out;
+			-webkit-transition: background-color .2s ease-in-out;
+			   -moz-transition: background-color .2s ease-in-out;
+					transition: background-color .2s ease-in-out;
 			&:hover {
 				cursor: pointer;
 				background-color: darken(@brightBlue, 4%);
@@ -955,9 +980,9 @@ a:active {
 				font-size: 14px;
 				line-height: 40px;
 				color: #efefef;
-				-webkit-transition: background-color 0.2s ease-in-out;
-				   -moz-transition: background-color 0.2s ease-in-out;
-						transition: background-color 0.2s ease-in-out;
+				-webkit-transition: background-color .2s ease-in-out;
+				   -moz-transition: background-color .2s ease-in-out;
+						transition: background-color .2s ease-in-out;
 				&:nth-child(even) { background-color: darken(@midBlue, 2%); }
 				&:hover {
 					cursor: pointer;
