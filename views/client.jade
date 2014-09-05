@@ -39,36 +39,64 @@ html(lang='en')
 			footer
 				button.fa.fa-times(type='button')
 				button.fa.fa-check(type='button')
-		#sidebar
-			header
-				h1
-					span Maid
-					| IRC
-				span#status
-				button.fa.fa-bars
+
+		// Login
+
+		#login
+			form(method='post')
+				header
+					h1
+						span Maid
+						| IRC
+					a.fa.fa-gear
+					a.fa.fa-github(href='//github.com/Phalanxia/Maid-IRC', target='_blank')
+				input#name(type='text', placeholder='Nickname', name='nick', spellcheck="false", autofocus, required)
+				input#nicknamePassword.advanced(type='password', name='nickPassword', placeholder='Password', tabIndex='-1')
+				input#realName.advanced(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
+				hr.advanced
+				section
+					input#server(type='text', placeholder='Server', name='server', spellcheck="false", required)
+					input#port(type='number', placeholder='Port', name='port', maxlength='4', max="9999")
+				section.checkbox.advanced
+					input#ssl(type='checkbox', name='ssl', tabIndex='-1')
+					span.checkboxLabel SSL
+				input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
+				footer
+					button#submit(type='submit', name='connect') Connect
+
+		// Client
+
+		#client
+			#sidebar
+				header
+					h1
+						span Maid
+						| IRC
+					span#status
+					button.fa.fa-bars
+					ul
+						li.fa.fa-cog
+						li.fa.fa-sign-out
+				h2 #{server}
+				ul#channelList
+				footer
+					button
+						span
+					input(value=name)
+			#channelConsole
+				header
+					input(type='text',  value='', placeholder='Topic')
+				output
+					article#filler
+						div
+				footer
+					input(type='text')
+					button.btn(type='button') Send
+			#users
+				header
+					p
 				ul
-					li.fa.fa-cog
-					li.fa.fa-sign-out
-			h2 #{server}
-			ul#channelList
-			footer
-				button
-					span
-				input(value=name)
-		#channelConsole
-			header
-				input(type='text',  value='', placeholder='Topic')
-			output
-				article#filler
-					div
-			footer
-				input(type='text')
-				button.btn(type='button') Send
-		#users
-			header
-				p
-			ul
-			footer
+				footer
 	script(src='js/modules.js')
 	script(src='js/client.js')
 	script(src='js/ui.js')

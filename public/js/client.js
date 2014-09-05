@@ -21,13 +21,18 @@ var client = {
 		focusedChannel: ""
 	},
 
-	init: function () {
+	init: function (connectInfo) {
 		"use strict";
+
+		console.log(connectInfo);
 
 		var socket = io.connect('http://' + document.domain + ":" + location.port, {
 			'reconnect': true,
 			'reconnection delay': 500
 		});
+
+		// Send connect info to the backend
+		socket.emit('connectInfo', connectInfo);
 
 		// Modules
 		var updateInterface = new UpdateInterface();
@@ -55,6 +60,10 @@ var client = {
 		socket.on('initialInfo', function (data) {
 			client.info.nick = data;
 			client.settings.highlights[0] = client.info.nick;
+		});
+
+		socket.on('raw', function (data) {
+			messaging.recieve(data);
 		});
 
 		socket.on('recieveMessage', function (data) {
@@ -148,4 +157,34 @@ var client = {
 	}
 };
 
-document.onload = client.init();
+// Handle Login Info
+select('#login form footer button').onclick = function (event) {
+	var connectInfo = {},
+		name,
+		invalid = false;
+
+	[].map.call(selectAll('#login input'), function (obj) {
+		name = obj.name;
+		connectInfo[name] = obj.value;
+
+		if (!obj.validity.valid) {
+			invalid = true;
+		}
+	});
+
+	if (!invalid) {
+		client.init(connectInfo);
+
+		// Add classes for transition
+		select('#login').classList.add("connected");
+		select('#client').classList.add("connected");
+	} else {
+		select('#login form').classList.add("invalid");
+
+		setTimeout(function () {
+			select('#login form').classList.remove("invalid");
+		}, 500);
+	}
+
+	event.preventDefault();
+}

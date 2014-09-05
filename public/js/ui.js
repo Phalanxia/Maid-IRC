@@ -1,5 +1,7 @@
 window.onbeforeunload = function () {
-	return "You have attempted to leave this page. Doing so will disconnect you from IRC.";
+	if (client.status.connection) {
+		return "You have attempted to leave this page. Doing so will disconnect you from IRC.";
+	}
 };
 
 selectAll('#sidebar header ul li')[0].onclick = function () {
@@ -69,3 +71,29 @@ for (i = 0; i < settingsItems.length; i++) {
 		selectAll('#settings.modal .page:nth-of-type(' + (theNumber+1) + ')')[0].style.display = 'block';
 	};
 }
+
+// Login Screen
+
+var advanced = false;
+select('a.fa.fa-gear').onclick = function () {
+	if (advanced) {
+		[].map.call(selectAll('.advanced'), function(obj) {
+			obj.style.display = 'none';
+		});
+
+		[].map.call(selectAll('input'), function(obj) {
+			obj.tabIndex = '1';
+		});
+
+	} else {
+		[].map.call(selectAll('.advanced'), function(obj) {
+			obj.style.display = 'block';
+		});
+
+		[].map.call(selectAll('input'), function(obj) {
+			obj.tabIndex = '0';
+		});
+	}
+
+	advanced = !advanced;
+};
