@@ -24,7 +24,7 @@ var UpdateInterface = (function () {
 				select('#channelConsole header input').value = '';
 			}
 
-			[].map.call(selectAll('#sidebar > ul li'), function(obj) {
+			[].map.call(selectAll('#sidebar > ul li'), function (obj) {
 				obj.classList.remove('focusedChannel');
 			});
 
@@ -32,12 +32,12 @@ var UpdateInterface = (function () {
 			select('#users ul').innerHTML = '';
 
 			// Show messages that are from the focused channel.
-			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.info.focusedChannel + '"]'), function(obj) {
+			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.info.focusedChannel + '"]'), function (obj) {
 				obj.style.display = '';
 			});
 
 			// Hide messages that are not from the focused channel.
-			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function(obj) {
+			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function (obj) {
 				obj.style.display = 'none';
 			});
 		};
@@ -95,7 +95,7 @@ var UpdateInterface = (function () {
 
 
 		// Hide messages not from the focused channel
-		[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function(obj) {
+		[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function (obj) {
 			obj.style.display = 'none';
 		});
 
