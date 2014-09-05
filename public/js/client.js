@@ -21,13 +21,16 @@ var client = {
 		focusedChannel: ""
 	},
 
-	init: function () {
+	init: function (connectInfo) {
 		"use strict";
 
 		var socket = io.connect('http://' + document.domain + ":" + location.port, {
 			'reconnect': true,
 			'reconnection delay': 500
 		});
+
+		// Send connect info to the backend
+		socket.emit('connectInfo', connectInfo);
 
 		// Modules
 		var updateInterface = new UpdateInterface();
@@ -152,4 +155,23 @@ var client = {
 	}
 };
 
-document.onload = client.init();
+// Handle Login Info
+select('#login form footer button').onclick = function (event) {
+	event.preventDefault;
+
+	var connectInfo = {},
+		name;
+
+	[].map.call(selectAll('#login input'), function (obj) {
+		name = obj.name;
+		connectInfo[name] = obj.value;
+	});
+
+	client.init(connectInfo);
+
+	// Add classes for transition
+	select('#login').classList.add("connected");
+	select('#client').classList.add("connected");
+
+	return false;
+}
