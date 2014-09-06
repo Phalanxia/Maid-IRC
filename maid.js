@@ -57,7 +57,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(favicon(__dirname + '/public/img/favicon.ico'));
 
 // Set up less.css middleware
-app.use(lessMiddleware(__dirname + '/public', {
+app.use(lessMiddleware(__dirname + '/public/css', {
 	compress: true,
 	optimization: 2
 }));
