@@ -1,5 +1,5 @@
 {	"name": "maidirc",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"description": "A web IRC client. Built on Node.",
 	"author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
 	"homepage": "https://phalanxia.github.io/Maid-IRC/",
@@ -17,7 +17,7 @@
 		"less-middleware": "~1.0.3"
 	},
 	"devDependencies": {
-		"morgan": "1.0.0"
+		"morgan": "~1.3.0"
 	},
 	"keywords": [
 		"irc",
