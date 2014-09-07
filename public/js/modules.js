@@ -52,9 +52,9 @@ var UpdateInterface = (function () {
 	};
 
 	// Update console
-	module.prototype.message = function (type, head, channel, message) {
+	module.prototype.message = function (data) {
 		// Filter the message of html unfriendly characters
-		message = message
+		message = data.message
 			.replace(/&/g, "&amp;")
 			.replace(/"/g, '&quot;')
 			.replace(/'/g, "&apos;")
@@ -67,7 +67,8 @@ var UpdateInterface = (function () {
 		// Lets format the timestamp
 		var timestamp = "[" + ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2) + "]";
 
-		if (["message", "action", "notice"].indexOf(type) > -1) {
+		// If it's not a message from the server
+		if (data.channel !== "SERVER") {
 			// Lets highlight your nick!
 			var highlightNick = function (name, input) {
 				var exp = new RegExp('\\b(' + name + ')', 'ig');
@@ -81,8 +82,8 @@ var UpdateInterface = (function () {
 		}
 
 		// If there is no specified channel just use the one the client is currently focused on
-		if (typeof channel === 'undefined') {
-			channel = client.info.focusedChannel;
+		if (typeof data.channel === 'undefined') {
+			data.channel = client.info.focusedChannel;
 		}
 
 		// If scrolled at the bottom set scrollIntoView as true.
@@ -91,7 +92,7 @@ var UpdateInterface = (function () {
 		}
 
 		select('#channelConsole output').removeChild(select('#channelConsole output #filler'));
-		select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + type + '" data-channel="' + channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span> ' + head + '</span></aside><p>' + message + '</p></article><article id="filler"><div></div></article>');
+		select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.type + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span> ' + data.head + '</span></aside><p>' + message + '</p></article><article id="filler"><div></div></article>');
 
 
 		// Hide messages not from the focused channel
@@ -188,14 +189,15 @@ var Messaging = (function () {
 			return;
 		} else if (data.substring(0, 1) != "/") {
 			// It's not a command.
-			this.socket.emit('sendMessage', [client.info.focusedChannel, data]);
+			this.socket.emit('send', ["PRIVMSG", client.info.focusedChannel, data]);
 			// Display it in the client.
-			this.updateInterface.message(
-				"message",
-				client.info.nick,
-				client.info.focusedChannel,
-				data
-			);
+			this.updateInterface.message({
+				type: "PRIVMSG",
+				head: client.info.nick,
+				nick: client.info.nick,
+				channel: client.info.focusedChannel,
+				message: data
+			});
 		} else {
 			// It's a command.
 			data = data.substring(1, data.length);
@@ -208,35 +210,37 @@ var Messaging = (function () {
 
 			// Check to see if the command is in commandList.
 			for (var i = 0; i < _commandList.length && !_commandFound; i++) {
-				if (_commandList[i] == _command) {
+				if (_commandList[i] == _command.toLowerCase()) {
 					_commandFound = true;
 				}
 			}
 
-			// It's not a command.
+			// It's not a special command that we need to do amazing things with. Display it and send it to the server.
 			if (!_commandFound) {
-				this.updateInterface.message("log", "**", _focusedChannel, 'Sorry, "' + _command + '" is not a recognized command.');
+				this.updateInterface.message({
+					type: "PRIVMSG",
+					head: "&gt;",
+					nick: "COMMAND",
+					channel: _focusedChannel,
+					message: data
+				});
 				return;
 			}
 
 			// It is a command so lets run it!
 			switch (_command) {
 				case "me":
-					this.socket.emit('sendCommand', {
-						type: "action",
+					this.socket.emit('send', ["ACTION", _focusedChannel, _message]);
+					this.updateInterface.message({
+						type: "ACTION",
+						head: "&raquo;",
+						nick: "COMMAND",
 						channel: _focusedChannel,
-						message: _message
+						message: client.info.nick + " " + _message
 					});
-					this.updateInterface.message("action", "&raquo;", _focusedChannel, client.info.nick + " " + _message);
 					break;
 				case "join":
-					var _channels = _message.split(" ");
-					for (var i = 0; i < _channels.length; i+=1) {
-						this.socket.emit('sendCommand', {
-							type: "join",
-							channels: _channels[i]
-						});
-					}
+					this.socket.emit('send', ["JOIN", "", _message]);
 					break;
 				case "part":
 					var _channels = _message.split(" ");
@@ -291,115 +295,129 @@ var Messaging = (function () {
 	module.prototype.recieve = function (data) {
 		console.log(data);
 
-		// Lets check each message based on the command. All incomming messages should have command, but not all seem to have rawCommand. (node-irc)
-		switch (data.command.toLowerCase()) {
-			// Commands
-			case "PRIVMSG":
-				this.updateInterface({
-					type: "PRIVMSG",
-					head: data.nick,
-					nick: data.nick,
-					channel: data.args[0],
-					message: data.args[1]
-				});
-				break;
-			case "NOTICE":
-				this.updateInterface({
-					type: "NOTICE",
-					head: data.nick,
-					nick: data.nick,
-					channel: data.args[0],
-					message: data.args[1]
-				});
-				break;
-			case "MODE":
-				break;
-			case "JOIN":
-				break;
-			case "PART":
-				break;
-			case "QUIT":
-				break;
-			case "TOPIC":
-				var topicDate = new Date(data.args[3]*1000);
-				this.updateInterface({
-					type: "TOPIC",
-					head: "&gt;",
-					nick: "SERVER",
-					channel: data.args[0],
-					message: 'Topic for ' + data.args[0] + ' set by ' + data.args[2] + ' at ' + topicDate
-				})
-				break;
-			case "NICK":
-				break;
+		if (data.commandType == "normal") {
+			switch (data.command.toLowerCase()) {
+				// Commands
+				case "ping":
+					break;
+				case "privmsg":
+					this.updateInterface.message({
+						type: "privmsg",
+						head: data.nick,
+						nick: data.nick,
+						channel: data.args[0],
+						message: data.args[1]
+					});
+					break;
+				case "notice":
+					this.updateInterface.message({
+						type: "notice",
+						head: data.nick,
+						nick: data.nick,
+						channel: data.args[0],
+						message: data.args[1]
+					});
+					break;
+				case "mode":
+					break;
+				case "join":
+					this.updateInterface.message({
+						type: "join",
+						head: data.nick,
+						nick: data.nick,
+						channel: data.args[0],
+						message: data.nick + " (" + data.prefix + ") has joined " + data.args[0]
+					});
+					break;
+				case "part":
+					break;
+				case "quit":
+					break;
+				case "nick":
+					break;
+				default:
+					break;
+			}
+		} else if (data.commandType === "reply") {
+			switch (data.rawCommand) {
+				// Numerics
+				case "001":
+					client.info.nick = data.args[0];
+					this.updateInterface.message({
+						type: "rpl_welcome",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: "SERVER",
+						message: data.args[1]
+					});
+					break;
+				case "002":
+					this.updateInterface.message({
+						type: "rpl_yourhost",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: "SERVER",
+						message: data.args[1]
+					});
+					break;
+				case "003":
+					this.updateInterface.message({
+						type: "rpl_created",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: "SERVER",
+						message: data.args[1]
+					});
+					break;
+				case "004":
+					var messages;
+					for (k in data.args) {
+						messages = k + " "; // I think this should work?
+					}
 
-			// If it's not in command, lets check for raw commands!
-
-			default:
-				switch (data.rawCommand) {
-					// Numerics
-					case "001":
-						this.updateInterface({
-							type: "RPL_WELCOME",
-							head: "&gt;",
-							nick: "SERVER",
-							channel: "SERVER",
-							message: data.args[1]
-						});
-						break;
-					case "002":
-						this.updateInterface({
-							type: "RPL_YOURHOST",
-							head: "&gt;",
-							nick: "SERVER",
-							channel: "SERVER",
-							message: data.args[1]
-						});
-						break;
-					case "003":
-						this.updateInterface({
-							type: "RPL_CREATED",
-							head: "&gt;",
-							nick: "SERVER",
-							channel: "SERVER",
-							message: data.args[1]
-						});
-						break;
-					case "004":
-						var messages;
-						for (k in data.args) {
-							messages = k + " "; // I think this should work?
+					this.updateInterface.message({
+						type: "rp_myinfo",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: "SERVER",
+						message: messages
+					});
+					break;
+				case "005":
+					for (var i = message.args.length - 1; i >= 0; i--) {
+						if (message.args[i].indexOf("NETWORK") != -1) {
+							var networkName = message.args[i].split("NETWORK=")[1];
+							select('#sidebar h2').innerHTML = networkName;
 						}
+					}
+					break;
+				case "332":
+					// Save the topic
+					client.info.channels[data.args[1]] = data.args[2];
+					break;
+				case "333":
+					var topicDate = new Date(data.args[3]*1000);
+					this.updateInterface.message({
+						type: "rpl_topicwhotime",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: data.args[1],
+						message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
+					});
+					break;
+				case "366":
+					break;
+				case "443":
+					this.updateInterface.message({
+						type: "err_nicknameinuse",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: "SERVER",
+						message: args[1] + ": " + args[2]
+					});
+					break;
+			}
 
-						console.log(messages);
-
-						this.updateInterface({
-							type: "RP_MYINFO",
-							head: "&gt;",
-							nick: "SERVER",
-							chnanel: "SERVER",
-							message: messages
-						});
-						break;
-					case "005":
-						for (var i = message.args.length - 1; i >= 0; i--) {
-							if (message.args[i].indexOf("NETWORK") != -1) {
-								var networkName = message.args[i].split("NETWORK=")[1];
-								socket.emit('networkName', networkName);
-							}
-						}
-						break;
-					case "443":
-						this.updateInterface({
-							type: "ERR_NICKNAMEINUSE",
-							head: "&gt;",
-							nick: "SERVER",
-							channel: "SERVER",
-							message: args[1] + ": " + args[2]
-						});
-						break;
-				}
-				break;
 		}
 	}
 

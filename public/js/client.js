@@ -24,8 +24,6 @@ var client = {
 	init: function (connectInfo) {
 		"use strict";
 
-		console.log(connectInfo);
-
 		var socket = io.connect('http://' + document.domain + ":" + location.port, {
 			'reconnect': true,
 			'reconnection delay': 500
@@ -33,6 +31,9 @@ var client = {
 
 		// Send connect info to the backend
 		socket.emit('connectInfo', connectInfo);
+		// Set the clients settings
+		client.info.nick = connectInfo.nick;
+		client.settings.highlights[0] = client.info.nick;
 
 		// Modules
 		var updateInterface = new UpdateInterface();
@@ -56,26 +57,9 @@ var client = {
 			console.warn("Lost connection to backend.");
 		});
 
-		// IRC specific.
-		socket.on('initialInfo', function (data) {
-			client.info.nick = data;
-			client.settings.highlights[0] = client.info.nick;
-		});
-
+		// IRC
 		socket.on('raw', function (data) {
 			messaging.recieve(data);
-		});
-
-		socket.on('recieveMessage', function (data) {
-			if (client.settings.ignoreList.indexOf(data.mask) != -1) {
-				return;
-			} else {
-				messaging.recieve(data);
-			}
-		});
-
-		socket.on('networkName', function (data) {
-			select('#sidebar h2').innerHTML = data;
 		});
 
 		socket.on('updateInfo', function (data) {
@@ -104,16 +88,15 @@ var client = {
 						} else {
 						}
 
-
 						console.log(JSON.stringify(client.info.channels[data.channel].users = data.users));
-						// Lets update the interface if its the channel the user is focused on.
+						// Update the interface if its the channel the user is focused on.
 						if (client.info.focusedChannel == data.channel) {
 							updateInterface.users(data.channel);
 						}
 						break;
 					case "topic":
 						client.info.channels[data.channel].topic = data.topic;
-						// Lets update the interface if its the channel the user is focused on.
+						// Update the interface if its the channel the user is focused on.
 						if (client.info.focusedChannel == data.channel) {
 							updateInterface.topic(data.topic);
 						}
@@ -140,16 +123,10 @@ var client = {
 		select('#sidebar footer > button').onclick = function () {
 			if (!client.away) {
 				select('#sidebar footer > button span').style.backgroundColor = '#908B3C';
-				socket.emit('sendCommand', {
-					type: "away",
-					message: client.settings.awayMessage
-				});
+				socket.emit('send', ["away", "", client.settings.awayMessage]);
 			} else {
 				select('#sidebar footer > button span').style.backgroundColor = '#3C9067';
-				socket.emit('sendCommand', {
-					type: "away",
-					message: ''
-				});
+				socket.emit('send', ["away", "", ""]);
 			}
 
 			client.away = !client.away;
@@ -159,6 +136,8 @@ var client = {
 
 // Handle Login Info
 select('#login form footer button').onclick = function (event) {
+	event.preventDefault();
+
 	var connectInfo = {},
 		name,
 		invalid = false;
