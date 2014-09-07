@@ -39,6 +39,12 @@ var client = {
 		var updateInterface = new UpdateInterface();
 		var messaging = new Messaging(socket, updateInterface);
 
+		// Respond to pings
+
+		socket.on('ping', function (data) {
+			socket.emit('pong', {beat: 1});
+		});
+
 		// Lets handle all the socket.io stuff here for now. :3
 		socket.on('connect', function () {
 			client.status.connection = true;
