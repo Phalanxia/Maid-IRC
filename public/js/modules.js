@@ -54,7 +54,7 @@ var UpdateInterface = (function () {
 	// Update console
 	module.prototype.message = function (data) {
 		// Filter the message of html unfriendly characters
-		message = data.message
+		var message = data.message
 			.replace(/&/g, "&amp;")
 			.replace(/"/g, '&quot;')
 			.replace(/'/g, "&apos;")
