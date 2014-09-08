@@ -1,4 +1,4 @@
-[![Maid IRC](public/img/logo.png)](https://github.com/Phalanxia/Maid-IRC)
+[![Maid IRC](public/img/icons/favicon-96x96.png)](https://github.com/Phalanxia/Maid-IRC)[![Maid IRC](public/img/logo.png)](https://github.com/Phalanxia/Maid-IRC)
 
 A modern web IRC client. Built on [Node](http://nodejs.org).
 
