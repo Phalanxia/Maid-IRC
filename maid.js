@@ -63,7 +63,6 @@ if (env !== "production") {
 app.use(lessMiddleware(__dirname + "/public", {
 	compress: true,
 	optimization: 2,
-	cacheFile: __dirname + "/cache",
 	force: forceCompile
 }));
 
