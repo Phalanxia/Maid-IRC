@@ -53,6 +53,7 @@ var UpdateInterface = (function () {
 
 	// Update console
 	module.prototype.message = function (data) {
+		console.log("New Message:" + JSON.stringify(data));
 		// Filter the message of html unfriendly characters
 		var message = data.message
 			.replace(/&/g, "&amp;")
@@ -370,7 +371,9 @@ var Messaging = (function () {
 					});
 					break;
 				case "004":
-					var messages;
+					var messages,
+						k;
+
 					for (k in data.args) {
 						messages = k + " "; // I think this should work?
 					}
@@ -406,6 +409,8 @@ var Messaging = (function () {
 					});
 					break;
 				case "366":
+					break;
+				case "372":
 					break;
 				case "443":
 					this.updateInterface.message({
