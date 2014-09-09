@@ -1,4 +1,4 @@
-{	"name": "maidirc",
+{	"name": "maid-irc",
 	"version": "0.0.10",
 	"description": "A web IRC client. Built on Node.",
 	"author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
@@ -7,7 +7,7 @@
 	"dependencies": {
 		"irc": "~0.3.7",
 		"socket.io": "~1.1.0",
-		"jade": "~1.5.0",
+		"jade": "~1.6.0",
 		"express": "~4.8.5",
 		"express-minify": "~0.0.7",
 		"serve-favicon": "~2.1.0",
