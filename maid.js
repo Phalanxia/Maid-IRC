@@ -4,7 +4,7 @@ console.log("Starting Maid IRC.\nEnvironment: " + env);
 
 // Check to see if it is a supported environment variable
 
-if (["production, development", "debug"].indexOf(env.toLowerCase()) < 0) {
+if (["production", "development", "debug"].indexOf(env.toLowerCase()) < 0) {
 	console.warn('Sorry! NODE_ENV: "' + env + '" is not recognized. Try "development" or "production".');
 }
 
