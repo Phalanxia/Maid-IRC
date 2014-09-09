@@ -10,6 +10,8 @@ A modern web IRC client. Built on [Node](http://nodejs.org).
 
 2. Edit config.js
 
+Note: Maid IRC requires node.js v0.10 or newer.
+
 ## Running
 
 1. Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's development.
