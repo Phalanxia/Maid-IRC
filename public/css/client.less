@@ -182,38 +182,34 @@ form:invalid {
 	header {
 		height: 32px;
 		margin: 0 0 16 0;
-		h1 {
-			float: left;
-			display: block;
-			width: inherit;
-			margin: 16px 0 16px 20px;
-			font-size: 23px;
-			-webkit-font-smoothing: subpixel-antialiased;
-			font-weight: 200;
-			line-height: 32px;
-			color: @brightBlue;
-			span {
-				color: #213246;
-				font-weight: 800;
-			}
+		img {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: -48px;
+			margin: 0 auto;
 		}
 		a {
-			float: right;
 			height: 32px;
 			width: 20px;
 			margin: 16px 8px;
 			color: @brightBlue;
 			line-height: 32px !important; // Sorry
-			font-size: 22px;
+			font-size: 26px;
 			&:hover {
 				text-decoration: none;
 				cursor: pointer;
 			}
-
+			&.fa-github {
+				float: left;
+				margin: 16px 0 16px 32px;
+			}
 			&.fa-gear {
-				margin: 16px 20px 16px 8px;
+				float: right;
+				margin: 16px 32px 16px 0;
 			}
 		}
+
 	}
 
 	section {
