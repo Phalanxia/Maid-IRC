@@ -394,6 +394,15 @@ var Messaging = (function () {
 						}
 					}
 					break;
+				case "251":
+					this.updateInterface.message({
+						type: "rpl_luserclient",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: "SERVER",
+						message: args[1]
+					});
+					break;
 				case "332":
 					// Save the topic
 					client.info.channels[data.args[1]] = data.args[2];
@@ -408,9 +417,35 @@ var Messaging = (function () {
 						message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
 					});
 					break;
+				case "333":
+					var topicDate = new Date(data.args[3]*1000);
+					this.updateInterface.message({
+						type: "rpl_topicwhotime",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: data.args[1],
+						message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
+					});
+					break;
 				case "366":
 					break;
 				case "372":
+					this.updateInterface.message({
+						type: "rpl_motd",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: "SERVER",
+						message: args[1]
+					});
+					break;
+				case "376":
+					this.updateInterface.message({
+						type: "rpl_endofmotd",
+						head: "&gt;",
+						nick: "SERVER",
+						channel: "SERVER",
+						message: args[1]
+					});
 					break;
 				case "443":
 					this.updateInterface.message({
