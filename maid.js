@@ -20,7 +20,6 @@ var http = require("http"),
 	maidStatic = require("./lib/maidStatic"),
 	maidIrc = require("./lib/maidIrc");
 
-
 // Define express for the next part
 var app = express();
 
