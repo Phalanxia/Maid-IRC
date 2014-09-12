@@ -189,7 +189,7 @@ form:invalid {
 	height: 44px;
 	padding: 0;
 	font-size: 12px;
-	font-weight: bold;
+	line-height: 12px;
 	color: #fafbfb;
 	background: @midBlue;
 	border: none;
@@ -687,6 +687,8 @@ form:invalid {
 		order: 1;
 		flex-direction: column;
 		background: #fafafa;
+		// Until I can find a monospace version of opensans
+		font-family: Monaco, Consolas, "Lucida Console", monospace;
 		article {
 			float: left;
 			width: 100%;
@@ -1037,6 +1039,31 @@ form:invalid {
 		padding: 0 16px;
 		overflow-x: hidden;
 		overflow-y: scroll;
+		hr {
+			display: block;
+			height: 0;
+			margin: 0;
+			border: none;
+			border-top: 1px dashed @midBlue;
+		}
+		h2, h3 {
+			margin: 14px 0;
+			padding: 0;
+			color: @midBlue;
+		}
+		h2 {
+			font-size: 20px;
+		}
+		h3 {
+			font-size: 18px;
+		}
+		p {
+			margin: 0 0 14px 0;
+			font-size: 16px;
+			font-weight: 200;
+			white-space: pre-line;
+			color: @midBlue;
+		}
 	}
 
 	.page:nth-of-type(1) { display: block; }
@@ -1049,29 +1076,16 @@ form:invalid {
 			font-weight: 800;
 			line-height: 60px;
 			color: @darkBlue;
-			text-align: center;
 			span {
 				font-weight: 200;
 				color: @brightBlue;
 			}
 		}
-		p {
-			padding: 0 0 0 92px;
-			margin: 0;
-			font-size: 12px;
-			font-weight: 200;
-			color: @midBlue;
-		}
-		#container {
-			width: 236px;
-			padding: 14px 0 0 0;
-			margin: 0 auto;
-			a {
-				margin: 0 17px 0 0;
-				font-size: 14px;
-				&:hover { cursor: pointer; }
-				&:last-child { margin: 0; }
-			}
+		a {
+			margin: 0 20px 0 0;
+			font-size: 16px;
+			&:hover { cursor: pointer; }
+			&:last-child { margin: 0; }
 		}
 	}
 }
