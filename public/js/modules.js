@@ -5,7 +5,7 @@ var UpdateInterface = (function () {
 
 	// Update channel/PM user list
 	module.prototype.directory = function () {
-		var channelList = Object.keys(client.info.channels);
+		var channelList = Object.keys(client.networks.channels);
 		select('#sidebar > ul').innerHTML = '';
 
 		function updateChannelMenu (element, index) {
@@ -16,10 +16,10 @@ var UpdateInterface = (function () {
 
 		// Now lets update the navigation for the directory.
 		function buildIt (i) {
-			client.info.focusedChannel = channelList[i].toLowerCase();
+			client.networks.focusedChannel = channelList[i].toLowerCase();
 
-			if (typeof client.info.channels[channelList[i]].topic === 'undefined') {
-				select('#channelConsole header input').value = client.info.channels[channelList[i]].topic;
+			if (typeof client.networks.channels[channelList[i]].topic === 'undefined') {
+				select('#channelConsole header input').value = client.networks.channels[channelList[i]].topic;
 			} else {
 				select('#channelConsole header input').value = '';
 			}
@@ -32,12 +32,12 @@ var UpdateInterface = (function () {
 			select('#users ul').innerHTML = '';
 
 			// Show messages that are from the focused channel.
-			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.info.focusedChannel + '"]'), function (obj) {
+			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.networks.focusedChannel + '"]'), function (obj) {
 				obj.style.display = '';
 			});
 
 			// Hide messages that are not from the focused channel.
-			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function (obj) {
+			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
 				obj.style.display = 'none';
 			});
 		};
@@ -84,7 +84,7 @@ var UpdateInterface = (function () {
 
 		// If there is no specified channel just use the one the client is currently focused on
 		if (typeof data.channel === 'undefined') {
-			data.channel = client.info.focusedChannel;
+			data.channel = client.networks.focusedChannel;
 		}
 
 		// If scrolled at the bottom set scrollIntoView as true.
@@ -97,7 +97,7 @@ var UpdateInterface = (function () {
 
 
 		// Hide messages not from the focused channel
-		[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.info.focusedChannel + '"])'), function (obj) {
+		[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
 			obj.style.display = 'none';
 		});
 
@@ -121,7 +121,7 @@ var UpdateInterface = (function () {
 		select('#users header p').innerHTML = '';
 
 		// Set up user list.
-		var _channel = client.info.channels[channel],
+		var _channel = client.networks.channels[channel],
 			_userList = [],
 			_opCount = 0,
 			_users = _channel.users;
@@ -132,7 +132,7 @@ var UpdateInterface = (function () {
 
 		// Lets sort the user list based on rank and alphabetizing.
 		_userList.sort(function(a, b) {
-			var rankString = "\r+~@";
+			var rankString = "\r+%@&~";
 			var rankA = rankString.indexOf(_users[a]),
 				rankB = rankString.indexOf(_users[b]);
 
@@ -190,13 +190,13 @@ var Messaging = (function () {
 			return;
 		} else if (data.substring(0, 1) != "/") {
 			// It's not a command.
-			this.socket.emit('send', ["PRIVMSG", client.info.focusedChannel, data]);
+			this.socket.emit('send', ["PRIVMSG", client.networks.focusedChannel, data]);
 			// Display it in the client.
 			this.updateInterface.message({
 				type: "PRIVMSG",
-				head: client.info.nick,
-				nick: client.info.nick,
-				channel: client.info.focusedChannel,
+				head: client.networks.nick,
+				nick: client.networks.nick,
+				channel: client.networks.focusedChannel,
 				message: data
 			});
 		} else {
@@ -207,7 +207,7 @@ var Messaging = (function () {
 				_message = data.substring(_command.length + 1, data.length),
 				_commandList = ['me', 'join', 'part', 'whois', 'notice', 'away', 'topic'],
 				_commandFound = false,
-				_focusedChannel = client.info.focusedChannel;
+				_focusedChannel = client.networks.focusedChannel;
 
 			// Check to see if the command is in commandList.
 			for (var i = 0; i < _commandList.length && !_commandFound; i++) {
@@ -237,7 +237,7 @@ var Messaging = (function () {
 						head: "&raquo;",
 						nick: "COMMAND",
 						channel: _focusedChannel,
-						message: client.info.nick + " " + _message
+						message: client.networks.nick + " " + _message
 					});
 					break;
 				case "join":
@@ -258,7 +258,7 @@ var Messaging = (function () {
 						channel: _focusedChannel,
 						message: _message
 					});
-					this.updateInterface.message("notice", "-" + client.info.nick + "-", _focusedChannel, client.info.nick + " " + _message);
+					this.updateInterface.message("notice", "-" + client.networks.nick + "-", _focusedChannel, client.networks.nick + " " + _message);
 					break;
 				case "away":
 					this.socket.emit('sendCommand', {
@@ -294,8 +294,6 @@ var Messaging = (function () {
 	};
 
 	module.prototype.recieve = function (data) {
-		console.log(data);
-
 		if (data.commandType == "normal") {
 			switch (data.command.toLowerCase()) {
 				// Commands
@@ -343,7 +341,7 @@ var Messaging = (function () {
 			switch (data.rawCommand) {
 				// Numerics
 				case "001":
-					client.info.nick = data.args[0];
+					client.networks.nick = data.args[0];
 					this.updateInterface.message({
 						type: "rpl_welcome",
 						head: "&gt;",
@@ -387,11 +385,11 @@ var Messaging = (function () {
 					});
 					break;
 				case "005":
-					for (var i = message.args.length - 1; i >= 0; i--) {
-						if (message.args[i].indexOf("NETWORK") != -1) {
-							var networkName = message.args[i].split("NETWORK=")[1];
-							select('#sidebar h2').innerHTML = networkName;
-						}
+					console.log(data.args[9].split("NETWORK="));
+					var networkName = data.args[9].split("NETWORK=");
+					console.log(networkName);
+					if (typeof networkName !== undefined) {
+						select('#sidebar h2').innerHTML = networkName;
 					}
 					break;
 				case "251":
@@ -400,12 +398,12 @@ var Messaging = (function () {
 						head: "&gt;",
 						nick: "SERVER",
 						channel: "SERVER",
-						message: args[1]
+						message: data.args[1]
 					});
 					break;
 				case "332":
 					// Save the topic
-					client.info.channels[data.args[1]] = data.args[2];
+					client.networks.channels[data.args[1]] = data.args[2];
 					break;
 				case "333":
 					var topicDate = new Date(data.args[3]*1000);
@@ -426,6 +424,19 @@ var Messaging = (function () {
 						channel: data.args[1],
 						message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
 					});
+					break;
+				case "353":
+					var names = data.args[3].split(" "),
+						re = new RegExp("^([+~&@%]*)(.+)$"),
+						values;
+
+					for (var i = names.length - 1; i >= 0; i--) {
+						if (names[i] !== "") {
+							values = re.exec(names[i]);
+							console.log(JSON.stringify(values));
+							client.networks.channels[data.args[2][values[1]]] = values[0];
+						}
+					};
 					break;
 				case "366":
 					break;
@@ -435,7 +446,7 @@ var Messaging = (function () {
 						head: "&gt;",
 						nick: "SERVER",
 						channel: "SERVER",
-						message: args[1]
+						message: data.args[1]
 					});
 					break;
 				case "376":
@@ -444,7 +455,7 @@ var Messaging = (function () {
 						head: "&gt;",
 						nick: "SERVER",
 						channel: "SERVER",
-						message: args[1]
+						message: data.args[1]
 					});
 					break;
 				case "443":
@@ -453,7 +464,7 @@ var Messaging = (function () {
 						head: "&gt;",
 						nick: "SERVER",
 						channel: "SERVER",
-						message: args[1] + ": " + args[2]
+						message: data.args[1] + ": " + data.args[2]
 					});
 					break;
 			}
