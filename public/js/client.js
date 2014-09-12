@@ -142,7 +142,7 @@ var client = {
 };
 
 // Handle Login Info
-select('#login form footer button').onclick = function (event) {
+select('#loginContainer form footer button').onclick = function (event) {
 	event.preventDefault();
 
 	var connectInfo = {},
@@ -165,10 +165,10 @@ select('#login form footer button').onclick = function (event) {
 		select('#login').classList.add("connected");
 		select('#client').classList.add("connected");
 	} else {
-		select('#login form').classList.add("invalid");
+		select('#loginContainer').classList.add("invalid");
 
 		setTimeout(function () {
-			select('#login form').classList.remove("invalid");
+			select('#loginContainer').classList.remove("invalid");
 		}, 500);
 	}
 
