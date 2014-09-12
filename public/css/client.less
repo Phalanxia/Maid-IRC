@@ -20,11 +20,11 @@
 }
 
 .transform(@transform) {
-	-webkit-transform: @transition;
-	   -moz-transform: @transition;
-	    -ms-transform: @transition;
-	     -o-transform: @transition;
-			transform: @transition;
+	-webkit-transform: @transform;
+	   -moz-transform: @transform;
+	    -ms-transform: @transform;
+	     -o-transform: @transform;
+			transform: @transform;
 }
 
 // Animation
@@ -160,7 +160,6 @@ body {
 	height: 100%;
 	overflow: hidden;
 	font-family: 'Open Sans', Helvetica, sans-serif;
-	// background: #e7e7e7;
 	background: #e0e4e9;
 	flex-flow: row nowrap;
 }
@@ -223,9 +222,7 @@ form:invalid {
 
 #login {
 	top: 0;
-	&.connected {
-		top: -100%;
-	}
+	&.connected { top: -100%; }
 }
 
 #loginContainer {
@@ -251,9 +248,7 @@ form:invalid {
 				cursor: pointer;
 			}
 		}
-		a:first-child {
-			padding: 0 20px 0 0;
-		}
+		a:first-child {	padding: 0 20px 0 0; }
 	}
 }
 
@@ -297,9 +292,7 @@ form:invalid {
 		box-shadow: 0 0 0 2px rgba(0, 0, 0, 0) rgba(255, 255, 255, 0);
 	}
 
-	section:not(.checkbox) {
-		width: 290px;
-	}
+	section:not(.checkbox) { width: 290px; }
 
 	input:not([type="checkbox"]) {
 		display: inline-block;
@@ -315,15 +308,9 @@ form:invalid {
 		border-radius: 4px;
 		box-shadow: inset 0 1px 2px rgba(240, 240, 240, .8);
 		.transition(all ease-in-out .15s);
-		&:focus {
-			box-shadow: inset 2px 0 80px fadeout(@brightBlue, 60%);
-		}
-		&:before {
-			color: #3c3c3c;
-		}
-		&.advanced {
-			display: none;
-		}
+		&:focus { box-shadow: inset 2px 0 80px fadeout(@brightBlue, 60%); }
+		&:before { color: #3c3c3c; }
+		&.advanced { display: none;	}
 	}
 
 	input[name="server"] {
@@ -384,9 +371,7 @@ form:invalid {
 				content: '\f00c';
 			}
 		}
-		&:hover {
-			cursor: pointer;
-		}
+		&:hover { cursor: pointer; }
 	}
 
 	&.selected {
@@ -399,19 +384,13 @@ form:invalid {
 		height: 40px;
 		margin: 0 20px 0 10px;
 		input,
-		span {
-			float: right;
-		}
-		input {
-			margin: 3px 0 0 16px;
-		}
+		span { float: right; }
+		input { margin: 3px 0 0 16px; }
 		span {
 			line-height: 28px;
 			color: @brightBlue;
 		}
-		&.advanced {
-			display: none;
-		}
+		&.advanced { display: none; }
 	}
 
 	hr {
@@ -421,9 +400,7 @@ form:invalid {
 		margin: 0 20px 20px 20px;
 		border: none;
 		border-top: 1px dashed #d1d1d1;
-		&.advanced {
-			display: none;
-		}
+		&.advanced { display: none; }
 	}
 
 	footer {
@@ -444,9 +421,7 @@ form:invalid {
 			border: 1px solid darken(@brightBlue, 16%);
 			border-radius: 4px;
 			box-shadow: inset 0 1px lighten(@brightBlue, 12%);
-			&:hover {
-				cursor: pointer;
-			}
+			&:hover { cursor: pointer; }
 			&:active {
 				color: #fafbfb;
 				background-color: darken(@brightBlue, 6%);
@@ -511,9 +486,7 @@ form:invalid {
 			background: none;
 			border: none;
 			border-radius: 4px;
-			&:active {
-				color: darken(#efefef, 10%)
-			}
+			&:active { color: darken(#efefef, 10%); }
 		}
 		ul {
 			position: absolute;
@@ -528,7 +501,7 @@ form:invalid {
 			background-color: #efefef;
 			border-radius: 4px;
 			opacity: 0;
-			.transition(all .2s ease-in-out)
+			.transition(all .2s ease-in-out);
 			.transform(translateY(10px));
 			&:before {
 				position: absolute;
@@ -552,7 +525,7 @@ form:invalid {
 				color: #1b1b1b;
 				text-align: center;
 				border-radius: 4px;
-				.tranition(background-color .2s ease-in-out);
+				.transition(background-color .2s ease-in-out);
 				&:hover {
 					cursor: pointer;
 					background-color: #fafafa;
