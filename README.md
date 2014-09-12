@@ -1,22 +1,27 @@
-[![Maid IRC](public/img/icons/favicon-96x96.png)](https://github.com/Phalanxia/Maid-IRC)[![Maid IRC](public/img/logo.png)](https://github.com/Phalanxia/Maid-IRC)
+[![Maid IRC](public/img/logo.png)](https://github.com/Phalanxia/Maid-IRC)
 
 A modern web IRC client. Built on [Node](http://nodejs.org).
 
-[![Dependency Status](https://gemnasium.com/Phalanxia/Maid-IRC.png)](https://gemnasium.com/Phalanxia/Maid-IRC) [![Build Status](https://travis-ci.org/Phalanxia/Maid-IRC.svg?branch=master)](https://travis-ci.org/Phalanxia/Maid-IRC)
+[![Dependency Status](https://gemnasium.com/Phalanxia/Maid-IRC.png)](https://gemnasium.com/Phalanxia/Maid-IRC)[![Build Status](https://travis-ci.org/Phalanxia/Maid-IRC.svg?branch=master)](https://travis-ci.org/Phalanxia/Maid-IRC)
 
 ## Installation
+'''bash
+$ npm install
+'''
 
-1. Download dependencies. `$ npm install` for development, and `$ npm install --production` for production.
+For production:
+'''bash
+$ npm install --production
+'''
 
-2. Edit config.js
-
-Note: Maid IRC requires node.js v0.10 or newer.
+**Note:** Maid IRC requires node.js v0.10 or newer.
 
 ## Running
+'''bash
+$ node maid.js
+'''
 
-1. Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's development.
-
-2. Run Maid IRC. Use this command in the main directory of Maid IRC: `$ node maid.js`
+**Note** Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's development.
 
 ## Screenshots
 

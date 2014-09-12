@@ -1,5 +1,5 @@
-var select = function (selectors) { return document.querySelector(selectors); },
-	selectAll = function (selectors) { return document.querySelectorAll(selectors); };
+var select = document.querySelector.bind(document);
+	selectAll = document.querySelectorAll.bind(document);
 
 var client = {
 	settings: {
@@ -14,9 +14,10 @@ var client = {
 		away: false
 	},
 
-	info: {
-		nick: "",
+	networks: {
+		name: "",
 		channels: [],
+		nick: "",
 		channelList: "",
 		focusedChannel: ""
 	},
@@ -32,8 +33,8 @@ var client = {
 		// Send connect info to the backend
 		socket.emit('connectInfo', connectInfo);
 		// Set the clients settings
-		client.info.nick = connectInfo.nick;
-		client.settings.highlights[0] = client.info.nick;
+		client.networks.nick = connectInfo.nick;
+		client.settings.highlights[0] = client.networks.nick;
 
 		// Modules
 		var updateInterface = new UpdateInterface();
@@ -69,15 +70,15 @@ var client = {
 		});
 
 		socket.on('updateInfo', function (data) {
-			if ((client.info.channels[data.channel] == undefined && data.type == "users") || (client.info.channels[data.channel] == undefined && data.type == "topic") ) {
+			if ((client.networks.channels[data.channel] == undefined && data.type == "users") || (client.networks.channels[data.channel] == undefined && data.type == "topic") ) {
 				return;
 			} else {
 				switch (data.type) {
 					case "channel":
 						if (data.action == "join") {
-							client.info.channels[data.channel] = data.channelInfo;
+							client.networks.channels[data.channel] = data.channelInfo;
 						} else { // If the user parted a channel
-							delete client.info.channels[data.channel];
+							delete client.networks.channels[data.channel];
 						}
 						updateInterface.directory();
 						break;
@@ -85,25 +86,25 @@ var client = {
 						if (typeof data.action !== "undefined") {
 							switch (data.action) {
 								case "join":
-									client.info.channels[data.channel].users = data.users;
+									client.networks.channels[data.channel].users = data.users;
 									break;
 								case "part":
-									delete client.info.channels[data.channel].users[data.nick];
+									delete client.networks.channels[data.channel].users[data.nick];
 									break;
 							}
 						} else {
 						}
 
-						console.log(JSON.stringify(client.info.channels[data.channel].users = data.users));
+						console.log(JSON.stringify(client.networks.channels[data.channel].users = data.users));
 						// Update the interface if its the channel the user is focused on.
-						if (client.info.focusedChannel == data.channel) {
+						if (client.networks.focusedChannel == data.channel) {
 							updateInterface.users(data.channel);
 						}
 						break;
 					case "topic":
-						client.info.channels[data.channel].topic = data.topic;
+						client.networks.channels[data.channel].topic = data.topic;
 						// Update the interface if its the channel the user is focused on.
-						if (client.info.focusedChannel == data.channel) {
+						if (client.networks.focusedChannel == data.channel) {
 							updateInterface.topic(data.topic);
 						}
 						break;
