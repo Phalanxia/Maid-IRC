@@ -3,7 +3,6 @@
 	"description": "A web IRC client. Built on Node.",
 	"author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
 	"homepage": "https://phalanxia.github.io/Maid-IRC/",
-	"private": true,
 	"dependencies": {
 		"irc": "~0.3.7",
 		"socket.io": "~1.1.0",
