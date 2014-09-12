@@ -75,7 +75,7 @@ for (i = 0; i < settingsItems.length; i++) {
 // Login Screen
 
 var advanced = false;
-select('a.fa.fa-gear').onclick = function () {
+select('#extra a:first-child').onclick = function () {
 	if (advanced) {
 		[].map.call(selectAll('.advanced'), function(obj) {
 			obj.style.display = 'none';
