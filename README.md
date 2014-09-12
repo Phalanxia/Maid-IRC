@@ -5,23 +5,23 @@ A modern web IRC client. Built on [Node](http://nodejs.org).
 [![Dependency Status](https://gemnasium.com/Phalanxia/Maid-IRC.png)](https://gemnasium.com/Phalanxia/Maid-IRC)[![Build Status](https://travis-ci.org/Phalanxia/Maid-IRC.svg?branch=master)](https://travis-ci.org/Phalanxia/Maid-IRC)
 
 ## Installation
-'''bash
+```bash
 $ npm install
-'''
+```
 
 For production:
-'''bash
+```bash
 $ npm install --production
-'''
+```
 
 **Note:** Maid IRC requires node.js v0.10 or newer.
 
 ## Running
-'''bash
+```bash
 $ node maid.js
-'''
+```
 
-**Note** Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's development.
+**Note:** Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's development.
 
 ## Screenshots
 
