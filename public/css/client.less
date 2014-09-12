@@ -163,18 +163,36 @@ form:invalid {
 	}
 }
 
-#login form {
+#login #container {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 290px;
-	background-color: #ffffff;
-	border-radius: 4px;
 	-webkit-transform: translate(-50%, -50%);
 	   -moz-transform: translate(-50%, -50%);
 			transform: translate(-50%, -50%);
-	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	footer#extra {
+		text-align: center;
+		padding: 20px 0 0 0;
+		a {
+			font-size: 16px;
+			line-height: 16px;
+			&:hover {
+				text-decoration: none;
+				cursor: pointer;
+			}
+		}
+		a:first-child {
+			padding: 0 20px 0 0;
+		}
+	}
+}
 
+#login #container form {
+	width: 290px;
+	padding: 20px 0 0 0;
+	background-color: #ffffff;
+	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	&.invalid {
 		-webkit-animation: loginError .5s linear;
 	}
@@ -196,10 +214,6 @@ form:invalid {
 			color: @brightBlue;
 			line-height: 32px !important; // Sorry
 			font-size: 26px;
-			&:hover {
-				text-decoration: none;
-				cursor: pointer;
-			}
 			&.fa-github {
 				float: left;
 				margin: 16px 0 16px 32px;
@@ -223,10 +237,10 @@ form:invalid {
 
 	input:not([type="checkbox"]) {
 		display: inline-block;
-		width: 218px;
+		width: 216px;
 		height: 44px;
 		padding: 0 16px;
-		margin: 0 20px 16px 20px;
+		margin: 0 20px 20px 20px;
 		font-size: 14px;
 		line-height: 20px;
 		color: #1b1b1b;
@@ -250,17 +264,17 @@ form:invalid {
 	input[name="server"] {
 		width: 150px;
 		padding: 0 0 0 16px;
-		margin: 0 0 16px 20px;
+		margin: 0 0 20px 20px;
 		border-right: none;
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 	}
 
 	input[name="port"] {
-		width: 63px;
+		width: 65px;
 		height: 44px;
 		padding: 0 0 0 16px;
-		margin: 5px 0;
+		margin: 0;
 		border-left: 1px dashed #d1d1d1;
 		border-bottom-left-radius: 0;
 		border-top-left-radius: 0;
