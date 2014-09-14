@@ -526,6 +526,7 @@ form:invalid {
 				text-align: center;
 				border-radius: 4px;
 				.transition(background-color .2s ease-in-out);
+
 				&:hover {
 					cursor: pointer;
 					background-color: #fafafa;
@@ -568,7 +569,9 @@ form:invalid {
 			line-height: 40px;
 			color: #efefef;
 			.transition(background-color .1s ease-in-out);
+
 			&:nth-child(odd) { background-color: darken(@midBlue, 2%); }
+
 			i {
 				padding: 0 14px;
 				color: #efefef;
@@ -695,10 +698,12 @@ form:invalid {
 			line-height: 25px;
 			.transition(background-color .1s ease-in-out);
 			flex: 0 0 auto;
+
 			&:hover { background-color: #eeeeee; }
+
 			aside {
 				float: left;
-				width: 220px;
+				width: 200px;
 				height: 100%;
 				min-width: 20px;
 				margin: 0 8px 0 0;
@@ -740,7 +745,7 @@ form:invalid {
 				div {
 					display: block;
 					padding: 0 8px;
-					margin: 0 0 0 220px;
+					margin: 0 0 0 200px;
 					font-size: 14px;
 					color: #1b1b1b;
 					word-wrap: break-word;
@@ -823,11 +828,15 @@ form:invalid {
 			height: 28px;
 			color: @midBlue;
 			.transition(background-color .1s ease-in-out);
+
 			&:nth-child(odd) { background-color: darken(#efefef, 2%); }
+
 			&:hover {
+
 				cursor: pointer;
 				background-color: darken(#efefef, 4%);
 			}
+
 			span {
 				display: inline-block;
 				float: left;
@@ -975,11 +984,13 @@ form:invalid {
 			background: none;
 			border: none;
 			.transition(background-color .2s ease-in-out);
+
 			&:hover {
 				cursor: pointer;
 				background-color: darken(@brightBlue, 4%);
 				border-top-right-radius: 4px;
 			}
+
 			&:active {
 				background-color: darken(@brightBlue, 8%);
 				border-top-right-radius: 4px;
@@ -1011,11 +1022,14 @@ form:invalid {
 				line-height: 40px;
 				color: #efefef;
 				.transition(background-color .2s ease-in-out);
+
 				&:nth-child(even) { background-color: darken(@midBlue, 2%); }
+
 				&:hover {
 					cursor: pointer;
 					background-color: @darkBlue;
 				}
+
 				&.focused {
 					&:before {
 						position: absolute;
@@ -1051,12 +1065,8 @@ form:invalid {
 			padding: 0;
 			color: @midBlue;
 		}
-		h2 {
-			font-size: 20px;
-		}
-		h3 {
-			font-size: 18px;
-		}
+		h2 { font-size: 20px; }
+		h3 { font-size: 18px; }
 		p {
 			margin: 0 0 14px 0;
 			font-size: 16px;

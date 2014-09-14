@@ -53,7 +53,7 @@ var UpdateInterface = (function () {
 
 	// Update console
 	module.prototype.message = function (data) {
-		console.log("New Message:" + JSON.stringify(data));
+		// console.log("New Message:" + JSON.stringify(data));
 		// Filter the message of html unfriendly characters
 		var message = data.message
 			.replace(/&/g, "&amp;")
@@ -385,11 +385,16 @@ var Messaging = (function () {
 					});
 					break;
 				case "005":
-					console.log(data.args[9].split("NETWORK="));
 					var networkName = data.args[9].split("NETWORK=");
-					console.log(networkName);
-					if (typeof networkName !== undefined) {
-						select('#sidebar h2').innerHTML = networkName;
+
+					if (networkName.length > 1) {
+						if (typeof networkName !== undefined) {
+							select('#sidebar h2').innerHTML = networkName[1];
+							client.networks.name = networkName[1];
+						} else {
+							select('#sidebar h2').innerHTML = data.server;
+							client.networks.name = data.server;
+						}
 					}
 					break;
 				case "251":
@@ -402,18 +407,12 @@ var Messaging = (function () {
 					});
 					break;
 				case "332":
+					// If we dont have the channel stored, lets do that now!
+					if (client.networks.channels[data.args[1]] == undefined) {
+						client.networks.channels[data.args[1]] = {}
+					}
 					// Save the topic
-					client.networks.channels[data.args[1]] = data.args[2];
-					break;
-				case "333":
-					var topicDate = new Date(data.args[3]*1000);
-					this.updateInterface.message({
-						type: "rpl_topicwhotime",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: data.args[1],
-						message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
-					});
+					client.networks.channels[data.args[1]]["topic"] = data.args[2];
 					break;
 				case "333":
 					var topicDate = new Date(data.args[3]*1000);
@@ -426,15 +425,22 @@ var Messaging = (function () {
 					});
 					break;
 				case "353":
-					var names = data.args[3].split(" "),
-						re = new RegExp("^([+~&@%]*)(.+)$"),
-						values;
+					// Build the user list and set the joined channels
+					var _channel = data.args[2],
+						_names = data.args[3].split(" "),
+						_re = new RegExp("^([+~&@%]*)(.+)$"),
+						_values;
 
-					for (var i = names.length - 1; i >= 0; i--) {
-						if (names[i] !== "") {
-							values = re.exec(names[i]);
-							console.log(JSON.stringify(values));
-							client.networks.channels[data.args[2][values[1]]] = values[0];
+					if (client.networks.channels[_channel] == undefined) {
+						client.networks.channels[_channel] = {};
+					}
+
+					client.networks.channels[_channel]["users"] = {};
+
+					for (var i = _names.length - 1; i >= 0; i--) {
+						if (_names[i] !== "") {
+							_values = _re.exec(_names[i]);
+							client.networks.channels[_channel]["users"][_values[2]] = _values[1];
 						}
 					};
 					break;

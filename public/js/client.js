@@ -16,7 +16,7 @@ var client = {
 
 	networks: {
 		name: "",
-		channels: [],
+		channels: {},
 		nick: "",
 		channelList: "",
 		focusedChannel: ""
