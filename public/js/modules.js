@@ -6,6 +6,7 @@ var UpdateInterface = (function () {
 	// Update channel/PM user list
 	module.prototype.directory = function () {
 		var channelList = Object.keys(client.networks.channels);
+
 		select('#sidebar > ul').innerHTML = '';
 
 		function updateChannelMenu (element, index) {
@@ -18,7 +19,7 @@ var UpdateInterface = (function () {
 		function buildIt (i) {
 			client.networks.focusedChannel = channelList[i].toLowerCase();
 
-			if (typeof client.networks.channels[channelList[i]].topic === 'undefined') {
+			if (typeof client.networks.channels[channelList[i]].topic !== undefined) {
 				select('#channelConsole header input').value = client.networks.channels[channelList[i]].topic;
 			} else {
 				select('#channelConsole header input').value = '';
@@ -40,7 +41,7 @@ var UpdateInterface = (function () {
 			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
 				obj.style.display = 'none';
 			});
-		};
+		}
 
 		var items = select('#sidebar > ul').getElementsByTagName('li');
 
@@ -123,16 +124,13 @@ var UpdateInterface = (function () {
 		// Set up user list.
 		var _channel = client.networks.channels[channel],
 			_userList = [],
-			_opCount = 0,
 			_users = _channel.users;
 
-		for (var k in _users) {
-			_userList.push(k);
-		}
+			_userList = Object.keys(client.networks.channels[channel].users);
 
 		// Lets sort the user list based on rank and alphabetizing.
 		_userList.sort(function(a, b) {
-			var rankString = "\r+%@&~";
+			var rankString = "\r~&@%+";
 			var rankA = rankString.indexOf(_users[a]),
 				rankB = rankString.indexOf(_users[b]);
 
@@ -143,18 +141,24 @@ var UpdateInterface = (function () {
 			return rankSort;
 		});
 
-		for (var i = 0; i < _userList.length; i++) {
+		for (var i = _userList.length - 1; i >= 0; i--) {
 			var identifyer = '';
 
 			switch (_users[_userList[i]]) {
-				case "@":
-					identifyer = '<span class="fa fa-circle rank0"></span>';
+				case "+": // Voiced
+					identifyer = '<span class="fa fa-comment"></span>';
 					break;
-				case "+":
-					identifyer = '<span class="fa fa-circle rank1"></span>';
+				case "%": // Half-ops
+					identifyer = '<span class="fa fa-shield"></span>';
 					break;
-				case "~":
-					identifyer = '<span class="fa fa-circle rank1"></span>';
+				case "@": // Ops
+					identifyer = '<span class="fa fa-lock"></span>';
+					break;
+				case "&": // Admins
+					identifyer = '<span class="fa fa-globe"></span>';
+					break;
+				case "~": // Owners
+					identifyer = '<span class="fa fa-heart"></span>';
 					break;
 				default:
 					identifyer = '<span></span>';
@@ -162,15 +166,10 @@ var UpdateInterface = (function () {
 			}
 
 			select('#users ul').insertAdjacentHTML('beforeend', '<li>' + identifyer + '<p>' + _userList[i] + '</p></li>');
-
-			// Get the op count.
-			if (_users[_userList[i]] === "@" || _users[_userList[i]] === "~") {
-				_opCount = _opCount+=1;
-			}
 		}
 
 		// Get user count
-		select('#users header p').innerHTML = _opCount + " ops, " + Object.keys(_channel.users).length + " total";
+		select('#users header p').innerHTML = _userList.length + " total";
 	};
 
 	return module;
@@ -320,6 +319,24 @@ var Messaging = (function () {
 				case "mode":
 					break;
 				case "join":
+					// Make sure the joined channel is in the current saved channel object
+					if (client.networks.channels[data.args[0]] === undefined) {
+						client.networks.channels[data.args[0]] = {};
+					}
+
+					// If it's us update the sidebar
+					if (data.nick == client.networks.nick) {
+						this.updateInterface.directory();
+					}
+
+					// If its the focused channel update the userlist
+					if (client.networks.channels[data.args[0]].users !== undefined) {
+						if (data.args[0] == client.networks.focusedChannel || client.networks.focusedChannel == "") {
+							this.updateInterface.users(data.args[0]);
+						}
+					}
+
+					// Add the join message to the console
 					this.updateInterface.message({
 						type: "join",
 						head: data.nick,
@@ -408,11 +425,11 @@ var Messaging = (function () {
 					break;
 				case "332":
 					// If we dont have the channel stored, lets do that now!
-					if (client.networks.channels[data.args[1]] == undefined) {
-						client.networks.channels[data.args[1]] = {}
+					if (client.networks.channels[data.args[1]] === undefined) {
+						client.networks.channels[data.args[1]] = {};
 					}
 					// Save the topic
-					client.networks.channels[data.args[1]]["topic"] = data.args[2];
+					client.networks.channels[data.args[1]].topic = data.args[2];
 					break;
 				case "333":
 					var topicDate = new Date(data.args[3]*1000);
@@ -431,18 +448,20 @@ var Messaging = (function () {
 						_re = new RegExp("^([+~&@%]*)(.+)$"),
 						_values;
 
-					if (client.networks.channels[_channel] == undefined) {
+					if (client.networks.channels[_channel] === undefined) {
 						client.networks.channels[_channel] = {};
 					}
 
-					client.networks.channels[_channel]["users"] = {};
+					client.networks.channels[_channel].users = {};
 
 					for (var i = _names.length - 1; i >= 0; i--) {
 						if (_names[i] !== "") {
 							_values = _re.exec(_names[i]);
-							client.networks.channels[_channel]["users"][_values[2]] = _values[1];
+							client.networks.channels[_channel].users[_values[2]] = _values[1];
 						}
-					};
+					}
+
+					this.updateInterface.users(_channel);
 					break;
 				case "366":
 					break;
@@ -476,7 +495,7 @@ var Messaging = (function () {
 			}
 
 		}
-	}
+	};
 
 	return module;
 })();

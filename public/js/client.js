@@ -70,7 +70,7 @@ var client = {
 		});
 
 		socket.on('updateInfo', function (data) {
-			if ((client.networks.channels[data.channel] == undefined && data.type == "users") || (client.networks.channels[data.channel] == undefined && data.type == "topic") ) {
+			if ((client.networks.channels[data.channel] === undefined && data.type == "users") || (client.networks.channels[data.channel] == undefined && data.type == "topic") ) {
 				return;
 			} else {
 				switch (data.type) {
@@ -173,4 +173,4 @@ select('#loginContainer form footer button').onclick = function (event) {
 	}
 
 	event.preventDefault();
-}
+};
