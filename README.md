@@ -2,7 +2,7 @@
 
 A modern web IRC client. Built on [Node](http://nodejs.org).
 
-[![Dependency Status](https://gemnasium.com/Phalanxia/Maid-IRC.png)](https://gemnasium.com/Phalanxia/Maid-IRC) [![Build Status](https://travis-ci.org/Phalanxia/Maid-IRC.svg?branch=master)](https://travis-ci.org/Phalanxia/Maid-IRC)
+[![NPM version](http://img.shields.io/npm/v/maid-irc.svg?style=flat)](https://www.npmjs.org/package/maid-irc) [![Dependency Status](http://img.shields.io/gemnasium/Phalanxia/Maid-IRC.svg?style=flat)](https://gemnasium.com/Phalanxia/Maid-IRC) [![Build Status](http://img.shields.io/travis/Phalanxia/Maid-IRC.svg?branch=master&style=flat)](https://travis-ci.org/Phalanxia/Maid-IRC)
 
 ## Installation
 ```bash
