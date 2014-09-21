@@ -1,4 +1,4 @@
-var select = document.querySelector.bind(document);
+var select = document.querySelector.bind(document),
 	selectAll = document.querySelectorAll.bind(document);
 
 var client = {
@@ -25,8 +25,8 @@ var client = {
 	init: function (connectInfo) {
 		"use strict";
 
-		var socket = io.connect('http://' + document.domain + ":" + location.port, {
-			'reconnect': true,
+		var socket = io.connect(window.location.origin, {
+			'reconnect': false,
 			'reconnection delay': 500
 		});
 
@@ -41,7 +41,6 @@ var client = {
 		var messaging = new Messaging(socket, updateInterface);
 
 		// Respond to pings
-
 		socket.on('ping', function (data) {
 			socket.emit('pong', {beat: 1});
 		});
@@ -77,7 +76,8 @@ var client = {
 					case "channel":
 						if (data.action == "join") {
 							client.networks.channels[data.channel] = data.channelInfo;
-						} else { // If the user parted a channel
+						} else {
+							// If the user parted a channel
 							delete client.networks.channels[data.channel];
 						}
 						updateInterface.directory();
@@ -111,8 +111,6 @@ var client = {
 				}
 			}
 		});
-
-		// Key inputs
 
 		// Press enter in chat box
 		select('#channelConsole footer input').onkeydown = function (event) {

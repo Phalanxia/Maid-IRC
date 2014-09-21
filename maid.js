@@ -1,9 +1,8 @@
-var env = process.env.NODE_ENV || 'development';
+var env = process.env.NODE_ENV || 'production';
 
 console.log("Starting Maid IRC.\nEnvironment: " + env);
 
 // Check to see if it is a supported environment variable
-
 if (["production", "development", "debug"].indexOf(env.toLowerCase()) < 0) {
 	console.warn('Sorry! NODE_ENV: "' + env + '" is not recognized. Try "development" or "production".');
 }
@@ -18,7 +17,10 @@ var http = require("http"),
 	lessMiddleware = require('less-middleware'),
 	// Maid IRC libs
 	maidStatic = require("./lib/maidStatic"),
-	maidIrc = require("./lib/maidIrc");
+	maidIrc = require("./lib/maidIrc"),
+	// Less middleware variables
+	forceCompile = false,
+	lessDebug = false;
 
 // Define express for the next part
 var app = express();
@@ -28,6 +30,9 @@ switch (env) {
 	case "development":
 		var morgan = require("morgan");
 		app.use(morgan("dev"));
+		// Set less middleware variables
+		forceCompile = true;
+		lessDebug = true;
 		break;
 	case "production":
 		var minify = require("express-minify");
@@ -54,14 +59,22 @@ app.use(bodyParser.urlencoded({
 app.use(methodOverride());
 
 // Set up less.css middleware
-var forceCompile = false;
-
-if (env !== "production") {
-	forceCompile = true;
-}
-app.use(lessMiddleware(__dirname + "/public", {
-	compress: true,
-	optimization: 2,
+app.use(lessMiddleware(__dirname + "/less", {
+	dest: __dirname + "/public",
+	compiler: {
+		compress: true,
+		sourceMap: true,
+		yuicompress: true
+	},
+	preprocess: {
+		path: function (pathname, req) {
+			return pathname.replace("css\\", "");
+		}
+	},
+	parser: {
+		optimization: 2
+	},
+	debug: lessDebug,
 	force: forceCompile
 }));
 
@@ -73,6 +86,6 @@ var server = http.createServer(app).listen(config.http_port, config.http_host),
 	// Set up socket.io
 	io = require("socket.io").listen(server);
 
-// Now that thats done with lets pass it of to maidStatic.js
+// Now that thats done with lets pass it of to maidStatic.js and maidIrc.js
 maidStatic(app);
 maidIrc(io);
