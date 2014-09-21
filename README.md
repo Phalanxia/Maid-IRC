@@ -9,9 +9,9 @@ A modern web IRC client. Built on [Node](http://nodejs.org).
 $ npm install
 ```
 
-For production:
+For development:
 ```bash
-$ npm install --production
+$ npm install --dev
 ```
 
 **Note:** Maid IRC requires node.js v0.10 or newer.
@@ -21,7 +21,7 @@ $ npm install --production
 $ node maid.js
 ```
 
-**Note:** Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's development.
+**Note:** Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's production.
 
 ## Screenshots
 

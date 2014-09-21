@@ -19,7 +19,8 @@ var UpdateInterface = (function () {
 		function buildIt (i) {
 			client.networks.focusedChannel = channelList[i].toLowerCase();
 
-			if (typeof client.networks.channels[channelList[i]].topic !== undefined) {
+
+			if (typeof client.networks.channels[channelList[i]].topic !== "undefined") {
 				select('#channelConsole header input').value = client.networks.channels[channelList[i]].topic;
 			} else {
 				select('#channelConsole header input').value = '';
@@ -67,7 +68,7 @@ var UpdateInterface = (function () {
 		var rawTime = new Date(),
 			scrollInfoView; // And this variable for later
 		// Lets format the timestamp
-		var timestamp = "[" + ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2) + "]";
+		var timestamp = ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2);
 
 		// If it's not a message from the server
 		if (data.channel !== "SERVER") {
@@ -169,7 +170,7 @@ var UpdateInterface = (function () {
 		}
 
 		// Get user count
-		select('#users header p').innerHTML = _userList.length + " total";
+		select('#users header p').innerHTML = _userList.length + " users";
 	};
 
 	return module;
@@ -430,6 +431,10 @@ var Messaging = (function () {
 					}
 					// Save the topic
 					client.networks.channels[data.args[1]].topic = data.args[2];
+
+					if (client.focusedChannel === data.args[1]) {
+						select('#channelConsole header input').value = data.args[2];
+					}
 					break;
 				case "333":
 					var topicDate = new Date(data.args[3]*1000);
