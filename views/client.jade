@@ -6,6 +6,7 @@ html(lang='en')
 		title Maid IRC
 		meta(name='description', content='Maid IRC')
 		meta(name='viewport', content='width=device-width', initial-scale='1', user-scalable='no')
+		meta(name='mobile-web-app-capable', content='yes')
 		// Icons
 		link(rel='shortcut icon', href='img/icons/favicon.ico')
 		link(rel='apple-touch-icon', sizes='57x57', href='img/icons/apple-touch-icon-57x57.png')
@@ -25,12 +26,59 @@ html(lang='en')
 		meta(name='msapplication-TileImage', content='img/icons/mstile-144x144.png')
 		meta(name='msapplication-config', content='img/icons/browserconfig.xml')
 		// CSS
-		link(rel='stylesheet', type='text/css', href='css/font-awesome.css')
-		link(rel='stylesheet', type='text/css', href='css/normalize.css')
-		link(rel='stylesheet', type='text/css', href='css/fonts.css')
-		link(rel='stylesheet', type='text/css', href='css/client.css')
-		script(src='/socket.io/socket.io.js')
+		link(rel='stylesheet', href='css/n-client.css', type='text/css')
 	body
+		// Login
+		#login
+			form(method='post')
+				#login-basic
+					input#name(type='text', placeholder='Nickname', name='nick', spellcheck="false", autofocus, required)
+					section
+						input#server(type='text', placeholder='Server', name='server', spellcheck="false", required)
+						input#port(type='number', placeholder='Port', name='port', maxlength='4', max="9999")
+					input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
+					footer
+						button.btn#submit(type='submit', name='connect') Connect
+						button.btn.fa.fa-gear(type='button')
+				#login-advanced
+					input#nicknamePassword(type='password', name='nickPassword', placeholder='Password', tabIndex='-1')
+					input#realName(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
+					input#ssl(type='checkbox', name='ssl', tabIndex='-1')
+					span.checkboxLabel SSL
+
+		// Client
+		#client
+			.panel#network-panel
+				header
+					h1
+						span Maid
+						| IRC
+					span#status
+					button.fa.fa-navicon
+					ul
+						li.fa.fa-cog
+						li.fa.fa-sign-out
+				ul#channel-list
+				footer
+					button
+						span
+					input(value=name)
+			.panel#channel-console
+				header
+					input(type='text', placeholder='Topic')
+				output
+					article.filler
+						div
+				footer
+					input(type='text')
+					button.btn.btn--dark(type='button') Send
+			.panel#users
+				header
+					p
+				ul
+				footer
+
+		// Modals
 		#pageCover
 		#settings.modal
 			header
@@ -48,7 +96,7 @@ html(lang='en')
 			.page#about
 				h1 Maid
 					span IRC
-				p Version 0.0.11
+				p Version 0.0.12
 				a(href='https://github.com/Phalanxia/Maid-IRC', target='_blank') GitHub
 				a(href='https://github.com/Phalanxia/Maid-IRC/issues', target='_blank') Report an issue
 				a(href='https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/LICENSE', target='_blank') License
@@ -59,62 +107,9 @@ html(lang='en')
 				button.fa.fa-times(type='button')
 				button.fa.fa-check(type='button')
 
-		// Login
-
-		#login
-			#loginContainer
-				form(method='post')
-					input#name(type='text', placeholder='Nickname', name='nick', spellcheck="false", autofocus, required)
-					input#nicknamePassword.advanced(type='password', name='nickPassword', placeholder='Password', tabIndex='-1')
-					input#realName.advanced(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
-					hr.advanced
-					section
-						input#server(type='text', placeholder='Server', name='server', spellcheck="false", required)
-						input#port(type='number', placeholder='Port', name='port', maxlength='4', max="9999")
-					section.checkbox.advanced
-						input#ssl(type='checkbox', name='ssl', tabIndex='-1')
-						span.checkboxLabel SSL
-					input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
-					footer
-						button#submit(type='submit', name='connect') Connect
-				footer#extra
-					a Advanced
-					a(href='//github.com/Phalanxia/Maid-IRC', target='_blank') GitHub
-
-		// Client
-
-		#client
-			#sidebar
-				header
-					h1
-						span Maid
-						| IRC
-					span#status
-					button.fa.fa-bars
-					ul
-						li.fa.fa-cog
-						li.fa.fa-sign-out
-				h2 Server
-				ul#channelList
-				footer
-					button
-						span
-					input(value=name)
-			#channelConsole
-				header
-					input(type='text', placeholder='Topic')
-				output
-					article#filler
-						div
-				footer
-					input(type='text')
-					button.btn(type='button') Send
-			#users
-				header
-					p
-				ul
-				footer
-
+	script(src='//cdn.socket.io/socket.io-1.0.0.js')
+	script(src='js/lib/handlebars.min.js')
+	script(src='js/templates.js')
 	script(src='js/modules.js')
 	script(src='js/client.js')
 	script(src='js/ui.js')

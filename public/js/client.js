@@ -49,7 +49,7 @@ var client = {
 		socket.on('connect', function () {
 			client.status.connection = true;
 
-			select('#sidebar header span#status').style.backgroundColor = '#3C9067';
+			select('#network-panel header span#status').style.backgroundColor = '#3c9067';
 
 			console.log("Connected to backend.");
 		});
@@ -58,7 +58,7 @@ var client = {
 			client.status.connection = false;
 			client.status.pastDisconnect = true;
 
-			select('#sidebar header span#status').style.backgroundColor = "#903C3C";
+			select('#network-panel header span#status').style.backgroundColor = "#903c3c";
 
 			console.warn("Lost connection to backend.");
 		});
@@ -113,24 +113,24 @@ var client = {
 		});
 
 		// Press enter in chat box
-		select('#channelConsole footer input').onkeydown = function (event) {
+		select('#channel-console footer input').onkeydown = function (event) {
 			switch (event.which) {
 				case 13: // Enter
-					messaging.send(select('#channelConsole footer input').value);
+					messaging.send(select('#channel-console footer input').value);
 					break;
 			}
 		};
 
-		select('#channelConsole footer button').onclick = function () {
-			messaging.send(select('#channelConsole footer input').value);
+		select('#channel-console footer button').onclick = function () {
+			messaging.send(select('#channel-console footer input').value);
 		};
 
-		select('#sidebar footer > button').onclick = function () {
+		select('#network-panel footer > button').onclick = function () {
 			if (!client.away) {
-				select('#sidebar footer > button span').style.backgroundColor = '#908B3C';
+				select('#network-panel footer > button span').style.backgroundColor = '#908B3C';
 				socket.emit('send', ["away", "", client.settings.awayMessage]);
 			} else {
-				select('#sidebar footer > button span').style.backgroundColor = '#3C9067';
+				select('#network-panel footer > button span').style.backgroundColor = '#3C9067';
 				socket.emit('send', ["away", "", ""]);
 			}
 
@@ -140,7 +140,7 @@ var client = {
 };
 
 // Handle Login Info
-select('#loginContainer form footer button').onclick = function (event) {
+select('#submit').onclick = function (event) {
 	event.preventDefault();
 
 	var connectInfo = {},
@@ -163,10 +163,10 @@ select('#loginContainer form footer button').onclick = function (event) {
 		select('#login').classList.add("connected");
 		select('#client').classList.add("connected");
 	} else {
-		select('#loginContainer').classList.add("invalid");
+		select('#login form').classList.add("invalid");
 
 		setTimeout(function () {
-			select('#loginContainer').classList.remove("invalid");
+			select('#login form').classList.remove("invalid");
 		}, 500);
 	}
 

@@ -1,0 +1,26 @@
+@import: "colors";
+@import: "polyfills";
+.btn {
+	width: 250px;
+	height: 44px;
+	padding: 0;
+	line-height: 12px;
+	font-size: 0.875em;
+	font-weight: 600;
+	color: @white;
+	background-color: @lightBlue;
+	border: none;
+	border-radius: 4px;
+	.user-select(none);
+	&:hover { cursor: pointer; }
+	&:active {
+		color: @white;
+		background-color: darken(@lightBlue, 6%);
+	}
+}
+.btn--dark {
+	background-color: @darkBlue;
+	&:active {
+		background-color: darken(@darkBlue, 6%);
+	}
+}

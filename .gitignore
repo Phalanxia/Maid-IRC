@@ -6,5 +6,5 @@ pids
 
 node_modules/
 rubbish/
-public/css/index.css
-public/css/client.css
+public/css/*.css
+public/css/*.map

@@ -1,0 +1,136 @@
+@import: "colors";
+@import: "polyfills";
+
+#channel-console {
+	display: flex;
+	flex: 1 1 auto;
+	order: 1;
+	flex-flow: column wrap;
+}
+#channel-console header {
+	display: flex;
+	width: 100%;
+	height: 40px;
+	background-color: @lightBlue;
+	flex: 0 1 auto;
+	order: 0;
+	flex-flow: row wrap;
+}
+#channel-console header input {
+	width: 100%;
+	height: 30px;
+	padding: 0 8px;
+	margin: 5px 0;
+	font-size: 14px;
+	line-height: 17px;
+	color: @darkBlue;
+	background-color: #fafafa;
+	border: none;
+	border-radius: 4px;
+	flex: 1 1 auto;
+	order: 0;
+}
+#channel-console output {
+	position: relative;
+	display: flex;
+	width: 100%;
+	overflow-y: scroll;
+	flex: 1 1 auto;
+	order: 1;
+	flex-direction: column;
+	background: #fafafa;
+	// Until I can find a monospace version of opensans
+	font-family: Monaco, Consolas, "Lucida Console", monospace;
+}
+#channel-console output article {
+	float: left;
+	width: 100%;
+	line-height: 25px;
+	.transition(background-color .1s ease-in-out);
+	flex: 0 0 auto;
+	&:hover { background-color: #eee; }
+	aside {
+		float: left;
+		width: 200px;
+		height: 100%;
+		min-width: 20px;
+		margin: 0 8px 0 0;
+		line-height: 24px;
+		time {
+			float: left;
+			width: 80px;
+			font-size: 14px;
+			color: #7d7f81;
+			text-align: center;
+		}
+		span {
+			float: right;
+			padding: 0 8px 0 0;
+			font-size: 14px;
+			color: @lightBlue;
+		}
+	}
+	p {
+		padding: 0 8px;
+		margin: 0 0 0 200px;
+		font-size: 14px;
+		line-height: 24px;
+		color: @darkBlue;
+		word-wrap: break-word;
+		white-space: pre-wrap;
+		border-left: 1px solid #d9d9d9;
+		.highlighted {
+			padding: 2px;
+			color: #fff;
+			background-color: @lightBlue;
+			border-radius: 2px;
+		}
+	}
+}
+.filler {
+	display: flex !important;
+	height: 100%;
+	flex: 1 !important;
+	div {
+		display: block;
+		padding: 0 8px;
+		margin: 0 0 0 200px;
+		font-size: 14px;
+		color: #1b1b1b;
+		word-wrap: break-word;
+		white-space: pre-wrap;
+		border-left: 1px solid #d9d9d9;
+		flex: 1;
+	}
+	&:hover { background: 0 !important; }
+}
+#channel-console footer {
+	display: flex;
+	width: 100%;
+	height: 40px;
+	background-color: #fff;
+	border-top: 1px solid #d1d1d1;
+	flex: 0 1 auto;
+	order: 2;
+	flex-flow: row nowrap;
+}
+#channel-console footer input {
+	width: 100%;
+	height: 40px;
+	padding: 0 5px;
+	background-color: #fff;
+	border: none;
+	color: @darkBlue;
+	font-size: 16px;
+	line-height: 16px;
+	flex: 1 1 auto;
+	order: 0;
+}
+#channel-console footer button {
+	width: 80px;
+	height: 30px;
+	margin: 5px;
+	flex: 0 1 auto;
+	order: 1;
+	font-size: 14px;
+}

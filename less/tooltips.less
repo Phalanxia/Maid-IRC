@@ -1,0 +1,49 @@
+@import "colors";
+@import "polyfills";
+@import "z-index";
+[data-tooltip] {
+	position: relative;
+}
+[data-tooltip]::before {
+	content: attr(data-tooltip);
+	z-index: @zIndex-10;
+	text-align: center;
+	color: #ffffff;
+	white-space: nowrap;
+	word-wrap: normal;
+	line-height: 20px;
+	font-size: 14px;
+	display: inline-block;
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translate(-50%,0);
+	padding: 4px 8px;
+	opacity: 0;
+	background-color: @lightBlue;
+	border-radius: 4px;
+	.transition(all .2s ease-in-out);
+}
+[data-tooltip]:hover::before {
+		bottom: 30px;
+}
+[data-tooltip]::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	opacity: 0;
+	padding-top: 2px;
+	transform: translate(-50%,0);
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-top: 8px solid @lightBlue;
+	.transition(all .2s ease-in-out);
+}
+[data-tooltip]:hover::after {
+		bottom: 20px;
+}
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+	opacity: 1;
+}
