@@ -15,6 +15,7 @@ var http = require("http"),
 	bodyParser = require("body-parser"),
 	methodOverride = require('method-override'),
 	lessMiddleware = require('less-middleware'),
+	compression = require('compression'),
 	// Maid IRC libs
 	maidStatic = require("./lib/maidStatic"),
 	maidIrc = require("./lib/maidIrc"),
@@ -24,6 +25,7 @@ var http = require("http"),
 
 // Define express for the next part
 var app = express();
+app.use(compression());
 
 // Do things depending on which environment were in
 switch (env) {
@@ -78,7 +80,9 @@ app.use(lessMiddleware(__dirname + "/less", {
 	force: forceCompile
 }));
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public", {
+	maxAge: "1w"
+}));
 app.use(favicon(__dirname + "/public/img/icons/favicon.ico"));
 
 // Define server

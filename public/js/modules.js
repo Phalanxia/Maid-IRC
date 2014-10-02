@@ -7,44 +7,46 @@ var UpdateInterface = (function () {
 	module.prototype.directory = function () {
 		var channelList = Object.keys(client.networks.channels);
 
-		select('#sidebar > ul').innerHTML = '';
+		// Remove all the current items in the list
+		[].map.call(selectAll('#network-panel > ul'), function (obj) {
+			obj.parentNode.removeChild(obj);
+		});
 
-		function updateChannelMenu (element, index) {
-			select('#sidebar > ul').insertAdjacentHTML('beforeend', '<li data-type="channel" data-alert="" data-channelNumber="' + index + '"><i class="fa fa-comments-o"></i><span>' + element + '</span></li>');
-		}
-
-		channelList.forEach(updateChannelMenu);
+		select('#network-panel header').insertAdjacentHTML('afterend', Templates.messageSource.compiled({
+				serverName: client.networks.name || "Server",
+				channels: client.networks.channels
+			})
+		);
 
 		// Now lets update the navigation for the directory.
 		function buildIt (i) {
 			client.networks.focusedChannel = channelList[i].toLowerCase();
 
-
 			if (typeof client.networks.channels[channelList[i]].topic !== "undefined") {
-				select('#channelConsole header input').value = client.networks.channels[channelList[i]].topic;
+				select('#channel-console header input').value = client.networks.channels[channelList[i]].topic;
 			} else {
-				select('#channelConsole header input').value = '';
+				select('#channel-console header input').value = '';
 			}
 
-			[].map.call(selectAll('#sidebar > ul li'), function (obj) {
+			[].map.call(selectAll('#network-panel > ul li'), function (obj) {
 				obj.classList.remove('focusedChannel');
 			});
 
-			select('#sidebar > ul li:nth-of-type(' + (i+=1) + ')').classList.add('focusedChannel');
+			select('#network-panel > ul li:nth-of-type(' + (i+=1) + ')').classList.add('focusedChannel');
 			select('#users ul').innerHTML = '';
 
 			// Show messages that are from the focused channel.
-			[].map.call(selectAll('#channelConsole output article[data-channel="' + client.networks.focusedChannel + '"]'), function (obj) {
+			[].map.call(selectAll('#channel-console output article[data-channel="' + client.networks.focusedChannel + '"]'), function (obj) {
 				obj.style.display = '';
 			});
 
 			// Hide messages that are not from the focused channel.
-			[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
+			[].map.call(selectAll('#channel-console output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
 				obj.style.display = 'none';
 			});
 		}
 
-		var items = select('#sidebar > ul').getElementsByTagName('li');
+		var items = select('#network-panel > ul').getElementsByTagName('li');
 
 		var i;
 		for (i = 0; i < items.length; i++) {
@@ -65,7 +67,8 @@ var UpdateInterface = (function () {
 			.replace(/>/g, "&gt;");
 
 		// Create get the time for the timestamp
-		var rawTime = new Date(),
+		var output = select('#channel-console output'),
+			rawTime = new Date(),
 			scrollInfoView; // And this variable for later
 		// Lets format the timestamp
 		var timestamp = ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2);
@@ -90,30 +93,29 @@ var UpdateInterface = (function () {
 		}
 
 		// If scrolled at the bottom set scrollIntoView as true.
-		if (select('#channelConsole output').scrollHeight - select('#channelConsole output').scrollTop === select('#channelConsole output').clientHeight) {
+		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
 			scrollInfoView = true;
 		}
 
-		select('#channelConsole output').removeChild(select('#channelConsole output #filler'));
-		select('#channelConsole output').insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.type + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span> ' + data.head + '</span></aside><p>' + message + '</p></article><article id="filler"><div></div></article>');
+		output.removeChild(select('#channel-console output .filler'));
+		output.insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.type + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span> ' + data.head + '</span></aside><p>' + message + '</p></article><article class="filler"><div></div></article>');
 
 
 		// Hide messages not from the focused channel
-		[].map.call(selectAll('#channelConsole output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
+		[].map.call(selectAll('#channel-console output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
 			obj.style.display = 'none';
 		});
 
 		// Scroll to bottom unless the user is scrolled up
 		if (scrollInfoView) {
-			select('#channelConsole output').scrollTop = select('#channelConsole output').scrollHeight;
+			output.scrollTop = output.scrollHeight;
 		}
 	};
 
 	// Update topic
 	module.prototype.topic = function (topic) {
 		topic = topic || '';
-		select('#channelConsole header input').value = '';
-		select('#channelConsole header input').value = topic;
+		select('#channel-console header input').value = topic;
 	};
 
 	// Update users
@@ -127,15 +129,16 @@ var UpdateInterface = (function () {
 			_userList = [],
 			_users = _channel.users;
 
-			_userList = Object.keys(client.networks.channels[channel].users);
+		_userList = Object.keys(client.networks.channels[channel].users);
 
 		// Lets sort the user list based on rank and alphabetizing.
 		_userList.sort(function(a, b) {
 			var rankString = "\r~&@%+";
+			var rankString = "\r+%@&~";
 			var rankA = rankString.indexOf(_users[a]),
 				rankB = rankString.indexOf(_users[b]);
 
-			var rankSort = rankA == rankB ? 0 : (rankA > rankB ? -1 : 1);
+			var rankSort = rankA == rankB ? 0 : (rankA > rankB ? 1 : -1);
 			if (rankSort === 0) {
 				return a.toLowerCase() > b.toLowerCase() ? 1 : -1;
 			}
@@ -143,30 +146,31 @@ var UpdateInterface = (function () {
 		});
 
 		for (var i = _userList.length - 1; i >= 0; i--) {
-			var identifyer = '';
+			var identifyer = {};
+			identifyer.rank = _users[_userList[i]];
+			identifyer.icon = "";
 
-			switch (_users[_userList[i]]) {
-				case "+": // Voiced
-					identifyer = '<span class="fa fa-comment"></span>';
-					break;
-				case "%": // Half-ops
-					identifyer = '<span class="fa fa-shield"></span>';
-					break;
-				case "@": // Ops
-					identifyer = '<span class="fa fa-lock"></span>';
-					break;
-				case "&": // Admins
-					identifyer = '<span class="fa fa-globe"></span>';
-					break;
-				case "~": // Owners
-					identifyer = '<span class="fa fa-heart"></span>';
-					break;
-				default:
-					identifyer = '<span></span>';
-					break;
+			if (_users[_userList[i]] !== "") {
+				switch (_users[_userList[i]]) {
+					case "~": // Owners
+						identifyer.icon = "&#xf004";
+						break;
+					case "&": // Admins
+						identifyer.icon = "&#xf0ac";
+						break;
+					case "@": // Ops
+						identifyer.icon = "&#xf0e3";
+						break;
+					case "%": // Half-ops
+						identifyer.icon = "&#xf132";
+						break;
+					case "+": // Voiced
+						identifyer.icon = "&#xf075";
+						break;
+				}
 			}
 
-			select('#users ul').insertAdjacentHTML('beforeend', '<li>' + identifyer + '<p>' + _userList[i] + '</p></li>');
+			select('#users ul').insertAdjacentHTML('beforeend', '<li><p data-rank="' + identifyer.rank + '" data-rank-icon="' + identifyer.icon + '">' + _userList[i] + '</p></li>');
 		}
 
 		// Get user count
@@ -228,7 +232,6 @@ var Messaging = (function () {
 				return;
 			}
 
-			// It is a command so lets run it!
 			switch (_command) {
 				case "me":
 					this.socket.emit('send', ["ACTION", _focusedChannel, _message]);
@@ -290,7 +293,7 @@ var Messaging = (function () {
 			}
 		}
 
-		select('#channelConsole footer input').value = "";
+		select('#channel-console footer input').value = "";
 	};
 
 	module.prototype.recieve = function (data) {
@@ -325,7 +328,7 @@ var Messaging = (function () {
 						client.networks.channels[data.args[0]] = {};
 					}
 
-					// If it's us update the sidebar
+					// If it's us update the network-bar
 					if (data.nick == client.networks.nick) {
 						this.updateInterface.directory();
 					}
@@ -407,10 +410,10 @@ var Messaging = (function () {
 
 					if (networkName.length > 1) {
 						if (typeof networkName !== undefined) {
-							select('#sidebar h2').innerHTML = networkName[1];
+							select('#network-panel ul h2').innerHTML = networkName[1];
 							client.networks.name = networkName[1];
 						} else {
-							select('#sidebar h2').innerHTML = data.server;
+							select('#network-panel ul h2').innerHTML = data.server;
 							client.networks.name = data.server;
 						}
 					}
@@ -433,7 +436,7 @@ var Messaging = (function () {
 					client.networks.channels[data.args[1]].topic = data.args[2];
 
 					if (client.focusedChannel === data.args[1]) {
-						select('#channelConsole header input').value = data.args[2];
+						select('#channel-console header input').value = data.args[2];
 					}
 					break;
 				case "333":
@@ -498,7 +501,6 @@ var Messaging = (function () {
 					});
 					break;
 			}
-
 		}
 	};
 
