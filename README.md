@@ -16,7 +16,7 @@ For development:
 $ npm install --dev
 ```
 
-**Note:** Maid IRC requires node.js v0.10 or newer.
+**Note:** Maid IRC requires Node.js v0.10 or newer.
 
 ## Running
 ```bash

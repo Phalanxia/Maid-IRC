@@ -7,6 +7,7 @@ window.onbeforeunload = function () {
 select("#pageCover").onclick = function () {
 	hideModals();
 };
+
 [].map.call(selectAll(".modal header button"), function (obj) {
 	obj.onclick = function () {
 		hideModals();
