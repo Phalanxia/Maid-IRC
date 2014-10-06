@@ -4,7 +4,8 @@ var UpdateInterface = (function () {
 	var module = function () {};
 
 	// Update
-	module.prototype.messageSources = function () {
+	module.prototype.messageSources = function (connectionId) {
+		console.log(connectionId);
 		// Remove all the current items in the list
 		[].map.call(selectAll('#network-panel > ul'), function (obj) {
 			obj.parentNode.removeChild(obj);
@@ -13,10 +14,12 @@ var UpdateInterface = (function () {
 		// Render the template
 		select('#network-panel header').insertAdjacentHTML('afterend', Templates.messageSource.compiled({
 				serverName: client.networks.name || "Server",
-				channels: client.networks.channels,
-				serverid: ""
+				sources: client.networks[connectionId].sources,
+				connectionId: connectionId
 			})
 		);
+
+		var network = client.networks[connectionId];
 
 		// Now lets update the navigation for the directory.
 		function navigation (element) {
@@ -39,7 +42,7 @@ var UpdateInterface = (function () {
 
 			switch (element.className) {
 				case "channel":
-					var channel = client.networks.channels[source];
+					var channel = network.sources[source];
 
 					if (typeof channel.topic !== "undefined") {
 						select('#channel-console header input').value = channel.topic;
@@ -82,24 +85,27 @@ var UpdateInterface = (function () {
 		select('#channel-console header input').value = topic || '';
 	};
 
-	module.prototype.users = function (channel) {
+	module.prototype.users = function (channel, connectionId) {
 		// Clear interface.
 		select('#users > ul').innerHTML = '';
 		select('#users header p').innerHTML = '';
 
 		// Set up user list.
-		var _channel = client.networks.channels[channel],
-			_userList = [],
-			_users = _channel.users;
+		var network = client.networks[connectionId];
 
-		_userList = Object.keys(client.networks.channels[channel].users);
+		console.log(network.sources[channel]);
+
+		var userList = [],
+			users = network.sources[channel].users;
+
+		userList = Object.keys(users);
 
 		// Lets sort the user list based on rank and alphabetizing.
-		_userList.sort(function(a, b) {
+		userList.sort(function(a, b) {
 			var rankString = "\r~&@%+";
 			var rankString = "\r+%@&~";
-			var rankA = rankString.indexOf(_users[a]),
-				rankB = rankString.indexOf(_users[b]);
+			var rankA = rankString.indexOf(users[a]),
+				rankB = rankString.indexOf(users[b]);
 
 			var rankSort = rankA == rankB ? 0 : (rankA > rankB ? 1 : -1);
 			if (rankSort === 0) {
@@ -108,13 +114,13 @@ var UpdateInterface = (function () {
 			return rankSort;
 		});
 
-		for (var i = _userList.length - 1; i >= 0; i--) {
+		for (var i = userList.length - 1; i >= 0; i--) {
 			var identifyer = {};
-			identifyer.rank = _users[_userList[i]];
+			identifyer.rank = users[userList[i]];
 			identifyer.icon = "";
 
-			if (_users[_userList[i]] !== "") {
-				switch (_users[_userList[i]]) {
+			if (users[userList[i]] !== "") {
+				switch (users[userList[i]]) {
 					case "~": // Owners
 						identifyer.icon = "&#xf004";
 						break;
@@ -133,14 +139,79 @@ var UpdateInterface = (function () {
 				}
 			}
 
-			select('#users ul').insertAdjacentHTML('beforeend', '<li><p data-rank="' + identifyer.rank + '" data-rank-icon="' + identifyer.icon + '">' + _userList[i] + '</p></li>');
+			select('#users ul').insertAdjacentHTML('beforeend', '<li><p data-rank="' + identifyer.rank + '" data-rank-icon="' + identifyer.icon + '">' + userList[i] + '</p></li>');
 		}
 
 		// Get user count
-		select('#users header p').innerHTML = _userList.length + " users";
+		select('#users header p').innerHTML = userList.length + " users";
 	};
 
-	module.prototype.message = function (data) {
+	module.prototype.message = function (data, connectionId) {
+		// console.log("New Message:" + JSON.stringify(data));
+		// Filter the message of html unfriendly characters
+		var message = data.message
+			.replace(/&/g, "&amp;")
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, "&apos;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;");
+
+		// Create get the time for the timestamp
+		var output = select('#channel-console output'),
+			rawTime = new Date(),
+			scrollInfoView;
+		// Lets format the timestamp
+		var timestamp = ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2);
+
+		// If it's not a message from the server
+		if (data.channel !== "SERVER") {
+			// Lets highlight your nick!
+			var highlightNick = function (name, input) {
+				var exp = new RegExp('\\b(' + name + ')', 'ig');
+				return input.replace(exp, '<span class="highlighted">$1</span>');
+			};
+
+			var i;
+			for (i = 0; i < client.settings.highlights.length; i++) {
+				message = highlightNick(client.settings.highlights[i], message);
+			}
+		}
+
+		// If there is no specified channel just use the one the client is currently focused on
+		if (typeof data.channel === 'undefined') {
+			data.channel = client.networks[connectionId].focusedSource;
+		}
+
+		// If scrolled at the bottom set scrollIntoView as true.
+		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
+			scrollInfoView = true;
+		}
+
+		// Remove the filler message the console
+		output.removeChild(select('article.filler'));
+
+		// Insert message into the console
+		output.insertAdjacentHTML('beforeend', Templates.message.compiled({
+				connectionId: connectionId,
+				source: data.channel.toLowerCase(),
+				type: data.type,
+				timestamp: timestamp,
+				head: data.head,
+				message: message
+			})
+		);
+
+		// console.log(client.networks[connectionId]);
+
+		// Hide messages not from the focused channel
+		[].map.call(selectAll('#channel-console output article:not([data-source="' + client.networks[connectionId].focusedSource + '"])'), function (obj) {
+			obj.style.display = 'none';
+		});
+
+		// Scroll to bottom unless the user is scrolled up
+		if (scrollInfoView) {
+			output.scrollTop = output.scrollHeight;
+		}
 	};
 
 	return module;
@@ -155,27 +226,27 @@ var ConnectToNetwork = (function () {
 	};
 
 	module.prototype.setup = function (data) {
-		var network = data,
-			connectionId = uuid.v4();
+		var connectionId = uuid.v4();
 
 		client.networks[connectionId] = {};
+
+		var network = client.networks[connectionId];
 
 		if (network.realName == "") {
 			network.realName = "MaidIRC";
 		}
 
-		network.highlights = network.nick;
-		// Define other server values
-		network.networkName = "";
-		network.focusedSource = "";
+		network.nick = data.nick;
+		network.highlights = data.nick;
+		// Set default focused source to server.
+		network.focusedSource = "server";
+		network.sources = {};
 
-		client.networks[connectionId] = network;
-
-		this.connect(network, connectionId);
+		this.connect(data, connectionId);
 	};
 
 	module.prototype.connect = function (data, connectionId) {
-		// Send connect info to the back-end
+		// Send connect info to the back-end.
 		this.socket.emit("connectToNetwork", [data, connectionId]);
 	};
 
@@ -278,19 +349,22 @@ var IncomingMessages = (function () {
 				break;
 			case "join":
 				// Make sure the joined channel is in the current saved channel object
-				if (network.channels[data.args[0]] === undefined) {
-					network.channels[data.args[0]] = {};
+				console.log(network)
+				if (network.sources[data.args[0]] === undefined) {
+					network.sources[data.args[0]] = {};
 				}
 
+				console.log("Will it?");
 				// If it's us update the network-bar
-				if (data.nick == client.networks.nick) {
-					this.updateInterface.directory();
+				if (data.nick == network.nick) {
+					console.log("Updating Source List");
+					this.updateInterface.messageSources(connectionId);
 				}
 
 				// If its the focused channel update the userlist
-				if (network.channels[data.args[0]].users !== undefined) {
+				if (network.sources[data.args[0]].users !== undefined) {
 					if (data.args[0] == network.focusedSource || network.focusedSource == "") {
-						this.updateInterface.users(data.args[0]);
+						this.updateInterface.users(data.args[0], connectionId);
 					}
 				}
 
@@ -314,19 +388,20 @@ var IncomingMessages = (function () {
 		}
 
 		if (Object.keys(updateMessage).length !== 0) {
-			this.updateInterface.message(updateMessage);
+			this.updateInterface.message(updateMessage, connectionId);
 		}
 	};
 
-	module.prototype.reply = function (serverId, data) {
-		var updateMessage = {};
+	module.prototype.reply = function (connectionId, data) {
+		var updateMessage = {},
+			network = client.networks[connectionId];
 
 		switch (data.rawCommand) {
 			case "001":
 				client.networks.nick = data.args[0];
 				updateMessage = {
 					type: "rpl_welcome",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
 					message: data.args[1]
@@ -335,7 +410,7 @@ var IncomingMessages = (function () {
 			case "002":
 				updateMessage = {
 					type: "rpl_yourhost",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
 					message: data.args[1]
@@ -344,7 +419,7 @@ var IncomingMessages = (function () {
 			case "003":
 				updateMessage = {
 					type: "rpl_created",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
 					message: data.args[1]
@@ -360,7 +435,7 @@ var IncomingMessages = (function () {
 
 				updateMessage = {
 					type: "rp_myinfo",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
 					message: messages
@@ -382,7 +457,7 @@ var IncomingMessages = (function () {
 			case "251":
 				updateMessage = {
 					type: "rpl_luserclient",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
 					message: data.args[1]
@@ -390,13 +465,13 @@ var IncomingMessages = (function () {
 				break;
 			case "332":
 				// If we dont have the channel stored, lets do that now!
-				if (client.networks.channels[data.args[1]] === undefined) {
-					client.networks.channels[data.args[1]] = {};
+				if (network.sources[data.args[1]] === undefined) {
+					network.sources[data.args[1]] = {};
 				}
 				// Save the topic
-				client.networks.channels[data.args[1]].topic = data.args[2];
+				network.sources[data.args[1]].topic = data.args[2];
 
-				if (client.networks.focusedSource === data.args[1]) {
+				if (network.focusedSource === data.args[1]) {
 					select('#channel-console header input').value = data.args[2];
 				}
 				break;
@@ -404,7 +479,7 @@ var IncomingMessages = (function () {
 				var topicDate = new Date(data.args[3]*1000);
 				updateMessage = {
 					type: "rpl_topicwhotime",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: data.args[1],
 					message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
@@ -417,27 +492,29 @@ var IncomingMessages = (function () {
 					_re = new RegExp("^([+~&@%]*)(.+)$"),
 					_values;
 
-				if (client.networks.channels[_channel] === undefined) {
-					client.networks.channels[_channel] = {};
+				if (network.sources[_channel] === undefined) {
+					network.sources[_channel] = {};
 				}
 
-				client.networks.channels[_channel].users = {};
+				network.sources[_channel].users = {};
 
 				for (var i = _names.length - 1; i >= 0; i--) {
 					if (_names[i] !== "") {
 						_values = _re.exec(_names[i]);
-						client.networks.channels[_channel].users[_values[2]] = _values[1];
+						network.sources[_channel].users[_values[2]] = _values[1];
 					}
 				}
 
-				this.updateInterface.users(_channel);
+				if (network.sources[_channel] == network.focusedSource) {
+					this.updateInterface.users(_channel, connectionId);
+				}
 				break;
 			case "366":
 				break;
 			case "372":
 				updateMessage = {
 					type: "rpl_motd",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
 					message: data.args[1]
@@ -446,7 +523,7 @@ var IncomingMessages = (function () {
 			case "376":
 				updateMessage = {
 					type: "rpl_endofmotd",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
 					message: data.args[1]
@@ -455,7 +532,7 @@ var IncomingMessages = (function () {
 			case "443":
 				updateMessage = {
 					type: "err_nicknameinuse",
-					head: "&gt;",
+					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
 					message: data.args[1] + ": " + data.args[2]
@@ -464,7 +541,7 @@ var IncomingMessages = (function () {
 		}
 
 		if (Object.keys(updateMessage).length !== 0) {
-			this.updateInterface.message(updateMessage);
+			this.updateInterface.message(updateMessage, connectionId);
 		}
 	};
 
