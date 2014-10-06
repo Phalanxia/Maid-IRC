@@ -6,31 +6,14 @@
 @import: "animations";
 
 #login {
-	top: 0;
-	background-color: @lightBlue;
-	&.connected { top: -100%; }
-}
-#login form {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	height: 296px;
+	height: 316px;
 	width: 300px;
-	border-radius: 4px;
-	.transform(translate(-50%,-50%));
-	&.invalid { .animation(loginError .5s ease-in-out); }
-}
-#login form footer.extra {
-	text-align: center;
-	padding-top: 20px;
-}
-#login-basic {
-	width: 300px;
-	height: 276px;
-	padding-top: 20px;
 	background-color: @white;
 	border-radius: 4px;
-	box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+	&.invalid { .animation(loginError .5s ease-in-out); }
+}
+#login-basic {
+	padding-top: 20px;
 	input:not([type="checkbox"]),
 	input:not([name="server"]),
 	input:not([name="port"]) {
@@ -56,16 +39,20 @@
 	}
 }
 #login-basic footer {
-	width: 260px;
+	width: inherit;
 	height: 44px;
-	padding: 20px;
-	background-color: #2d3847;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	// background-color: #2d3847;
 	border-bottom-right-radius: 4px;
 	border-bottom-left-radius: 4px;
+	// Connect button.
 	button:first-child {
 		width: ~"calc(100% - 64px)";
 		height: 44px;
 	}
+	// Advanced Button.
 	button:last-child {
 		width: 44px;
 		height: 44px;

@@ -15,30 +15,21 @@ var client = {
 	},
 
 	networks: {
-		name: "",
-		channels: {},
-		nick: "",
-		channelList: "",
-		focusedChannel: ""
+		focusedServer: ""
 	},
 
 	init: function (connectInfo) {
 		"use strict";
 
-		var socket = io.connect(window.location.origin, {
-			'reconnect': false,
-			'reconnection delay': 500
-		});
-
-		// Send connect info to the backend
-		socket.emit('connectInfo', connectInfo);
-		// Set the clients settings
-		client.networks.nick = connectInfo.nick;
-		client.settings.highlights[0] = client.networks.nick;
+		var socket = io.connect(window.location.origin, { "reconnect": false });
 
 		// Modules
-		var updateInterface = new UpdateInterface();
-		var messaging = new Messaging(socket, updateInterface);
+		var updateInterface = new UpdateInterface(),
+			outgoingMessages = new OutgoingMessages(socket, updateInterface),
+			incomingMessages = new IncomingMessages(socket, updateInterface),
+			connectToNetwork = new ConnectToNetwork(socket, updateInterface);
+
+		connectToNetwork.setup(connectInfo);
 
 		// Respond to pings
 		socket.on('ping', function (data) {
@@ -48,95 +39,52 @@ var client = {
 		// Lets handle all the socket.io stuff here for now. :3
 		socket.on('connect', function () {
 			client.status.connection = true;
-
-			select('#network-panel header span#status').style.backgroundColor = '#3c9067';
-
-			console.log("Connected to backend.");
+			console.log("Connected.");
 		});
 
 		socket.on('disconnect', function () {
 			client.status.connection = false;
 			client.status.pastDisconnect = true;
+			console.log("Lost connection.");
+		});
 
-			select('#network-panel header span#status').style.backgroundColor = "#903c3c";
-
-			console.warn("Lost connection to backend.");
+		// Receive the version number from the server.
+		socket.on('version', function (version) {
+			select("p.version").innerHtml = "Version " + version;
 		});
 
 		// IRC
 		socket.on('raw', function (data) {
-			messaging.recieve(data);
-		});
+			var connectionId = data[0],
+				message = data[1];
 
-		socket.on('updateInfo', function (data) {
-			if ((client.networks.channels[data.channel] === undefined && data.type == "users") || (client.networks.channels[data.channel] == undefined && data.type == "topic") ) {
-				return;
+			if (message.commandType == "normal") {
+				incomingMessages.normal(connectionId, message);
+			} else if (message.commandType == "reply") {
+				incomingMessages.reply(connectionId, message);
 			} else {
-				switch (data.type) {
-					case "channel":
-						if (data.action == "join") {
-							client.networks.channels[data.channel] = data.channelInfo;
-						} else {
-							// If the user parted a channel
-							delete client.networks.channels[data.channel];
-						}
-						updateInterface.directory();
-						break;
-					case "users":
-						if (typeof data.action !== "undefined") {
-							switch (data.action) {
-								case "join":
-									client.networks.channels[data.channel].users = data.users;
-									break;
-								case "part":
-									delete client.networks.channels[data.channel].users[data.nick];
-									break;
-							}
-						} else {
-						}
-
-						console.log(JSON.stringify(client.networks.channels[data.channel].users = data.users));
-						// Update the interface if its the channel the user is focused on.
-						if (client.networks.focusedChannel == data.channel) {
-							updateInterface.users(data.channel);
-						}
-						break;
-					case "topic":
-						client.networks.channels[data.channel].topic = data.topic;
-						// Update the interface if its the channel the user is focused on.
-						if (client.networks.focusedChannel == data.channel) {
-							updateInterface.topic(data.topic);
-						}
-						break;
-				}
+				console.warn("Error: Unknown command type");
 			}
 		});
 
 		// Press enter in chat box
 		select('#channel-console footer input').onkeydown = function (event) {
-			switch (event.which) {
-				case 13: // Enter
-					messaging.send(select('#channel-console footer input').value);
-					break;
+			if (event.which == 13) { // Enter Key
+				messaging.send(select('#channel-console footer input').value);
 			}
 		};
 
 		select('#channel-console footer button').onclick = function () {
 			messaging.send(select('#channel-console footer input').value);
 		};
-
-		select('#network-panel footer > button').onclick = function () {
-			if (!client.away) {
-				select('#network-panel footer > button span').style.backgroundColor = '#908B3C';
-				socket.emit('send', ["away", "", client.settings.awayMessage]);
-			} else {
-				select('#network-panel footer > button span').style.backgroundColor = '#3C9067';
-				socket.emit('send', ["away", "", ""]);
-			}
-
-			client.away = !client.away;
-		};
 	}
+};
+
+var hideModals = function () {
+	select("#pageCover").classList.remove("displayed");
+	[].map.call(selectAll(".modal"), function(obj) {
+		obj.classList.remove("displayed");
+	});
 };
 
 // Handle Login Info
@@ -144,31 +92,32 @@ select('#submit').onclick = function (event) {
 	event.preventDefault();
 
 	var connectInfo = {},
-		name,
 		invalid = false;
 
+	connectInfo = {};
 	[].map.call(selectAll('#login input'), function (obj) {
-		name = obj.name;
-		connectInfo[name] = obj.value;
+		connectInfo[obj.name] = obj.value;
 
+		// If the input is no longer invalid remove the invalid class.
+		if (obj.classList.contains && obj.validity.valid) {
+			obj.classList.remove("invalid");
+		}
+
+		// If the input is invalid add the invalid class to the input.
 		if (!obj.validity.valid) {
+			obj.classList.add("invalid");
 			invalid = true;
 		}
 	});
 
 	if (!invalid) {
 		client.init(connectInfo);
-
-		// Add classes for transition
-		select('#login').classList.add("connected");
-		select('#client').classList.add("connected");
+		hideModals();
 	} else {
-		select('#login form').classList.add("invalid");
+		select('#login').classList.add("invalid");
 
 		setTimeout(function () {
-			select('#login form').classList.remove("invalid");
+			select('#login').classList.remove("invalid");
 		}, 500);
 	}
-
-	event.preventDefault();
 };
