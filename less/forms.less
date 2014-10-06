@@ -16,31 +16,37 @@ input:-ms-input-placeholder {
 }
 // Change placeholder text color on focus
 input:focus::-webkit-input-placeholder {
-	color: @white;
+	color: #1b1b1b;
 }
 input:focus:-moz-placeholder {
-	color: @white;
+	color: #1b1b1b;
 }
 input:focus::-moz-placeholder {
-	color: @white;
+	color: #1b1b1b;
 }
 input:focus:-ms-input-placeholder {
-	color: @white;
+	color: #1b1b1b;
 }
 // Inputs
 input {
-	background-color: @lightestBlue;
+	// background-color: @lightestBlue;
+	background-color: @lightGrey;
 	padding: 0 20px;
 	font-size: 14px;
 	line-height: 20px;
 	color: #1b1b1b;
 	border: 0;
 	border-radius: 2px;
+	box-shadow: inset 0 -1px 0 0 @lightestBlue;
 	.transition(all ease-in-out .15s);
 	&:focus {
-		color: @white;
-		background-color: @lightBlue;
+		background-color: @lightestBlue;
+		box-shadow: none;
 	}
+}
+input.invalid {
+	box-shadow: inset 0 -1px 0 0 @red;
+
 }
 input[type="checkbox"] {
 	display: block;
@@ -80,4 +86,16 @@ input[type="checkbox"] {
 		}
 	}
 	&:hover { cursor: pointer; }
+}
+header input::-webkit-input-placeholder {
+	color: @white;
+}
+header input:-moz-placeholder {
+	color: @white;
+}
+header input::-moz-placeholder {
+	color: @white;
+}
+header input:-ms-input-placeholder {
+	color: @white;
 }

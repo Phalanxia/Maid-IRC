@@ -14,11 +14,13 @@
 @import "modals";
 @import "forms";
 @import "panels";
-// Big
-@import "login";
-@import "network-panel";
-@import "channel-console";
-@import "users";
+// Modals
+@import "modal-connect";
+@import "modal-settings";
+// Panels
+@import "panel-networks";
+@import "panel-console";
+@import "panel-users";
 
 html {
 	width: 100%;
@@ -36,20 +38,8 @@ body {
 	background: @lightestBlue;
 	overflow: hidden;
 }
-#login,
 #client {
-	position: absolute;
+	display: flex;
 	height: 100%;
 	width: 100%;
-	&.connected { .transition(all .8s ease-in-out); }
-}
-#client {
-	// display: none;
-	top: 100%;
-	display: inherit;
-	opacity: 0;
-	&.connected {
-		top: 0;
-		opacity: 1;
-	}
 }

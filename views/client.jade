@@ -26,16 +26,45 @@ html(lang='en')
 		meta(name='msapplication-TileImage', content='img/icons/mstile-144x144.png')
 		meta(name='msapplication-config', content='img/icons/browserconfig.xml')
 		// CSS
-		link(rel='stylesheet', href='css/n-client.css', type='text/css')
+		link(rel='stylesheet', href='css/client.css', type='text/css')
 	body
-		// Login
-		#login
+		#pageCover.displayed
+		// Client
+		#client
+			.panel#network-panel
+				header
+					h1
+						span Maid
+						| IRC
+					span#status
+					button.fa.fa-cog
+				ul.message-source-list
+				footer
+					button.btn.fa.fa-plus
+			.panel#channel-console
+				header
+					input(type='text')
+				output
+					article.filler
+						div
+				footer
+					input(type='text')
+					button.btn(type='button') Send
+			.panel#users
+				header
+					p
+				ul
+		// Modals
+		.modal.displayed#login
+			header
+				h1 Connect
+				button(type='button') &times;
 			form(method='post')
 				#login-basic
 					input#name(type='text', placeholder='Nickname', name='nick', spellcheck="false", autofocus, required)
 					section
 						input#server(type='text', placeholder='Server', name='server', spellcheck="false", required)
-						input#port(type='number', placeholder='Port', name='port', maxlength='4', max="9999")
+						input#port(type='number', placeholder='Port', name='port', maxlength='4', max="9999" required)
 					input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
 					footer
 						button.btn#submit(type='submit', name='connect') Connect
@@ -45,42 +74,7 @@ html(lang='en')
 					input#realName(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
 					input#ssl(type='checkbox', name='ssl', tabIndex='-1')
 					span.checkboxLabel SSL
-
-		// Client
-		#client
-			.panel#network-panel
-				header
-					h1
-						span Maid
-						| IRC
-					span#status
-					button.fa.fa-navicon
-					ul
-						li.fa.fa-cog
-						li.fa.fa-sign-out
-				ul#channel-list
-				footer
-					button
-						span
-					input(value=name)
-			.panel#channel-console
-				header
-					input(type='text', placeholder='Topic')
-				output
-					article.filler
-						div
-				footer
-					input(type='text')
-					button.btn.btn--dark(type='button') Send
-			.panel#users
-				header
-					p
-				ul
-				footer
-
-		// Modals
-		#pageCover
-		#settings.modal
+		.modal#settings
 			header
 				h1 Settings
 				button(type='button') &times;
@@ -96,12 +90,12 @@ html(lang='en')
 			.page#about
 				h1 Maid
 					span IRC
-				p Version 0.0.12
+				p.version Version 0.0.12
 				a(href='https://github.com/Phalanxia/Maid-IRC', target='_blank') GitHub
 				a(href='https://github.com/Phalanxia/Maid-IRC/issues', target='_blank') Report an issue
 				a(href='https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/LICENSE', target='_blank') License
 				include ./includes/licenses.jade
-		#shutdown.modal.alert
+		.modal.alert#shutdown
 			p Are you sure you want to shutdown?
 			footer
 				button.fa.fa-times(type='button')
@@ -109,6 +103,7 @@ html(lang='en')
 
 	script(src='//cdn.socket.io/socket.io-1.0.0.js')
 	script(src='js/lib/handlebars.min.js')
+	script(src='js/lib/uuid.js')
 	script(src='js/templates.js')
 	script(src='js/modules.js')
 	script(src='js/client.js')

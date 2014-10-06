@@ -4,8 +4,7 @@
 #users {
 	width: 200px;
 	height: 100%;
-	// background-color: rgb(237,237,246);
-	// background-color: #f2f2f2;
+
 	background-color: @brightOffWhite;
 	-webkit-user-select: none;
 	   -moz-user-select: none;
@@ -13,13 +12,14 @@
 	flex: 0 0 auto;
 	order: 2;
 }
+#users header { box-shadow: inset 1px 0 0 0px fadeout(@darkBlue, 90%) }
 #users header p {
 	width: inherit;
 	padding: 0;
 	margin: 0;
 	font-size: 14px;
 	line-height: 40px;
-	color: @lightGrey;
+	color: @grey;
 	text-align: center;
 }
 #users ul {
@@ -63,6 +63,7 @@
 	color: @darkBlue;
 }
 #users footer {
+	display: none;
 	height: 40px;
 	border-left: 1px solid #d1d1d1;
 	flex: 0 1 auto;

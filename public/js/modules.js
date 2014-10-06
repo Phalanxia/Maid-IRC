@@ -3,122 +3,85 @@ var UpdateInterface = (function () {
 
 	var module = function () {};
 
-	// Update channel/PM user list
-	module.prototype.directory = function () {
-		var channelList = Object.keys(client.networks.channels);
-
+	// Update
+	module.prototype.messageSources = function () {
 		// Remove all the current items in the list
 		[].map.call(selectAll('#network-panel > ul'), function (obj) {
 			obj.parentNode.removeChild(obj);
 		});
 
+		// Render the template
 		select('#network-panel header').insertAdjacentHTML('afterend', Templates.messageSource.compiled({
 				serverName: client.networks.name || "Server",
-				channels: client.networks.channels
+				channels: client.networks.channels,
+				serverid: ""
 			})
 		);
 
 		// Now lets update the navigation for the directory.
-		function buildIt (i) {
-			client.networks.focusedChannel = channelList[i].toLowerCase();
+		function navigation (element) {
+			var serverId = element.getAttribute("data-server-id").toLowerCase(),
+				source = element.getAttribute("data-value").toLowerCase();
 
-			if (typeof client.networks.channels[channelList[i]].topic !== "undefined") {
-				select('#channel-console header input').value = client.networks.channels[channelList[i]].topic;
-			} else {
-				select('#channel-console header input').value = '';
+			// If you're already viewing it, there's no point in this so lets do nothing
+			if (source == client.networks.focusedSource) {
+				return;
 			}
 
-			[].map.call(selectAll('#network-panel > ul li'), function (obj) {
-				obj.classList.remove('focusedChannel');
+			client.networks.focusedServer = serverId;
+			client.networks.focusedSource = source;
+
+			var sourceList = selectAll('.message-source-list li');
+			// Reset focuseed source class
+			[].map.call(sourceList, function (obj) {
+				obj.classList.remove('focusedSource');
 			});
 
-			select('#network-panel > ul li:nth-of-type(' + (i+=1) + ')').classList.add('focusedChannel');
+			switch (element.className) {
+				case "channel":
+					var channel = client.networks.channels[source];
+
+					if (typeof channel.topic !== "undefined") {
+						select('#channel-console header input').value = channel.topic;
+					} else {
+						select('#channel-console header input').value = '';
+					}
+					break;
+				case "pm":
+					select('#channel-console header input').value = 'Private Message';
+					break;
+				case "network":
+					select('#channel-console header input').value = "Server";
+					// TODO: Get the server name based off the ID
+					break;
+			}
+
+			// Update Displayed
+
+			select(sourceList + ':nth-of-type(' + (parseFloat(element.getAttribute(data-number))+=1) + ')').classList.add('focusedSource');
 			select('#users ul').innerHTML = '';
 
 			// Show messages that are from the focused channel.
-			[].map.call(selectAll('#channel-console output article[data-channel="' + client.networks.focusedChannel + '"]'), function (obj) {
+			[].map.call(selectAll('#channel-console output article[data-source="' + client.networks.focusedSource + '"]'), function (obj) {
 				obj.style.display = '';
 			});
 
 			// Hide messages that are not from the focused channel.
-			[].map.call(selectAll('#channel-console output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
+			[].map.call(selectAll('#channel-console output article:not([data-source="' + client.networks.focusedSource + '"])'), function (obj) {
 				obj.style.display = 'none';
 			});
 		}
 
-		var items = select('#network-panel > ul').getElementsByTagName('li');
-
-		var i;
-		for (i = 0; i < items.length; i++) {
-			items[i].i = i;
-			items[i].onclick = buildIt(i);
-		}
-	};
-
-	// Update console
-	module.prototype.message = function (data) {
-		// console.log("New Message:" + JSON.stringify(data));
-		// Filter the message of html unfriendly characters
-		var message = data.message
-			.replace(/&/g, "&amp;")
-			.replace(/"/g, '&quot;')
-			.replace(/'/g, "&apos;")
-			.replace(/</g, "&lt;")
-			.replace(/>/g, "&gt;");
-
-		// Create get the time for the timestamp
-		var output = select('#channel-console output'),
-			rawTime = new Date(),
-			scrollInfoView; // And this variable for later
-		// Lets format the timestamp
-		var timestamp = ("0" + rawTime.getHours()).slice(-2) + ":" + ("0" + rawTime.getMinutes()).slice(-2) + ":" + ("0" + rawTime.getSeconds()).slice(-2);
-
-		// If it's not a message from the server
-		if (data.channel !== "SERVER") {
-			// Lets highlight your nick!
-			var highlightNick = function (name, input) {
-				var exp = new RegExp('\\b(' + name + ')', 'ig');
-				return input.replace(exp, '<span class="highlighted">$1</span>');
-			};
-
-			var i;
-			for (i = 0; i < client.settings.highlights.length; i++) {
-				message = highlightNick(client.settings.highlights[i], message);
-			}
-		}
-
-		// If there is no specified channel just use the one the client is currently focused on
-		if (typeof data.channel === 'undefined') {
-			data.channel = client.networks.focusedChannel;
-		}
-
-		// If scrolled at the bottom set scrollIntoView as true.
-		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
-			scrollInfoView = true;
-		}
-
-		output.removeChild(select('#channel-console output .filler'));
-		output.insertAdjacentHTML('beforeend', '<article class="consoleMessage" data-messageType="' + data.type + '" data-channel="' + data.channel.toLowerCase() + '"><aside><time>' + timestamp + '</time><span> ' + data.head + '</span></aside><p>' + message + '</p></article><article class="filler"><div></div></article>');
-
-
-		// Hide messages not from the focused channel
-		[].map.call(selectAll('#channel-console output article:not([data-channel="' + client.networks.focusedChannel + '"])'), function (obj) {
-			obj.style.display = 'none';
+		[].map.call(sourceList, function (obj) {
+			obj.onclick = navigation(obj);
 		});
-
-		// Scroll to bottom unless the user is scrolled up
-		if (scrollInfoView) {
-			output.scrollTop = output.scrollHeight;
-		}
 	};
 
 	// Update topic
 	module.prototype.topic = function (topic) {
-		topic = topic || '';
-		select('#channel-console header input').value = topic;
+		select('#channel-console header input').value = topic || '';
 	};
 
-	// Update users
 	module.prototype.users = function (channel) {
 		// Clear interface.
 		select('#users > ul').innerHTML = '';
@@ -177,10 +140,13 @@ var UpdateInterface = (function () {
 		select('#users header p').innerHTML = _userList.length + " users";
 	};
 
+	module.prototype.message = function (data) {
+	};
+
 	return module;
 })();
 
-var Messaging = (function () {
+var ConnectToNetwork = (function () {
 	"use strict";
 
 	var module = function (socket, updateInterface) {
@@ -188,319 +154,317 @@ var Messaging = (function () {
 		this.updateInterface = updateInterface;
 	};
 
-	// Update channel/PM user list
-	module.prototype.send = function (data) {
-		if (data === '') {
-			return;
-		} else if (data.substring(0, 1) != "/") {
-			// It's not a command.
-			this.socket.emit('send', ["PRIVMSG", client.networks.focusedChannel, data]);
-			// Display it in the client.
-			this.updateInterface.message({
-				type: "PRIVMSG",
-				head: client.networks.nick,
-				nick: client.networks.nick,
-				channel: client.networks.focusedChannel,
-				message: data
-			});
-		} else {
-			// It's a command.
-			data = data.substring(1, data.length);
+	module.prototype.setup = function (data) {
+		var network = data,
+			connectionId = uuid.v4();
 
-			var _command = data.split(" ")[0],
-				_message = data.substring(_command.length + 1, data.length),
-				_commandList = ['me', 'join', 'part', 'whois', 'notice', 'away', 'topic'],
-				_commandFound = false,
-				_focusedChannel = client.networks.focusedChannel;
+		client.networks[connectionId] = {};
 
-			// Check to see if the command is in commandList.
-			for (var i = 0; i < _commandList.length && !_commandFound; i++) {
-				if (_commandList[i] == _command.toLowerCase()) {
-					_commandFound = true;
-				}
-			}
-
-			// It's not a special command that we need to do amazing things with. Display it and send it to the server.
-			if (!_commandFound) {
-				this.updateInterface.message({
-					type: "PRIVMSG",
-					head: "&gt;",
-					nick: "COMMAND",
-					channel: _focusedChannel,
-					message: data
-				});
-				return;
-			}
-
-			switch (_command) {
-				case "me":
-					this.socket.emit('send', ["ACTION", _focusedChannel, _message]);
-					this.updateInterface.message({
-						type: "ACTION",
-						head: "&raquo;",
-						nick: "COMMAND",
-						channel: _focusedChannel,
-						message: client.networks.nick + " " + _message
-					});
-					break;
-				case "join":
-					this.socket.emit('send', ["JOIN", "", _message]);
-					break;
-				case "part":
-					var _channels = _message.split(" ");
-					for (var i = 0; i < _channels.length; i+=1) {
-						this.socket.emit('sendCommand', {
-							type: "part",
-							channels: _channels[i]
-						});
-					}
-					break;
-				case "notice":
-					this.socket.emit('sendCommand', {
-						type: "notice",
-						channel: _focusedChannel,
-						message: _message
-					});
-					this.updateInterface.message("notice", "-" + client.networks.nick + "-", _focusedChannel, client.networks.nick + " " + _message);
-					break;
-				case "away":
-					this.socket.emit('sendCommand', {
-						type: "away",
-						message: _message
-					});
-					break;
-				case "help":
-					this.socket.emit('sendCommand', {
-						type: "help",
-						message: _message
-					});
-					break;
-				case "topic":
-					if (_message.split(" ")[0].charAt(0) === "#") {
-						this.socket.emit('sendCommand', {
-							type: "topic",
-							channel: _message.split(" ")[0],
-							message: _message.substring(_message.split(" ")[0].length+1)
-						});
-					} else {
-						this.socket.emit('sendCommand', {
-							type: "topic",
-							channel: _focusedChannel,
-							message: _message
-						});
-					}
-					break;
-			}
+		if (network.realName == "") {
+			network.realName = "MaidIRC";
 		}
 
-		select('#channel-console footer input').value = "";
+		network.highlights = network.nick;
+		// Define other server values
+		network.networkName = "";
+		network.focusedSource = "";
+
+		client.networks[connectionId] = network;
+
+		this.connect(network, connectionId);
 	};
 
-	module.prototype.recieve = function (data) {
-		if (data.commandType == "normal") {
-			switch (data.command.toLowerCase()) {
-				// Commands
-				case "ping":
-					break;
-				case "privmsg":
-					this.updateInterface.message({
-						type: "privmsg",
-						head: data.nick,
-						nick: data.nick,
-						channel: data.args[0],
-						message: data.args[1]
-					});
-					break;
-				case "notice":
-					this.updateInterface.message({
-						type: "notice",
-						head: data.nick,
-						nick: data.nick,
-						channel: data.args[0],
-						message: data.args[1]
-					});
-					break;
-				case "mode":
-					break;
-				case "join":
-					// Make sure the joined channel is in the current saved channel object
-					if (client.networks.channels[data.args[0]] === undefined) {
-						client.networks.channels[data.args[0]] = {};
-					}
+	module.prototype.connect = function (data, connectionId) {
+		// Send connect info to the back-end
+		this.socket.emit("connectToNetwork", [data, connectionId]);
+	};
 
-					// If it's us update the network-bar
-					if (data.nick == client.networks.nick) {
-						this.updateInterface.directory();
-					}
+	return module;
+})();
 
-					// If its the focused channel update the userlist
-					if (client.networks.channels[data.args[0]].users !== undefined) {
-						if (data.args[0] == client.networks.focusedChannel || client.networks.focusedChannel == "") {
-							this.updateInterface.users(data.args[0]);
-						}
-					}
+var OutgoingMessages = (function () {
+	"use strict";
 
-					// Add the join message to the console
-					this.updateInterface.message({
-						type: "join",
-						head: data.nick,
-						nick: data.nick,
-						channel: data.args[0],
-						message: data.nick + " (" + data.prefix + ") has joined " + data.args[0]
-					});
-					break;
-				case "part":
-					break;
-				case "quit":
-					break;
-				case "nick":
-					break;
-				default:
+	var module = function (socket, updateInterface) {
+		this.socket = socket;
+		this.updateInterface = updateInterface;
+	};
+
+	module.prototype.filtering = function (data) {
+	};
+
+	module.prototype.command = function (data) {
+		// If it's empty then lets just not do this okay
+		if (data === '') {
+			return;
+		}
+
+		// List of supported commands.
+		var commands = [
+			'me',
+			'join',
+			'part',
+			'whois',
+			'notice',
+			'away',
+			'topic'
+		],
+		message = data.substring(data.split(" ")[0].length + 1, data.length),
+		command = data.split(" ")[0];
+
+		// If it's a supported command.
+		if (commands.indexOf(command)) {
+			// Depending on the command, lets do someething.
+			switch (command) {
+				case "":
 					break;
 			}
-		} else if (data.commandType === "reply") {
-			switch (data.rawCommand) {
-				// Numerics
-				case "001":
-					client.networks.nick = data.args[0];
-					this.updateInterface.message({
-						type: "rpl_welcome",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: "SERVER",
-						message: data.args[1]
-					});
-					break;
-				case "002":
-					this.updateInterface.message({
-						type: "rpl_yourhost",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: "SERVER",
-						message: data.args[1]
-					});
-					break;
-				case "003":
-					this.updateInterface.message({
-						type: "rpl_created",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: "SERVER",
-						message: data.args[1]
-					});
-					break;
-				case "004":
-					var messages,
-						k;
+		} else {
+			// It's not a special command that we need to do amazing things with. Display it and send it to the server raw.
+			this.socket.emit("send-raw", message);
+		}
 
-					for (k in data.args) {
-						messages = k + " "; // I think this should work?
+	};
+
+	module.prototype.send = function (data) {
+		if (data.substring(0, 1) == "/" && data.substring(0, 2) != "//") { // Check if it's a command.
+			// Remove the / from thee message, it's not needed any more!
+			data = data.substring(1, data.length);
+			// Send it to the command handler.
+			this.command(data);
+		} else {
+			// Normal Message
+		}
+	};
+
+	return module;
+})();
+
+var IncomingMessages = (function () {
+	"use strict";
+
+	var module = function (socket, updateInterface) {
+		this.socket = socket;
+		this.updateInterface = updateInterface;
+	};
+
+	module.prototype.normal = function (connectionId, data) {
+		var updateMessage = {},
+			network = client.networks[connectionId];
+
+		switch (data.command.toLowerCase()) {
+			// Commands
+			case "ping":
+				break;
+			case "privmsg":
+				updateMessage = {
+					type: "privmsg",
+					head: data.nick,
+					nick: data.nick,
+					channel: data.args[0],
+					message: data.args[1]
+				};
+				break;
+			case "notice":
+				updateMessage = {
+					type: "notice",
+					head: data.nick,
+					nick: data.nick,
+					channel: data.args[0],
+					message: data.args[1]
+				};
+				break;
+			case "mode":
+				break;
+			case "join":
+				// Make sure the joined channel is in the current saved channel object
+				if (network.channels[data.args[0]] === undefined) {
+					network.channels[data.args[0]] = {};
+				}
+
+				// If it's us update the network-bar
+				if (data.nick == client.networks.nick) {
+					this.updateInterface.directory();
+				}
+
+				// If its the focused channel update the userlist
+				if (network.channels[data.args[0]].users !== undefined) {
+					if (data.args[0] == network.focusedSource || network.focusedSource == "") {
+						this.updateInterface.users(data.args[0]);
 					}
+				}
 
-					this.updateInterface.message({
-						type: "rp_myinfo",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: "SERVER",
-						message: messages
-					});
-					break;
-				case "005":
-					var networkName = data.args[9].split("NETWORK=");
+				// Add the join message to the console
+				updateMessage = {
+					type: "join",
+					head: data.nick,
+					nick: data.nick,
+					channel: data.args[0],
+					message: data.nick + " (" + data.prefix + ") has joined " + data.args[0]
+				};
+				break;
+			case "part":
+				break;
+			case "quit":
+				break;
+			case "nick":
+				break;
+			default:
+				break;
+		}
 
-					if (networkName.length > 1) {
-						if (typeof networkName !== undefined) {
-							select('#network-panel ul h2').innerHTML = networkName[1];
-							client.networks.name = networkName[1];
-						} else {
-							select('#network-panel ul h2').innerHTML = data.server;
-							client.networks.name = data.server;
-						}
+		if (Object.keys(updateMessage).length !== 0) {
+			this.updateInterface.message(updateMessage);
+		}
+	};
+
+	module.prototype.reply = function (serverId, data) {
+		var updateMessage = {};
+
+		switch (data.rawCommand) {
+			case "001":
+				client.networks.nick = data.args[0];
+				updateMessage = {
+					type: "rpl_welcome",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1]
+				};
+				break;
+			case "002":
+				updateMessage = {
+					type: "rpl_yourhost",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1]
+				};
+				break;
+			case "003":
+				updateMessage = {
+					type: "rpl_created",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1]
+				};
+				break;
+			case "004":
+				var messages,
+					k;
+
+				for (k in data.args) {
+					messages = k + " "; // I think this should work?
+				}
+
+				updateMessage = {
+					type: "rp_myinfo",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: messages
+				};
+				break;
+			case "005":
+				var networkName = data.args[9].split("NETWORK=");
+
+				if (networkName.length > 1) {
+					if (typeof networkName !== undefined) {
+						// select('#network-panel ul h2').innerHTML = networkName[1];
+						client.networks.name = networkName[1];
+					} else {
+						// select('#network-panel ul h2').innerHTML = data.server;
+						client.networks.name = data.server;
 					}
-					break;
-				case "251":
-					this.updateInterface.message({
-						type: "rpl_luserclient",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: "SERVER",
-						message: data.args[1]
-					});
-					break;
-				case "332":
-					// If we dont have the channel stored, lets do that now!
-					if (client.networks.channels[data.args[1]] === undefined) {
-						client.networks.channels[data.args[1]] = {};
+				}
+				break;
+			case "251":
+				updateMessage = {
+					type: "rpl_luserclient",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1]
+				};
+				break;
+			case "332":
+				// If we dont have the channel stored, lets do that now!
+				if (client.networks.channels[data.args[1]] === undefined) {
+					client.networks.channels[data.args[1]] = {};
+				}
+				// Save the topic
+				client.networks.channels[data.args[1]].topic = data.args[2];
+
+				if (client.networks.focusedSource === data.args[1]) {
+					select('#channel-console header input').value = data.args[2];
+				}
+				break;
+			case "333":
+				var topicDate = new Date(data.args[3]*1000);
+				updateMessage = {
+					type: "rpl_topicwhotime",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: data.args[1],
+					message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
+				};
+				break;
+			case "353":
+				// Build the user list and set the joined channels
+				var _channel = data.args[2],
+					_names = data.args[3].split(" "),
+					_re = new RegExp("^([+~&@%]*)(.+)$"),
+					_values;
+
+				if (client.networks.channels[_channel] === undefined) {
+					client.networks.channels[_channel] = {};
+				}
+
+				client.networks.channels[_channel].users = {};
+
+				for (var i = _names.length - 1; i >= 0; i--) {
+					if (_names[i] !== "") {
+						_values = _re.exec(_names[i]);
+						client.networks.channels[_channel].users[_values[2]] = _values[1];
 					}
-					// Save the topic
-					client.networks.channels[data.args[1]].topic = data.args[2];
+				}
 
-					if (client.focusedChannel === data.args[1]) {
-						select('#channel-console header input').value = data.args[2];
-					}
-					break;
-				case "333":
-					var topicDate = new Date(data.args[3]*1000);
-					this.updateInterface.message({
-						type: "rpl_topicwhotime",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: data.args[1],
-						message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
-					});
-					break;
-				case "353":
-					// Build the user list and set the joined channels
-					var _channel = data.args[2],
-						_names = data.args[3].split(" "),
-						_re = new RegExp("^([+~&@%]*)(.+)$"),
-						_values;
+				this.updateInterface.users(_channel);
+				break;
+			case "366":
+				break;
+			case "372":
+				updateMessage = {
+					type: "rpl_motd",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1]
+				};
+				break;
+			case "376":
+				updateMessage = {
+					type: "rpl_endofmotd",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1]
+				};
+				break;
+			case "443":
+				updateMessage = {
+					type: "err_nicknameinuse",
+					head: "&gt;",
+					nick: "SERVER",
+					channel: "SERVER",
+					message: data.args[1] + ": " + data.args[2]
+				};
+				break;
+		}
 
-					if (client.networks.channels[_channel] === undefined) {
-						client.networks.channels[_channel] = {};
-					}
-
-					client.networks.channels[_channel].users = {};
-
-					for (var i = _names.length - 1; i >= 0; i--) {
-						if (_names[i] !== "") {
-							_values = _re.exec(_names[i]);
-							client.networks.channels[_channel].users[_values[2]] = _values[1];
-						}
-					}
-
-					this.updateInterface.users(_channel);
-					break;
-				case "366":
-					break;
-				case "372":
-					this.updateInterface.message({
-						type: "rpl_motd",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: "SERVER",
-						message: data.args[1]
-					});
-					break;
-				case "376":
-					this.updateInterface.message({
-						type: "rpl_endofmotd",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: "SERVER",
-						message: data.args[1]
-					});
-					break;
-				case "443":
-					this.updateInterface.message({
-						type: "err_nicknameinuse",
-						head: "&gt;",
-						nick: "SERVER",
-						channel: "SERVER",
-						message: data.args[1] + ": " + data.args[2]
-					});
-					break;
-			}
+		if (Object.keys(updateMessage).length !== 0) {
+			this.updateInterface.message(updateMessage);
 		}
 	};
 

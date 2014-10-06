@@ -18,15 +18,16 @@
 }
 #channel-console header input {
 	width: 100%;
-	height: 30px;
+	height: 28px;
+	margin: 6px 0;
 	padding: 0 8px;
-	margin: 5px 0;
-	font-size: 14px;
-	line-height: 17px;
-	color: @darkBlue;
-	background-color: #fafafa;
+	font-size: 16px;
+	line-height: 28px;
+	color: @white;
+	background-color: transparent;
 	border: none;
 	border-radius: 4px;
+	box-shadow: none;
 	flex: 1 1 auto;
 	order: 0;
 }
@@ -38,7 +39,7 @@
 	flex: 1 1 auto;
 	order: 1;
 	flex-direction: column;
-	background: #fafafa;
+	background: @lightGrey;
 	// Until I can find a monospace version of opensans
 	font-family: Monaco, Consolas, "Lucida Console", monospace;
 }
@@ -120,6 +121,7 @@
 	padding: 0 5px;
 	background-color: #fff;
 	border: none;
+	box-shadow: none;
 	color: @darkBlue;
 	font-size: 16px;
 	line-height: 16px;
