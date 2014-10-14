@@ -49,43 +49,43 @@
 	width: 100%;
 	line-height: 25px;
 	flex: 0 0 auto;
-	&:hover { background-color: @white-3; }
-	aside {
+	&:hover { background-color: @white-2; }
+}
+#channel-console output article aside {
+	float: left;
+	width: 200px;
+	height: 100%;
+	min-width: 20px;
+	margin: 0 8px 0 0;
+	line-height: 24px;
+	time {
 		float: left;
-		width: 200px;
-		height: 100%;
-		min-width: 20px;
-		margin: 0 8px 0 0;
-		line-height: 24px;
-		time {
-			float: left;
-			width: 80px;
-			font-size: 14px;
-			color: @f-grey;
-			text-align: center;
-		}
-		span {
-			float: right;
-			padding: 0 8px 0 0;
-			font-size: 14px;
-			color: @lightBlue;
-		}
-	}
-	p {
-		padding: 0 8px;
-		margin: 0 0 0 200px;
+		width: 80px;
 		font-size: 14px;
-		line-height: 24px;
-		color: @darkBlue;
-		word-wrap: break-word;
-		white-space: pre-wrap;
-		border-left: 1px solid @white-4;
-		.highlighted {
-			padding: 2px;
-			color: @white;
-			background-color: @lightBlue;
-			border-radius: 2px;
-		}
+		color: @f-grey;
+		text-align: center;
+	}
+	span {
+		float: right;
+		padding: 0 8px 0 0;
+		font-size: 14px;
+		color: @lightBlue;
+	}
+}
+#channel-console output article p {
+	padding: 0 8px;
+	margin: 0 0 0 200px;
+	font-size: 14px;
+	line-height: 24px;
+	color: @darkBlue;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	border-left: 1px solid @white-4;
+	.highlighted {
+		padding: 2px;
+		color: @white;
+		background-color: @lightBlue;
+		border-radius: 2px;
 	}
 }
 .filler {

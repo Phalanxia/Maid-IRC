@@ -48,11 +48,6 @@ var client = {
 			console.log("Lost connection.");
 		});
 
-		// Receive the version number from the server.
-		socket.on('version', function (version) {
-			select("p.version").innerHtml = "Version " + version;
-		});
-
 		// IRC
 		socket.on('raw', function (data) {
 			console.log(data[1]); // For testing.
