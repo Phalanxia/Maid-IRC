@@ -4,8 +4,7 @@
 #users {
 	width: 200px;
 	height: 100%;
-
-	background-color: @brightOffWhite;
+	background-color: @white-2;
 	-webkit-user-select: none;
 	   -moz-user-select: none;
 			user-select: none;
@@ -19,7 +18,7 @@
 	margin: 0;
 	font-size: 14px;
 	line-height: 40px;
-	color: @grey;
+	color: @white-1;
 	text-align: center;
 }
 #users ul {
@@ -30,7 +29,7 @@
 	overflow-y: scroll;
 	overflow-x: hide;
 	list-style: none;
-	border-left: 1px solid #d1d1d1;
+	border-left: 1px solid @white-4;
 	flex: 1 1 auto;
 	order: 1;
 }
@@ -40,7 +39,7 @@
 	.transition(background-color .1s ease-in-out);
 	&:hover {
 		cursor: pointer;
-		background-color: darken(@brightOffWhite,4%);
+		background-color: darken(@white-2,4%);
 	}
 	&:after {
 		content: attr(data-rank-icon);
@@ -52,7 +51,7 @@
 	}
 	&:hover:after {
 		content: attr(data-rank);
-		font-family: 'Open Sans',Helvetica,sans-serif;
+		font-family: 'Open Sans', Helvetica, sans-serif;
 	}
 }
 #users ul li p {

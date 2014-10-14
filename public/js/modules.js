@@ -19,7 +19,8 @@ var UpdateInterface = (function () {
 			})
 		);
 
-		var network = client.networks[connectionId];
+		var network = client.networks[connectionId],
+			sourceList = selectAll('.message-source-list li');
 
 		// Now lets update the navigation for the directory.
 		function navigation (element) {
@@ -34,7 +35,6 @@ var UpdateInterface = (function () {
 			client.networks.focusedServer = serverId;
 			client.networks.focusedSource = source;
 
-			var sourceList = selectAll('.message-source-list li');
 			// Reset focuseed source class
 			[].map.call(sourceList, function (obj) {
 				obj.classList.remove('focusedSource');
@@ -349,12 +349,10 @@ var IncomingMessages = (function () {
 				break;
 			case "join":
 				// Make sure the joined channel is in the current saved channel object
-				console.log(network)
 				if (network.sources[data.args[0]] === undefined) {
 					network.sources[data.args[0]] = {};
 				}
 
-				console.log("Will it?");
 				// If it's us update the network-bar
 				if (data.nick == network.nick) {
 					console.log("Updating Source List");

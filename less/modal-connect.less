@@ -5,14 +5,14 @@
 @import: "polyfills";
 @import: "animations";
 
-#login {
+#connect {
 	height: 316px;
 	width: 300px;
 	background-color: @white;
 	border-radius: 4px;
 	&.invalid { .animation(loginError .5s ease-in-out); }
 }
-#login-basic {
+#connect-basic {
 	padding-top: 20px;
 	input:not([type="checkbox"]),
 	input:not([name="server"]),
@@ -38,7 +38,7 @@
 		border-top-left-radius: 0;
 	}
 }
-#login-basic footer {
+#connect-basic footer {
 	width: inherit;
 	height: 44px;
 	padding-right: 20px;
@@ -59,7 +59,7 @@
 		margin-left: 20px;
 	}
 }
-#login-advanced {
+#connect-advanced {
 	position: absolute;
 	display: none;
 	// display: block;
@@ -69,7 +69,7 @@
 	padding-top: 20px;
 	background-color: @white;
 	border-radius: 4px;
-	box-shadow: 5px 5px 0px rgba(0,0,0,0.2), inset 6px 0 8px -4px @offWhite;
+	box-shadow: 5px 5px 0px rgba(0,0,0,0.2), inset 6px 0 8px -4px @white-3;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	input:not([type="checkbox"]) {
