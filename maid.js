@@ -1,4 +1,14 @@
-var env = process.env.NODE_ENV || 'production';
+var parsed,
+	argEnv;
+
+process.argv.forEach(function (val, index) {
+	parsed = val.split("=");
+	if (parsed[0] == "env") {
+		argEnv = parsed[1];
+	}
+});
+
+var env = process.env.NODE_ENV || argEnv || 'production';
 
 console.log("Starting Maid IRC.\nEnvironment: " + env);
 
@@ -7,6 +17,7 @@ if (["production", "development", "debug"].indexOf(env.toLowerCase()) < 0) {
 	console.warn('Sorry! NODE_ENV: "' + env + '" is not recognized. Try "development" or "production".');
 }
 
+// Requirements
 var http = require("http"),
 	express = require("express"),
 	fs = require("fs"),

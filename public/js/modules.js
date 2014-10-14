@@ -60,8 +60,8 @@ var UpdateInterface = (function () {
 			}
 
 			// Update Displayed
-
-			select(sourceList + ':nth-of-type(' + (parseFloat(element.getAttribute(data-number))+=1) + ')').classList.add('focusedSource');
+			select(sourceList + ':nth-of-type(' + parseFloat(element.getAttribute("data-number")) + ')').classList.add('focusedSource');
+			// select(sourceList + ':nth-of-type(' + (parseFloat(element.getAttribute("data-number")) + 1) + ')').classList.add('focusedSource');
 			select('#users ul').innerHTML = '';
 
 			// Show messages that are from the focused channel.

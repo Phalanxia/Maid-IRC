@@ -1,6 +1,6 @@
 var Templates = {
 	messageSource: {
-		source: '<ul class="message-source-list"><li class="server" data-server-id="{{connectionId}}"><h2>{{serverName}}</h2></li>{{#each sources}}<li class="channel" data-server-id="" data-value="{{@key}}" data-number="{{@index}}" data-alert=""><i class="fa fa-comments-o"></i><span>{{@key}}</span></li>{{/each}}</ul>'
+		source: '<ul class="message-source-list"><li class="server" data-server-id="{{connectionId}}" data-value="server"><h2>{{serverName}}</h2></li>{{#each sources}}<li class="channel" data-server-id="" data-value="{{@key}}" data-number="{{@index}}" data-alert=""><i class="fa fa-comments-o"></i><span>{{@key}}</span></li>{{/each}}</ul>'
 	},
 	usersList: {
 		source: '{{#each user}}<li><p data-rank="{{rank}}" data-rank-icon="{{rankIcon}}">{{@key}}</p></li>{{/each}}'
