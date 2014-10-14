@@ -3,44 +3,42 @@
 
 // Placeholder text color
 input::-webkit-input-placeholder {
-	color: #2d3847;
+	color: @f-darkBlue;
 }
 input:-moz-placeholder {
-	color: #2d3847;
+	color: @f-darkBlue;
 }
 input::-moz-placeholder {
-	color: #2d3847;
+	color: @f-darkBlue;
 }
 input:-ms-input-placeholder {
-	color: #2d3847;
+	color: @f-darkBlue;
 }
 // Change placeholder text color on focus
 input:focus::-webkit-input-placeholder {
-	color: #1b1b1b;
+	color: @darkestBlue;
 }
 input:focus:-moz-placeholder {
-	color: #1b1b1b;
+	color: @darkestBlue;
 }
 input:focus::-moz-placeholder {
-	color: #1b1b1b;
+	color: @darkestBlue;
 }
 input:focus:-ms-input-placeholder {
-	color: #1b1b1b;
+	color: @darkestBlue;
 }
 // Inputs
 input {
-	// background-color: @lightestBlue;
-	background-color: @lightGrey;
+	background-color: @white;
 	padding: 0 20px;
 	font-size: 14px;
 	line-height: 20px;
-	color: #1b1b1b;
+	color: @darkestBlue;
 	border: 0;
-	border-radius: 2px;
-	box-shadow: inset 0 -1px 0 0 @lightestBlue;
-	.transition(all ease-in-out .15s);
+	box-shadow: inset 0 -1px 0 0 @white-3;
+	.transition(background-color ease-in-out .15s);
 	&:focus {
-		background-color: @lightestBlue;
+		background-color: @white-3;
 		box-shadow: none;
 	}
 }
@@ -55,11 +53,12 @@ input[type="checkbox"] {
 	margin: 3px 0 0 16px;
 	font: 10px FontAwesome;
 	background: none;
-	background-color: @white;
-	border: 1px solid @lightestBlue;
+	background-color: @white-1;
+	border: 1px solid @white-3;
 	border-radius: 4px;
 	box-shadow: inset 0 1px 2px rgba(240,240,240,.8);
 	.appearance(none);
+	&:hover { cursor: pointer; }
 	&:after {
 		left: 0;
 		display: none;
@@ -69,33 +68,30 @@ input[type="checkbox"] {
 		color: @lightBlue;
 		content: '\f00c';
 	}
-	&:checked {
-		&:after {
-			left: 0;
-			display: block;
-			width: 20px;
-			height: 20px;
-			margin: 0;
-			font-size: 14px;
-			line-height: 20px;
-			color: @white;
-			text-align: center;
-			background-color: @lightBlue;
-			border-radius: 3px;
-			content: '\f00c';
-		}
+	&:checked:after {
+		left: 0;
+		display: block;
+		width: 20px;
+		height: 20px;
+		margin: 0;
+		font-size: 14px;
+		line-height: 20px;
+		color: @white-1;
+		text-align: center;
+		background-color: @lightBlue;
+		border-radius: 3px;
+		content: '\f00c';
 	}
-	&:hover { cursor: pointer; }
 }
 header input::-webkit-input-placeholder {
-	color: @white;
+	color: @white-1;
 }
 header input:-moz-placeholder {
-	color: @white;
+	color: @white-1;
 }
 header input::-moz-placeholder {
-	color: @white;
+	color: @white-1;
 }
 header input:-ms-input-placeholder {
-	color: @white;
+	color: @white-1;
 }

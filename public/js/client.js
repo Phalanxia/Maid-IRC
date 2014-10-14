@@ -55,15 +55,20 @@ var client = {
 
 		// IRC
 		socket.on('raw', function (data) {
+			console.log(data[1]); // For testing.
+
 			var connectionId = data[0],
 				message = data[1];
 
+			// Do certant things depending on the incoming command types (normal, reply, error)
 			if (message.commandType == "normal") {
 				incomingMessages.normal(connectionId, message);
 			} else if (message.commandType == "reply") {
 				incomingMessages.reply(connectionId, message);
+			} else if (message.commandType == "error") {
+				incomingMessages.error(connectionId, message);
 			} else {
-				console.warn("Error: Unknown command type");
+				console.warn("Error: Unknown command type " + '"' + message.commandType + '"');
 			}
 		});
 
@@ -95,7 +100,7 @@ select('#submit').onclick = function (event) {
 		invalid = false;
 
 	connectInfo = {};
-	[].map.call(selectAll('#login input'), function (obj) {
+	[].map.call(selectAll('#connect input'), function (obj) {
 		connectInfo[obj.name] = obj.value;
 
 		// If the input is no longer invalid remove the invalid class.
@@ -113,11 +118,12 @@ select('#submit').onclick = function (event) {
 	if (!invalid) {
 		client.init(connectInfo);
 		hideModals();
+		select("#connect form").reset();
 	} else {
-		select('#login').classList.add("invalid");
+		select('#connect').classList.add("invalid");
 
 		setTimeout(function () {
-			select('#login').classList.remove("invalid");
+			select('#connect').classList.remove("invalid");
 		}, 500);
 	}
 };

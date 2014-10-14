@@ -12,7 +12,7 @@
 	flex-flow: column wrap;
 }
 // Header
-#network-panel header { box-shadow: inset -1px 0 0 0px fadeout(@darkBlue, 90%) }
+#network-panel header { box-shadow: inset -1px 0 0 0px fadeout(@darkBlue, 90%); }
 #network-panel header h1 {
 	float: left;
 	width: 68px;
@@ -21,8 +21,9 @@
 	font-size: 16px;
 	font-weight: 200;
 	line-height: 40px;
-	color: @grey;
+	color: @white-1;
 	text-align: left;
+	&:hover { cursor: pointer; }
 	span {
 		font-weight: 800;
 		color: @darkBlue;
@@ -34,10 +35,10 @@
 	height: 30px;
 	margin: 5px 14px 5px 0;
 	font-size: 16px;
-	color: @grey;
+	color: @white-1;
 	background: none;
 	border: none;
-	&:active { color: darken(@grey,10%); }
+	&:active { color: @white-1; }
 }
 #network-panel header ul {
 	position: absolute;
@@ -49,7 +50,7 @@
 	margin: 0;
 	list-style: none;
 	pointer-events: none;
-	background-color: @grey;
+	background-color: @white-1;
 	border-radius: 4px;
 	opacity: 0;
 	.transition(all .2s ease-in-out);
@@ -60,7 +61,7 @@
 	bottom: 40px;
 	left: 53px;
 	border: 6px solid transparent;
-	border-bottom: 6px solid @grey;
+	border-bottom: 6px solid @white;
 	content: '';
 }
 #network-panel header ul.displayed {
@@ -74,13 +75,13 @@
 	height: 40px;
 	overflow: hidden;
 	line-height: 40px;
-	color: #1b1b1b;
+	color: @darkestBlue;
 	text-align: center;
 	border-radius: 4px;
 	.transition(background-color .2s ease-in-out);
 	&:hover {
 		cursor: pointer;
-		background-color: @lightGrey;
+		background-color: @white-1;
 	}
 }
 #network-panel header #status {
@@ -99,7 +100,7 @@
 	margin: 0;
 	font-size: 16px;
 	font-weight: 400;
-	color: @grey;
+	color: @white-1;
 	&:hover {
 		cursor: pointer;
 		background-color: @darkBlue;
@@ -118,7 +119,7 @@
 	width: inherit;
 	height: 40px;
 	line-height: 40px;
-	color: @grey;
+	color: @white-1;
 	.transition(background-color .1s ease-in-out);
 	&:hover {
 		cursor: pointer;
@@ -134,7 +135,7 @@
 	margin: 10px 16px 0 10px;
 	font-size: 12px;
 	line-height: 20px;
-	color: @grey;
+	color: @white-1;
 	text-align: center;
 	background: @lightBlue;
 	border-radius: 4px;
@@ -150,13 +151,13 @@
 		height: 0;
 		border-top: 7px solid transparent;
 		border-bottom: 7px solid transparent;
-		border-right: 7px solid @lightGrey;
+		border-right: 7px solid @white-1;
 		content: "";
 	}
 }
 .message-source-list i {
 	padding: 0 14px;
-	color: @grey;
+	color: @white-1;
 }
 .message-source-list span { font-size: 14px; }
 // Footer
