@@ -3,97 +3,100 @@ var UpdateInterface = (function () {
 
 	var module = function () {};
 
-	// Update
 	module.prototype.messageSources = function (connectionId) {
-		console.log(connectionId);
+		var parentThis = this;
+
 		// Remove all the current items in the list
-		[].map.call(selectAll('#network-panel > ul'), function (obj) {
+		[].map.call(selectAll("#network-panel > ul"), function (obj) {
 			obj.parentNode.removeChild(obj);
 		});
 
 		// Render the template
-		select('#network-panel header').insertAdjacentHTML('afterend', Templates.messageSource.compiled({
-				serverName: client.networks.name || "Server",
-				sources: client.networks[connectionId].sources,
-				connectionId: connectionId
+		select("#network-panel header").insertAdjacentHTML("afterend", Templates.messageSource.compiled({
+				serverName: client.networks[connectionId].name || "Server",
+				connectionId: connectionId,
+				sources: client.networks[connectionId].sources
 			})
 		);
 
-		var network = client.networks[connectionId],
-			sourceList = selectAll('.message-source-list li');
 
-		// Now lets update the navigation for the directory.
-		function navigation (element) {
-			var serverId = element.getAttribute("data-server-id").toLowerCase(),
-				source = element.getAttribute("data-value").toLowerCase();
+		function renderALl(connectionId, source, type) {
+			var network = client.networks[connectionId];
 
 			// If you're already viewing it, there's no point in this so lets do nothing
-			if (source == client.networks.focusedSource) {
+			if (source == network.focusedSource) {
 				return;
 			}
 
-			client.networks.focusedServer = serverId;
-			client.networks.focusedSource = source;
+			client.networks.focusedServer = connectionId;
+			network.focusedSource = source;
 
 			// Reset focuseed source class
-			[].map.call(sourceList, function (obj) {
-				obj.classList.remove('focusedSource');
+			[].map.call(selectAll(".message-source-list li"), function (obj) {
+				obj.classList.remove("focusedSource");
 			});
 
-			switch (element.className) {
+			switch (type) {
 				case "channel":
 					var channel = network.sources[source];
 
-					if (typeof channel.topic !== "undefined") {
-						select('#channel-console header input').value = channel.topic;
-					} else {
-						select('#channel-console header input').value = '';
-					}
+					select("#channel-console header input").value = channel.topic;
+					select("#channel-console header input").disabled  = false;
+
+					select("#users").style.display = '';
+
+					// Update user list.
+
+					parentThis.users(source, connectionId);
 					break;
 				case "pm":
-					select('#channel-console header input').value = 'Private Message';
+					select("#channel-console header input").value = "Private Message";
+					select("#channel-console header input").disabled  = true;
+
+					select("#users").style.display = 'none';
 					break;
-				case "network":
-					select('#channel-console header input').value = "Server";
-					// TODO: Get the server name based off the ID
+				case "server":
+					select("#channel-console header input").value = network.name;
+					select("#channel-console header input").disabled  = true;
+
+					select("#users").style.display = 'none';
 					break;
 			}
 
 			// Update Displayed
-			select(sourceList + ':nth-of-type(' + parseFloat(element.getAttribute("data-number")) + ')').classList.add('focusedSource');
-			// select(sourceList + ':nth-of-type(' + (parseFloat(element.getAttribute("data-number")) + 1) + ')').classList.add('focusedSource');
+			select('[data-connection-id="' + connectionId + '"][data-value="' + source + '"]').classList.add("focusedSource");
 			select('#users ul').innerHTML = '';
 
-			// Show messages that are from the focused channel.
-			[].map.call(selectAll('#channel-console output article[data-source="' + client.networks.focusedSource + '"]'), function (obj) {
-				obj.style.display = '';
-			});
-
-			// Hide messages that are not from the focused channel.
-			[].map.call(selectAll('#channel-console output article:not([data-source="' + client.networks.focusedSource + '"])'), function (obj) {
+			// Hide all messages.
+			[].map.call(selectAll('#channel-console output article'), function (obj) {
 				obj.style.display = 'none';
 			});
-		}
 
-		[].map.call(sourceList, function (obj) {
-			obj.onclick = navigation(obj);
+			// Show messages that are from the focused source.
+			[].map.call(selectAll('#channel-console output article[data-source="' + client.networks[connectionId].focusedSource + '"]'), function (obj) {
+				obj.style.display = '';
+			});
+		};
+
+		[].map.call(selectAll(".message-source-list li"), function (obj) {
+			obj.onclick = function () {
+				renderALl(obj.getAttribute("data-connection-id").toLowerCase(), obj.getAttribute("data-value").toLowerCase(), obj.className);
+			}
 		});
 	};
 
 	// Update topic
 	module.prototype.topic = function (topic) {
-		select('#channel-console header input').value = topic || '';
+		select("#channel-console header input").value = topic;
 	};
 
 	module.prototype.users = function (channel, connectionId) {
-		// Clear interface.
-		select('#users > ul').innerHTML = '';
-		select('#users header p').innerHTML = '';
+		// Clear users bar.
+		select("#users > ul").innerHTML = '';
+		select("#users header p").innerHTML = '';
 
 		// Set up user list.
 		var network = client.networks[connectionId];
-
-		console.log(network.sources[channel]);
 
 		var userList = [],
 			users = network.sources[channel].users;
@@ -102,7 +105,7 @@ var UpdateInterface = (function () {
 
 		// Lets sort the user list based on rank and alphabetizing.
 		userList.sort(function(a, b) {
-			var rankString = "\r~&@%+";
+			// var rankString = "\r~&@%+";
 			var rankString = "\r+%@&~";
 			var rankA = rankString.indexOf(users[a]),
 				rankB = rankString.indexOf(users[b]);
@@ -139,7 +142,12 @@ var UpdateInterface = (function () {
 				}
 			}
 
-			select('#users ul').insertAdjacentHTML('beforeend', '<li><p data-rank="' + identifyer.rank + '" data-rank-icon="' + identifyer.icon + '">' + userList[i] + '</p></li>');
+			// Render the template
+			select("#users ul").insertAdjacentHTML("beforeend", Templates.messageSource.compiled({
+				rank: identifyer.rank,
+				icon: identifyer.icon,
+				nick: userList[i]
+			}));
 		}
 
 		// Get user count
@@ -157,7 +165,7 @@ var UpdateInterface = (function () {
 			.replace(/>/g, "&gt;");
 
 		// Create get the time for the timestamp
-		var output = select('#channel-console output'),
+		var output = select("#channel-console output"),
 			rawTime = new Date(),
 			scrollInfoView;
 		// Lets format the timestamp
@@ -188,7 +196,7 @@ var UpdateInterface = (function () {
 		}
 
 		// Remove the filler message the console
-		output.removeChild(select('article.filler'));
+		output.removeChild(select("article.filler"));
 
 		// Insert message into the console
 		output.insertAdjacentHTML('beforeend', Templates.message.compiled({
@@ -272,13 +280,13 @@ var OutgoingMessages = (function () {
 
 		// List of supported commands.
 		var commands = [
-			'me',
-			'join',
-			'part',
-			'whois',
-			'notice',
-			'away',
-			'topic'
+			"me",
+			"join",
+			"part",
+			"whois",
+			"notice",
+			"away",
+			"topic"
 		],
 		message = data.substring(data.split(" ")[0].length + 1, data.length),
 		command = data.split(" ")[0];
@@ -396,7 +404,7 @@ var IncomingMessages = (function () {
 
 		switch (data.rawCommand) {
 			case "001":
-				client.networks.nick = data.args[0];
+				network.nick = data.args[0];
 				updateMessage = {
 					type: "rpl_welcome",
 					head: ">",
@@ -445,10 +453,10 @@ var IncomingMessages = (function () {
 				if (networkName.length > 1) {
 					if (typeof networkName !== undefined) {
 						// select('#network-panel ul h2').innerHTML = networkName[1];
-						client.networks.name = networkName[1];
+						network.name = networkName[1];
 					} else {
 						// select('#network-panel ul h2').innerHTML = data.server;
-						client.networks.name = data.server;
+						network.name = data.server;
 					}
 				}
 				break;
@@ -466,6 +474,9 @@ var IncomingMessages = (function () {
 				if (network.sources[data.args[1]] === undefined) {
 					network.sources[data.args[1]] = {};
 				}
+				// MADISON
+				network.sources[data.args[1]].connectionId = connectionId;
+
 				// Save the topic
 				network.sources[data.args[1]].topic = data.args[2];
 
@@ -535,6 +546,20 @@ var IncomingMessages = (function () {
 					channel: "SERVER",
 					message: data.args[1] + ": " + data.args[2]
 				};
+				break;
+		}
+
+		if (Object.keys(updateMessage).length !== 0) {
+			this.updateInterface.message(updateMessage, connectionId);
+		}
+	};
+
+	module.prototype.error = function (connectionId, data) {
+		var updateMessage = {},
+			network = client.networks[connectionId];
+
+		switch (data.rawCommand) {
+			case "001":
 				break;
 		}
 
