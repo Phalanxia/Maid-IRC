@@ -50,7 +50,7 @@ var client = {
 
 		// IRC
 		socket.on('raw', function (data) {
-			console.log(data[1]); // For testing.
+			// console.log(data[1]); // For testing.
 
 			var connectionId = data[0],
 				message = data[1];
