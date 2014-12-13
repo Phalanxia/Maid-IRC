@@ -11,7 +11,7 @@
 	height: 100%;
 	width: 100%;
 	background-color: fade(@darkBlue, 80%);
-	.transition(all .3s ease-in-out);
+	.m-transition(all .3s ease-in-out);
 }
 #pageCover.displayed {
 	opacity: 1;
@@ -24,11 +24,11 @@
 	left: 50%;
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
 	visibility: hidden; // Will Tranition
-	.transform(translate(-50%, -50%));
+	.m-transform(translate(-50%, -50%));
 }
 .modal.displayed {
 	visibility: visible !important;
-	.animation(modalShow .3s ease-in-out);
+	.m-animation(modalShow .3s ease-in-out);
 }
 .modal header {
 	width: 100%;
@@ -36,7 +36,7 @@
 	background-color: @lightBlue;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
-	.user-select(none);
+	.m-user-select(none);
 }
 .modal header h1 {
 	float: left;
@@ -56,7 +56,7 @@
 	color: @white-1;
 	background: none;
 	border: none;
-	.transition(background-color .2s ease-in-out);
+	.m-transition(background-color .2s ease-in-out);
 	&:hover {
 		cursor: pointer;
 		background-color: darken(@lightBlue, 4%);

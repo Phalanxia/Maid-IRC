@@ -46,7 +46,6 @@ var UpdateInterface = (function () {
 					select("#users").style.display = '';
 
 					// Update user list.
-
 					parentThis.users(source, connectionId);
 					break;
 				case "pm":
@@ -63,7 +62,7 @@ var UpdateInterface = (function () {
 					break;
 			}
 
-			// Update Displayed
+			// Update Displayed.
 			select('[data-connection-id="' + connectionId + '"][data-value="' + source + '"]').classList.add("focusedSource");
 			select('#users ul').innerHTML = '';
 
@@ -312,7 +311,7 @@ var OutgoingMessages = (function () {
 			// Send it to the command handler.
 			this.command(data);
 		} else {
-			// Normal Message
+			// Normal Message.
 		}
 	};
 
@@ -356,7 +355,7 @@ var IncomingMessages = (function () {
 			case "mode":
 				break;
 			case "join":
-				// Make sure the joined channel is in the current saved channel object
+				// Make sure the joined channel is in the current saved channel object.
 				if (network.sources[data.args[0]] === undefined) {
 					network.sources[data.args[0]] = {};
 				}
@@ -374,7 +373,7 @@ var IncomingMessages = (function () {
 					}
 				}
 
-				// Add the join message to the console
+				// Add the join message to the console.
 				updateMessage = {
 					type: "join",
 					head: data.nick,
