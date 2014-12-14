@@ -30,6 +30,7 @@ var http = require("http"),
 	// Maid IRC libs
 	maidStatic = require("./lib/maidStatic"),
 	maidIrc = require("./lib/maidIrc"),
+	maidHelpers = require("./lib/maidHelpers"),
 	// Less middleware variables
 	forceCompile = false,
 	lessDebug = false;
@@ -96,11 +97,45 @@ app.use(express.static(__dirname + "/public", {
 }));
 app.use(favicon(__dirname + "/public/img/icons/favicon.ico"));
 
+var server,
+	io = require("socket.io");
+function httpServer () {
+	var server = http.createServer(app).listen(config.http_port, config.http_host);
+	maidIrc(io.listen(server));
+}
+
+function httpsServer () {
+	var server = http.createServer({key: config.private_key, cert: config.certificate}, app).listen(config.https_port, config.http_host);
+	maidIrc(io.listen(server));
+}
+
 // Define server
-var server = http.createServer(app).listen(config.http_port, config.http_host),
-	// Set up socket.io
-	io = require("socket.io").listen(server);
+if (config.enable_https >= 1) { // If HTTPS
+	if (config.private_key && config.certificate) {
+		switch (config.enable_https) {
+			case 1: // Both HTTP and HTTPS
+				httpServer();
+				httpsServer();
+				break;
+			case 2: // HTTPS only
+				httpsServer();
+				break;
+			default: // Typo? :p
+				console.warn("The setting in enable_https in config.js only accepts 0-2. Starting in HTTPS only mode.")
+				httpsServer();
+				break;
+		}
+	} else {
+		maidHelpers.stopMaid("To use HTTPS, private_key and certificate both need to be set in config.js!");
+	}
+} else { // If HTTP only
+	httpServer();
+}
 
 // Now that thats done with lets pass it of to maidStatic.js and maidIrc.js
 maidStatic(app);
-maidIrc(io);
+
+// Technical
+process.on("SIGINT", function() {
+	maidHelpers.stopMaid("SIGINT");
+});
