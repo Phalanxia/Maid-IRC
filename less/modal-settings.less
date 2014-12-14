@@ -35,8 +35,9 @@
 	&:nth-child(even) { background-color: darken(@darkBlue, 2%); }
 	&:hover {
 		cursor: pointer;
-		background-color: @darkBlue;
+		background-color: lighten(@darkBlue, 4%);
 	}
+	&:hover:nth-child(even) { background-color: lighten(@darkBlue, 2%); }
 }
 #settings li.focused:before {
 	position: absolute;
