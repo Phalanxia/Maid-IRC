@@ -1,29 +1,31 @@
 {	"name": "maid-irc",
-	"version": "0.0.14",
+	"version": "0.0.15",
 	"description": "A web IRC client. Built on Node.",
 	"author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
 	"homepage": "https://phalanxia.github.io/Maid-IRC/",
 	"dependencies": {
-		"irc": "~0.3.7",
-		"socket.io": "~1.1.0",
-		"jade": "~1.7.0",
-		"express": "~4.10.1",
+		"body-parser": "~1.10.0",
+		"compression": "~1.2.2",
+		"errorhandler": "~1.3.0",
+		"express": "~4.10.6",
 		"express-minify": "~0.0.7",
-		"compression": "~1.2.0",
-		"serve-favicon": "~2.1.5",
-		"body-parser": "~1.9.1",
+		"irc": "~0.3.7",
+		"jade": "~1.8.1",
+		"less-middleware": "~1.0.4",
 		"method-override": "~2.3.0",
-		"errorhandler": "~1.2.0",
-		"less-middleware": "~1.0.4"
+		"serve-favicon": "~2.1.7",
+		"socket.io": "~1.2.1"
 	},
 	"devDependencies": {
-		"morgan": "~1.4.0"
+		"morgan": "~1.5.0"
 	},
 	"keywords": [
 		"irc",
 		"web",
 		"client",
-		"app"
+		"app",
+		"application",
+		"chat"
 	],
 	"repository": {
 		"type": "git",
