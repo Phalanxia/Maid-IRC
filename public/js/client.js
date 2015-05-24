@@ -32,17 +32,17 @@ var client = {
 		connectToNetwork.setup(connectInfo);
 
 		// Respond to pings
-		socket.on('ping', function (data) {
-			socket.emit('pong', {beat: 1});
+		socket.on("ping", function (data) {
+			socket.emit("pong", {beat: 1});
 		});
 
 		// Lets handle all the socket.io stuff here for now. :3
-		socket.on('connect', function () {
+		socket.on("connect", function () {
 			client.status.connection = true;
 			console.log("Connected.");
 		});
 
-		socket.on('disconnect', function () {
+		socket.on("disconnect", function () {
 			client.status.connection = false;
 			client.status.pastDisconnect = true;
 			console.log("Lost connection.");
@@ -74,7 +74,7 @@ var client = {
 			}
 		};
 
-		select('#channel-console footer button').onclick = function () {
+		select("#channel-console footer button").onclick = function () {
 			messaging.send(select('#channel-console footer input').value);
 		};
 	}
