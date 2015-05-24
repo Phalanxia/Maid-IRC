@@ -63,16 +63,16 @@ var UpdateInterface = (function () {
 
 			// Update Displayed.
 			select('[data-connection-id="' + connectionId + '"][data-value="' + source + '"]').classList.add("focusedSource");
-			select('#users ul').innerHTML = '';
+			select("#users ul").innerHTML = "";
 
 			// Hide all messages.
-			[].map.call(selectAll('#channel-console output article'), function (obj) {
-				obj.style.display = 'none';
+			[].map.call(selectAll("#channel-console output article"), function (obj) {
+				obj.style.display = "none";
 			});
 
 			// Show messages that are from the focused source.
 			[].map.call(selectAll('#channel-console output article[data-source="' + client.networks[connectionId].focusedSource + '"]'), function (obj) {
-				obj.style.display = '';
+				obj.style.display = "";
 			});
 		};
 
@@ -92,8 +92,8 @@ var UpdateInterface = (function () {
 		console.log("Upodating users list.");
 
 		// Clear users bar.
-		select("#users > ul").innerHTML = '';
-		select("#users header p").innerHTML = '';
+		select("#users > ul").innerHTML = "";
+		select("#users header p").innerHTML = "";
 
 		// Set up user list.
 		var network = client.networks[connectionId];
@@ -151,7 +151,7 @@ var UpdateInterface = (function () {
 		}
 
 		// Get user count
-		select('#users header p').innerHTML = userList.length + " users";
+		select("#users header p").innerHTML = userList.length + " users";
 	};
 
 	module.prototype.message = function (data, connectionId) {
@@ -186,7 +186,7 @@ var UpdateInterface = (function () {
 		}
 
 		// If there is no specified channel just use the one the client is currently focused on
-		if (typeof data.channel === 'undefined') {
+		if (typeof data.channel === "undefined") {
 			data.channel = client.networks[connectionId].focusedSource;
 		}
 
@@ -199,7 +199,7 @@ var UpdateInterface = (function () {
 		output.removeChild(select("article.filler"));
 
 		// Insert message into the console
-		output.insertAdjacentHTML('beforeend', Templates.message.compiled({
+		output.insertAdjacentHTML("beforeend", Templates.message.compiled({
 				connectionId: connectionId,
 				source: data.channel.toLowerCase(),
 				type: data.type,
@@ -213,7 +213,7 @@ var UpdateInterface = (function () {
 
 		// Hide messages not from the focused channel
 		[].map.call(selectAll('#channel-console output article:not([data-source="' + client.networks[connectionId].focusedSource + '"])'), function (obj) {
-			obj.style.display = 'none';
+			obj.style.display = "none";
 		});
 
 		// Scroll to bottom unless the user is scrolled up

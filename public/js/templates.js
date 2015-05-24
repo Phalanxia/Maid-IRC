@@ -18,7 +18,7 @@ var Partials = {
 	connectPartial: ''
 }
 
-Handlebars.registerHelper('with', function (context, options) {
+Handlebars.registerHelper("with", function (context, options) {
 	// console.log(JSON.stringify(options.data.root));
 	var content = (function () {
 		var results = [];
@@ -32,7 +32,7 @@ Handlebars.registerHelper('with', function (context, options) {
 		}
 		return results;
 	})();
-	return content.join('');
+	return content.join("");
 });
 
 // Compile templates and save them back in the template object
