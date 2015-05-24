@@ -111,6 +111,10 @@ select("#submit").onclick = function (event) {
 	});
 
 	if (!invalid) {
+		if (!connectInfo.realName.length) {
+			connectInfo.realName = connectInfo.nick
+		}
+
 		client.init(connectInfo);
 		hideModals();
 		select("#connect form").reset();
