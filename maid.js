@@ -8,7 +8,7 @@ process.argv.forEach(function (val, index) {
 	}
 });
 
-var env = process.env.NODE_ENV || argEnv || 'production';
+var env = process.env.NODE_ENV || argEnv || "production";
 
 console.log("Starting Maid IRC.\nEnvironment: " + env);
 
@@ -24,9 +24,9 @@ var http = require("http"),
 	// Middleware
 	favicon = require("serve-favicon"),
 	bodyParser = require("body-parser"),
-	methodOverride = require('method-override'),
-	lessMiddleware = require('less-middleware'),
-	compression = require('compression'),
+	methodOverride = require("method-override"),
+	lessMiddleware = require("less-middleware"),
+	compression = require("compression"),
 	// Maid IRC libs
 	maidStatic = require("./lib/maidStatic"),
 	maidIrc = require("./lib/maidIrc"),
@@ -97,8 +97,10 @@ app.use(express.static(__dirname + "/public", {
 }));
 app.use(favicon(__dirname + "/public/img/icons/favicon.ico"));
 
+// Define server
 var server,
 	io = require("socket.io");
+
 function httpServer () {
 	var server = http.createServer(app).listen(config.http_port, config.http_host);
 	maidIrc(io.listen(server));
@@ -109,7 +111,6 @@ function httpsServer () {
 	maidIrc(io.listen(server));
 }
 
-// Define server
 if (config.enable_https >= 1) { // If HTTPS
 	if (config.private_key && config.certificate) {
 		switch (config.enable_https) {

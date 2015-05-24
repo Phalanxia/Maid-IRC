@@ -19,7 +19,6 @@ var UpdateInterface = (function () {
 			})
 		);
 
-
 		function renderALl(connectionId, source, type) {
 			var network = client.networks[connectionId];
 
@@ -90,6 +89,8 @@ var UpdateInterface = (function () {
 	};
 
 	module.prototype.users = function (channel, connectionId) {
+		console.log("Upodating users list.");
+
 		// Clear users bar.
 		select("#users > ul").innerHTML = '';
 		select("#users header p").innerHTML = '';
