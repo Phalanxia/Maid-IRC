@@ -1,33 +1,33 @@
 doctype html
-html(lang='en')
+html(lang="en")
 	head
-		meta(charset='utf-8')
-		meta(http-equiv='X-UA-Compatible', content='IE=edge')
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible", content="IE=edge")
 		title Maid IRC
-		meta(name='description', content='Maid IRC')
-		meta(name='viewport', content='width=device-width', initial-scale='1', user-scalable='no')
-		meta(name='mobile-web-app-capable', content='yes')
-		meta(name='theme-color', content='rgb(81,176,255)')
+		meta(name="description", content="Maid IRC")
+		meta(name="viewport", content="width=device-width", initial-scale="1", user-scalable="no")
+		meta(name="mobile-web-app-capable", content="yes")
+		meta(name="theme-color", content="rgb(81,176,255)")
 		// Icons
-		link(rel='shortcut icon', href='img/icons/favicon.ico')
-		link(rel='apple-touch-icon', sizes='57x57', href='img/icons/apple-touch-icon-57x57.png')
-		link(rel='apple-touch-icon', sizes='114x114', href='img/icons/apple-touch-icon-114x114.png')
-		link(rel='apple-touch-icon', sizes='72x72', href='img/icons/apple-touch-icon-72x72.png')
-		link(rel='apple-touch-icon', sizes='144x144', href='img/icons/apple-touch-icon-144x144.png')
-		link(rel='apple-touch-icon', sizes='60x60', href='img/icons/apple-touch-icon-60x60.png')
-		link(rel='apple-touch-icon', sizes='120x120', href='img/icons/apple-touch-icon-120x120.png')
-		link(rel='apple-touch-icon', sizes='76x76', href='img/icons/apple-touch-icon-76x76.png')
-		link(rel='apple-touch-icon', sizes='152x152', href='img/icons/apple-touch-icon-152x152.png')
-		link(rel='icon', type='image/png', href='img/icons/favicon-196x196.png', sizes='196x196')
-		link(rel='icon', type='image/png', href='img/icons/favicon-160x160.png', sizes='160x160')
-		link(rel='icon', type='image/png', href='img/icons/favicon-96x96.png', sizes='96x96')
-		link(rel='icon', type='image/png', href='img/icons/favicon-16x16.png', sizes='16x16')
-		link(rel='icon', type='image/png', href='img/icons/favicon-32x32.png', sizes='32x32')
-		meta(name='msapplication-TileColor', content='#2b5797')
-		meta(name='msapplication-TileImage', content='img/icons/mstile-144x144.png')
-		meta(name='msapplication-config', content='img/icons/browserconfig.xml')
+		link(rel="shortcut icon", href="img/icons/favicon.ico")
+		link(rel="apple-touch-icon", sizes="57x57", href="img/icons/apple-touch-icon-57x57.png")
+		link(rel="apple-touch-icon", sizes="114x114", href="img/icons/apple-touch-icon-114x114.png")
+		link(rel="apple-touch-icon", sizes="72x72", href="img/icons/apple-touch-icon-72x72.png")
+		link(rel="apple-touch-icon", sizes="144x144", href="img/icons/apple-touch-icon-144x144.png")
+		link(rel="apple-touch-icon", sizes="60x60", href="img/icons/apple-touch-icon-60x60.png")
+		link(rel="apple-touch-icon", sizes="120x120", href="img/icons/apple-touch-icon-120x120.png")
+		link(rel="apple-touch-icon", sizes="76x76", href="img/icons/apple-touch-icon-76x76.png")
+		link(rel="apple-touch-icon", sizes="152x152", href="img/icons/apple-touch-icon-152x152.png")
+		link(rel="icon", type="image/png", href="img/icons/favicon-196x196.png", sizes="196x196")
+		link(rel="icon", type="image/png", href="img/icons/favicon-160x160.png", sizes="160x160")
+		link(rel="icon", type="image/png", href="img/icons/favicon-96x96.png", sizes="96x96")
+		link(rel="icon", type="image/png", href="img/icons/favicon-16x16.png", sizes="16x16")
+		link(rel="icon", type="image/png", href="img/icons/favicon-32x32.png", sizes="32x32")
+		meta(name="msapplication-TileColor", content="#2b5797")
+		meta(name="msapplication-TileImage", content="img/icons/mstile-144x144.png")
+		meta(name="msapplication-config", content="img/icons/browserconfig.xml")
 		// CSS
-		link(rel='stylesheet', href='css/client.css', type='text/css')
+		link(rel="stylesheet", href="css/client.css", type="text/css")
 	body
 		#pageCover.displayed
 		// Client
@@ -42,13 +42,13 @@ html(lang='en')
 				ul.message-source-list
 			.panel#channel-console
 				header
-					input(type='text')
+					input(type="text")
 				output
 					article.filler
 						div
 				footer
-					input(type='text')
-					button.btn(type='button') Send
+					input(type="text")
+					button.btn(type="button") Send
 			.panel#users
 				header
 					p
@@ -60,27 +60,27 @@ html(lang='en')
 		.modal.displayed#connect
 			header
 				h1 Connect
-				button(type='button') &times;
-			form(method='post')
+				button(type="button") &times;
+			form(method="post")
 				#connect-basic
-					input#name(type='text', placeholder='Nickname', name='nick', spellcheck="false", autofocus, required)
+					input#name(type="text", placeholder="Nickname", name="nick", spellcheck="false", autofocus, required)
 					section
-						input#server(type='text', placeholder='Server', name='server', spellcheck="false", required)
-						input#port(type='number', placeholder='Port', name='port', maxlength='4', max="9999" required)
-					input#channel(type='text', placeholder='Channel', name='channel', spellcheck="false", required)
+						input#server(type="text", placeholder="Server", name="server", spellcheck="false", required)
+						input#port(type="number", placeholder="Port", name="port", maxlength="4", max="9999" required)
+					input#channel(type="text", placeholder="Channel", name="channel", spellcheck="false", required)
 					footer
-						button.btn#submit(type='submit', name='connect') Connect
-						button.btn.fa.fa-gear(type='button')
+						button.btn#submit(type="submit", name="connect") Connect
+						button.btn.fa.fa-gear(type="button")
 				#connect-advanced
-					input#nicknamePassword(type='password', name='nickPassword', placeholder='Password', tabIndex='-1')
-					input#realName(type='text', name='realName', placeholder='Real Name', tabIndex='-1')
-					input#ssl(type='checkbox', name='ssl', tabIndex='-1')
+					input#nicknamePassword(type="password", name="nickPassword", placeholder="Password", tabIndex="-1")
+					input#realName(type="text", name="realName", placeholder="Real Name", tabIndex="-1")
+					input#ssl(type="checkbox", name="ssl", tabIndex="-1")
 					span.checkboxLabel SSL
 
 		.modal#settings
 			header
 				h1 Settings
-				button(type='button') &times;
+				button(type="button") &times;
 			nav
 				ul
 					li.focused Connection
@@ -94,15 +94,15 @@ html(lang='en')
 				h1 Maid
 					span IRC
 				p.version Version #{version}
-				a(href='https://github.com/Phalanxia/Maid-IRC', target='_blank') GitHub
-				a(href='https://github.com/Phalanxia/Maid-IRC/issues', target='_blank') Report an issue
-				a(href='https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/LICENSE', target='_blank') License
+				a(href="https://github.com/Phalanxia/Maid-IRC", target="_blank") GitHub
+				a(href="https://github.com/Phalanxia/Maid-IRC/issues", target="_blank") Report an issue
+				a(href="https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/LICENSE", target="_blank") License
 				include ./includes/licenses.jade
 
-	script(src='//cdn.socket.io/socket.io-1.0.0.js')
-	script(src='js/lib/handlebars.min.js')
-	script(src='js/lib/uuid.js')
-	script(src='js/templates.js')
-	script(src='js/modules.js')
-	script(src='js/client.js')
-	script(src='js/ui.js')
+	script(src="//cdn.socket.io/socket.io-1.0.0.js")
+	script(src="js/lib/handlebars.min.js")
+	script(src="js/lib/uuid.js")
+	script(src="js/templates.js")
+	script(src="js/modules.js")
+	script(src="js/client.js")
+	script(src="js/ui.js")
