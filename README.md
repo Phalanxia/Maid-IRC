@@ -27,9 +27,10 @@ $ node maid.js
 
 ## Screenshots
 
-![Login Screen](screenshots/login.png)
+![Connect](screenshots/login.png)
 
-![Login Screen](screenshots/client.png)
+Old Screenshot:
+![Client](screenshots/client.png)
 
 ## Community
 
@@ -44,7 +45,7 @@ Need support? Want to chat? Join our channel on the Freenode IRC network.
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Madison Tries
+Copyright (c) 2015 Madison Tries
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

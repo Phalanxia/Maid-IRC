@@ -49,7 +49,7 @@ var client = {
 		});
 
 		// IRC
-		socket.on('raw', function (data) {
+		socket.on("raw", function (data) {
 			// console.log(data[1]); // For testing.
 
 			var connectionId = data[0],
@@ -68,14 +68,14 @@ var client = {
 		});
 
 		// Press enter in chat box
-		select('#channel-console footer input').onkeydown = function (event) {
+		select("#channel-console footer input").onkeydown = function (event) {
 			if (event.which == 13) { // Enter Key
-				messaging.send(select('#channel-console footer input').value);
+				messaging.send(select("#channel-console footer input").value);
 			}
 		};
 
 		select("#channel-console footer button").onclick = function () {
-			messaging.send(select('#channel-console footer input').value);
+			messaging.send(select("#channel-console footer input").value);
 		};
 	}
 };
@@ -88,14 +88,14 @@ var hideModals = function () {
 };
 
 // Handle Login Info
-select('#submit').onclick = function (event) {
+select("#submit").onclick = function (event) {
 	event.preventDefault();
 
 	var connectInfo = {},
 		invalid = false;
 
 	connectInfo = {};
-	[].map.call(selectAll('#connect input'), function (obj) {
+	[].map.call(selectAll("#connect input"), function (obj) {
 		connectInfo[obj.name] = obj.value;
 
 		// If the input is no longer invalid remove the invalid class.
@@ -115,10 +115,10 @@ select('#submit').onclick = function (event) {
 		hideModals();
 		select("#connect form").reset();
 	} else {
-		select('#connect').classList.add("invalid");
+		select("#connect").classList.add("invalid");
 
 		setTimeout(function () {
-			select('#connect').classList.remove("invalid");
+			select("#connect").classList.remove("invalid");
 		}, 500);
 	}
 };
