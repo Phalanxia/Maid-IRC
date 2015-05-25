@@ -21,6 +21,7 @@ if (["production", "development", "debug"].indexOf(env.toLowerCase()) < 0) {
 var http = require("http"),
 	express = require("express"),
 	fs = require("fs"),
+	path = require("path"),
 	// Middleware
 	favicon = require("serve-favicon"),
 	bodyParser = require("body-parser"),
@@ -82,7 +83,7 @@ app.use(lessMiddleware(__dirname + "/less", {
 	},
 	preprocess: {
 		path: function (pathname, req) {
-			return pathname.replace("css\\", "");
+			return pathname.replace("css" + path.sep, "");
 		}
 	},
 	parser: {
@@ -122,7 +123,7 @@ if (config.enable_https >= 1) { // If HTTPS
 				httpsServer();
 				break;
 			default: // Typo? :p
-				console.warn("The setting in enable_https in config.js only accepts 0-2. Starting in HTTPS only mode.")
+				console.warn("The setting in enable_https in config.js only accepts 0-2. Starting in HTTPS only mode.");
 				httpsServer();
 				break;
 		}

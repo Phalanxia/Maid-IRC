@@ -3,6 +3,12 @@ var UpdateInterface = (function () {
 
 	var module = function () {};
 
+	var autolinker = new Autolinker({
+		stripPrefix: false,
+		twitter: false,
+		phone: false
+	});
+
 	module.prototype.messageSources = function (connectionId) {
 		var parentThis = this;
 
@@ -19,7 +25,7 @@ var UpdateInterface = (function () {
 			})
 		);
 
-		function renderALl(connectionId, source, type) {
+		function renderAll(connectionId, source, type) {
 			var network = client.networks[connectionId];
 
 			// If you're already viewing it, there's no point in this so lets do nothing
@@ -40,7 +46,7 @@ var UpdateInterface = (function () {
 					var channel = network.sources[source];
 
 					select("#channel-console header input").value = channel.topic;
-					select("#channel-console header input").disabled  = false;
+					select("#channel-console header input").disabled = false;
 
 					select("#users").style.display = '';
 
@@ -49,13 +55,13 @@ var UpdateInterface = (function () {
 					break;
 				case "pm":
 					select("#channel-console header input").value = "Private Message";
-					select("#channel-console header input").disabled  = true;
+					select("#channel-console header input").disabled = true;
 
 					select("#users").style.display = 'none';
 					break;
 				case "server":
 					select("#channel-console header input").value = network.name;
-					select("#channel-console header input").disabled  = true;
+					select("#channel-console header input").disabled = true;
 
 					select("#users").style.display = 'none';
 					break;
@@ -78,18 +84,18 @@ var UpdateInterface = (function () {
 
 		[].map.call(selectAll(".message-source-list li"), function (obj) {
 			obj.onclick = function () {
-				renderALl(obj.getAttribute("data-connection-id").toLowerCase(), obj.getAttribute("data-value").toLowerCase(), obj.className);
+				renderAll(obj.getAttribute("data-connection-id").toLowerCase(), obj.getAttribute("data-value").toLowerCase(), obj.className);
 			}
 		});
 	};
 
 	// Update topic
 	module.prototype.topic = function (topic) {
-		select("#channel-console header input").value = topic;
+		select("#channel-console header input").value = topic || "";
 	};
 
 	module.prototype.users = function (channel, connectionId) {
-		console.log("Upodating users list.");
+		console.log("Updating users list.");
 
 		// Clear users bar.
 		select("#users > ul").innerHTML = "";
@@ -102,6 +108,8 @@ var UpdateInterface = (function () {
 			users = network.sources[channel].users;
 
 		userList = Object.keys(users);
+
+		console.log(userList);
 
 		// Lets sort the user list based on rank and alphabetizing.
 		userList.sort(function(a, b) {
@@ -184,6 +192,8 @@ var UpdateInterface = (function () {
 				message = highlightNick(client.settings.highlights[i], message);
 			}
 		}
+
+		message = autolinker.link(message);
 
 		// If there is no specified channel just use the one the client is currently focused on
 		if (typeof data.channel === "undefined") {
