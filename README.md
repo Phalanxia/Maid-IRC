@@ -23,7 +23,7 @@ $ npm install --dev
 $ node maid.js
 ```
 
-**Note:** Please define the node environment variable. Supported variables are `development` and `production`. If not defined it will assume it's production.
+**Note:** Please define the node environment variable. Supported variables are `development` and `production`. Will default to production if not defined.
 
 ## Screenshots
 
