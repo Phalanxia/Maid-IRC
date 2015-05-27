@@ -14,6 +14,13 @@ select("#pageCover").onclick = function () {
 	};
 });
 
+var hideModals = function () {
+	select("#pageCover").classList.remove("displayed");
+	[].map.call(selectAll(".modal"), function(obj) {
+		obj.classList.remove("displayed");
+	});
+};
+
 // Show settings modal.
 select("#network-panel header button.fa-cog").onclick = function () {
 	select("#pageCover").classList.add("displayed");

@@ -18,6 +18,10 @@ var client = {
 		focusedServer: ""
 	},
 
+	getFocused: function () {
+		return this.networks[this.networks.focusedServer].focusedSource
+	},
+
 	init: function (connectInfo) {
 		"use strict";
 
@@ -50,12 +54,10 @@ var client = {
 
 		// IRC
 		socket.on("raw", function (data) {
-			// console.log(data[1]); // For testing.
-
 			var connectionId = data[0],
 				message = data[1];
 
-			// Do certant things depending on the incoming command types (normal, reply, error)
+			// Handle different command types differently (normal, reply, error)
 			if (message.commandType == "normal") {
 				incomingMessages.normal(connectionId, message);
 			} else if (message.commandType == "reply") {
@@ -67,24 +69,22 @@ var client = {
 			}
 		});
 
-		// Press enter in chat box
+		function enterMessage () {
+			var input = select("#channel-console footer input");
+			outgoingMessages.send(input.value);
+			input.value = "";
+		}
+
 		select("#channel-console footer input").onkeydown = function (event) {
 			if (event.which == 13) { // Enter Key
-				messaging.send(select("#channel-console footer input").value);
+				enterMessage();
 			}
 		};
 
 		select("#channel-console footer button").onclick = function () {
-			messaging.send(select("#channel-console footer input").value);
+			enterMessage();
 		};
 	}
-};
-
-var hideModals = function () {
-	select("#pageCover").classList.remove("displayed");
-	[].map.call(selectAll(".modal"), function(obj) {
-		obj.classList.remove("displayed");
-	});
 };
 
 // Handle Login Info

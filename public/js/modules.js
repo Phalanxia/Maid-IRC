@@ -91,7 +91,11 @@ var UpdateInterface = (function () {
 
 	// Update topic
 	module.prototype.topic = function (topic) {
-		select("#channel-console header input").value = topic || "";
+		if (!topic || typeof topic == undefined) {
+			topic = "";
+		}
+
+		select("#channel-console header input").value = topic;
 	};
 
 	module.prototype.users = function (channel, connectionId) {
@@ -109,7 +113,7 @@ var UpdateInterface = (function () {
 
 		userList = Object.keys(users);
 
-		console.log(userList);
+		// console.log(userList);
 
 		// Lets sort the user list based on rank and alphabetizing.
 		userList.sort(function(a, b) {
@@ -219,8 +223,6 @@ var UpdateInterface = (function () {
 			})
 		);
 
-		// console.log(client.networks[connectionId]);
-
 		// Hide messages not from the focused channel
 		[].map.call(selectAll('#channel-console output article:not([data-source="' + client.networks[connectionId].focusedSource + '"])'), function (obj) {
 			obj.style.display = "none";
@@ -312,7 +314,6 @@ var OutgoingMessages = (function () {
 			// It's not a special command that we need to do amazing things with. Display it and send it to the server raw.
 			this.socket.emit("send-raw", message);
 		}
-
 	};
 
 	module.prototype.send = function (data) {
@@ -322,7 +323,19 @@ var OutgoingMessages = (function () {
 			// Send it to the command handler.
 			this.command(data);
 		} else {
+			var updateMessage;
 			// Normal Message.
+			this.socket.emit("send-raw", ["PRIVMSG", client.getFocused().focusedSource, data]);
+			// Display it.
+			updateMessage = {
+				type: "privmsg",
+				head: client.getFocused().nick,
+				nick: client.getFocused().nick,
+				channel: client.getFocused().focusedSource,
+				message: data
+			};
+
+			this.updateInterface.message(updateMessage, client.networks.focusedServer);
 		}
 	};
 
@@ -387,7 +400,7 @@ var IncomingMessages = (function () {
 				// Add the join message to the console.
 				updateMessage = {
 					type: "join",
-					head: data.nick,
+					head: "-->",
 					nick: data.nick,
 					channel: data.args[0],
 					message: data.nick + " (" + data.prefix + ") has joined " + data.args[0]
