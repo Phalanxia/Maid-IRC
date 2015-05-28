@@ -12,7 +12,7 @@ var UpdateInterface = (function () {
 	module.prototype.messageSources = function (connectionId) {
 		var parentThis = this;
 
-		// Remove all the current items in the list
+		// Remove all the current items in the list.
 		[].map.call(selectAll("#network-panel > ul"), function (obj) {
 			obj.parentNode.removeChild(obj);
 		});
@@ -28,7 +28,7 @@ var UpdateInterface = (function () {
 		function renderAll(connectionId, source, type) {
 			var network = client.networks[connectionId];
 
-			// If you're already viewing it, there's no point in this so lets do nothing
+			// If you're already viewing it, there's no point in this so lets do nothing.
 			if (source == network.focusedSource) {
 				return;
 			}
@@ -36,7 +36,7 @@ var UpdateInterface = (function () {
 			client.networks.focusedServer = connectionId;
 			network.focusedSource = source;
 
-			// Reset focuseed source class
+			// Reset focused source class.
 			[].map.call(selectAll(".message-source-list li"), function (obj) {
 				obj.classList.remove("focusedSource");
 			});
@@ -223,12 +223,12 @@ var UpdateInterface = (function () {
 			})
 		);
 
-		// Hide messages not from the focused channel
+		// Hide messages not from the focused channel.
 		[].map.call(selectAll('#channel-console output article:not([data-source="' + client.networks[connectionId].focusedSource + '"])'), function (obj) {
 			obj.style.display = "none";
 		});
 
-		// Scroll to bottom unless the user is scrolled up
+		// Scroll to bottom unless the user is scrolled up.
 		if (scrollInfoView) {
 			output.scrollTop = output.scrollHeight;
 		}
