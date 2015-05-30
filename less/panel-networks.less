@@ -10,7 +10,7 @@
 	flex-flow: column wrap;
 }
 // Header
-#network-panel header { box-shadow: inset -1px 0 0 0px fadeout(@darkBlue, 90%); }
+#network-panel header { box-shadow: inset -1px 0 0 0 fadeout(@darkBlue, 90%); }
 #network-panel header h1 {
 	float: left;
 	width: 68px;
@@ -123,7 +123,7 @@
 		cursor: pointer;
 		background-color: @darkBlue;
 	}
-	&:nth-child(odd) { background-color: darken(@darkBlue,2%); }
+	&:nth-child(odd) { background-color: darken(@darkBlue, 2%); }
 }
 .message-source-list li[data-alert]:after  {
 	float: right;
