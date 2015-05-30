@@ -29,9 +29,9 @@ var http = require("http"),
 	lessMiddleware = require("less-middleware"),
 	compression = require("compression"),
 	// Maid IRC libs
-	maidStatic = require("./lib/maidStatic"),
-	maidIrc = require("./lib/maidIrc"),
-	maidHelpers = require("./lib/maidHelpers"),
+	maidStatic = require("./modules/maidStatic"),
+	maidIrc = require("./modules/maidIrc"),
+	maidHelpers = require("./modules/maidHelpers"),
 	// Less middleware variables
 	forceCompile = false,
 	lessDebug = false;
