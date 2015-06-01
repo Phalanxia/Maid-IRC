@@ -12,7 +12,7 @@ var UpdateInterface = (function () {
 	module.prototype.messageSources = function (connectionId) {
 		var parentThis = this;
 
-		// Remove all the current items in the list.
+		// Remove all the current items in the list
 		[].map.call(selectAll("#network-panel > ul"), function (obj) {
 			obj.parentNode.removeChild(obj);
 		});
@@ -28,7 +28,7 @@ var UpdateInterface = (function () {
 		function renderAll(connectionId, source, type) {
 			var network = client.networks[connectionId];
 
-			// If you're already viewing it, there's no point in this so lets do nothing.
+			// If you're already viewing it, there's no point in this so lets do nothing
 			if (source == network.focusedSource) {
 				return;
 			}
@@ -36,7 +36,7 @@ var UpdateInterface = (function () {
 			client.networks.focusedServer = connectionId;
 			network.focusedSource = source;
 
-			// Reset focused source class.
+			// Reset focused source class
 			[].map.call(selectAll(".message-source-list li"), function (obj) {
 				obj.classList.remove("focusedSource");
 			});
@@ -47,36 +47,33 @@ var UpdateInterface = (function () {
 
 					select("#channel-console header input").value = channel.topic;
 					select("#channel-console header input").disabled = false;
+					select("#users").style.display = "";
 
-					select("#users").style.display = '';
-
-					// Update user list.
+					// Update user list
 					parentThis.users(source, connectionId);
 					break;
 				case "pm":
 					select("#channel-console header input").value = "Private Message";
 					select("#channel-console header input").disabled = true;
-
-					select("#users").style.display = 'none';
+					select("#users").style.display = "none";
 					break;
 				case "server":
 					select("#channel-console header input").value = network.name;
 					select("#channel-console header input").disabled = true;
-
-					select("#users").style.display = 'none';
+					select("#users").style.display = "none";
 					break;
 			}
 
 			// Update Displayed.
 			select('[data-connection-id="' + connectionId + '"][data-value="' + source + '"]').classList.add("focusedSource");
-			select("#users ul").innerHTML = "";
+			// select("#users ul").innerHTML = "";
 
-			// Hide all messages.
+			// Hide all messages
 			[].map.call(selectAll("#channel-console output article"), function (obj) {
 				obj.style.display = "none";
 			});
 
-			// Show messages that are from the focused source.
+			// Show messages that are from the focused source
 			[].map.call(selectAll('#channel-console output article[data-source="' + client.networks[connectionId].focusedSource + '"]'), function (obj) {
 				obj.style.display = "";
 			});
@@ -91,7 +88,7 @@ var UpdateInterface = (function () {
 
 	// Update topic
 	module.prototype.topic = function (topic) {
-		if (!topic || typeof topic == undefined) {
+		if (!topic || typeof topic == undefined || topic == "undefined") {
 			topic = "";
 		}
 
@@ -101,8 +98,8 @@ var UpdateInterface = (function () {
 	module.prototype.users = function (channel, connectionId) {
 		console.log("Updating users list.");
 
-		// Clear users bar.
-		select("#users > ul").innerHTML = "";
+		// Clear users bar
+		select("#users ul").innerHTML = "";
 		select("#users header p").innerHTML = "";
 
 		// Set up user list.
@@ -113,9 +110,7 @@ var UpdateInterface = (function () {
 
 		userList = Object.keys(users);
 
-		// console.log(userList);
-
-		// Lets sort the user list based on rank and alphabetizing.
+		// Sort the user list based on rank and alphabetization
 		userList.sort(function(a, b) {
 			// var rankString = "\r~&@%+";
 			var rankString = "\r+%@&~";
@@ -124,43 +119,43 @@ var UpdateInterface = (function () {
 
 			var rankSort = rankA == rankB ? 0 : (rankA > rankB ? 1 : -1);
 			if (rankSort === 0) {
-				return a.toLowerCase() > b.toLowerCase() ? 1 : -1;
+				return a.toLowerCase() < b.toLowerCase() ? 1 : -1;
 			}
 			return rankSort;
 		});
 
-		for (var i = userList.length - 1; i >= 0; i--) {
+		userList.forEach(function (element, index, array) {
 			var identifyer = {};
-			identifyer.rank = users[userList[i]];
+			identifyer.rank = users[element];
 			identifyer.icon = "";
 
-			if (users[userList[i]] !== "") {
-				switch (users[userList[i]]) {
+			if (users[element] !== "") {
+				switch (users[element]) {
 					case "~": // Owners
-						identifyer.icon = "&#xf004";
+						identifyer.icon = "&#xf004;";
 						break;
 					case "&": // Admins
-						identifyer.icon = "&#xf0ac";
+						identifyer.icon = "&#xf0ac;";
 						break;
 					case "@": // Ops
-						identifyer.icon = "&#xf0e3";
+						identifyer.icon = "&#xf0e3;";
 						break;
 					case "%": // Half-ops
-						identifyer.icon = "&#xf132";
+						identifyer.icon = "&#xf132;";
 						break;
 					case "+": // Voiced
-						identifyer.icon = "&#xf075";
+						identifyer.icon = "&#xf075;";
 						break;
 				}
 			}
 
-			// Render the template
-			select("#users ul").insertAdjacentHTML("beforeend", Templates.messageSource.compiled({
+			// Display the user in the list
+			select("#users ul").insertAdjacentHTML("afterbegin", Templates.userList.compiled({
 				rank: identifyer.rank,
 				icon: identifyer.icon,
-				nick: userList[i]
+				nick: element
 			}));
-		}
+		});
 
 		// Get user count
 		select("#users header p").innerHTML = userList.length + " users";
@@ -204,7 +199,7 @@ var UpdateInterface = (function () {
 			data.channel = client.networks[connectionId].focusedSource;
 		}
 
-		// If scrolled at the bottom set scrollIntoView as true.
+		// If scrolled at the bottom set scrollIntoView as true
 		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
 			scrollInfoView = true;
 		}
@@ -223,12 +218,12 @@ var UpdateInterface = (function () {
 			})
 		);
 
-		// Hide messages not from the focused channel.
+		// Hide messages not from the focused channel
 		[].map.call(selectAll('#channel-console output article:not([data-source="' + client.networks[connectionId].focusedSource + '"])'), function (obj) {
 			obj.style.display = "none";
 		});
 
-		// Scroll to bottom unless the user is scrolled up.
+		// Scroll to bottom unless the user is scrolled up
 		if (scrollInfoView) {
 			output.scrollTop = output.scrollHeight;
 		}
@@ -258,7 +253,7 @@ var ConnectToNetwork = (function () {
 
 		network.nick = data.nick;
 		network.highlights = data.nick;
-		// Set default focused source to server.
+		// Set default focused source to server
 		network.focusedSource = "server";
 		network.sources = {};
 
@@ -266,7 +261,7 @@ var ConnectToNetwork = (function () {
 	};
 
 	module.prototype.connect = function (data, connectionId) {
-		// Send connect info to the back-end.
+		// Send connect info to the back-end
 		this.socket.emit("connectToNetwork", [data, connectionId]);
 	};
 
@@ -285,12 +280,11 @@ var OutgoingMessages = (function () {
 	};
 
 	module.prototype.command = function (data) {
-		// If it's empty then lets just not do this okay
-		if (data === '') {
+		if (data === "") {
 			return;
 		}
 
-		// List of supported commands.
+		// List of supported commands
 		var commands = [
 			"me",
 			"join",
@@ -303,30 +297,34 @@ var OutgoingMessages = (function () {
 		message = data.substring(data.split(" ")[0].length + 1, data.length),
 		command = data.split(" ")[0];
 
-		// If it's a supported command.
+		// If it's a supported command
 		if (commands.indexOf(command)) {
-			// Depending on the command, lets do someething.
+			// Depending on the command, lets do someething
 			switch (command) {
 				case "":
 					break;
 			}
 		} else {
-			// It's not a special command that we need to do amazing things with. Display it and send it to the server raw.
+			// It's not one of our commands
 			this.socket.emit("send-raw", message);
 		}
 	};
 
 	module.prototype.send = function (data) {
-		if (data.substring(0, 1) == "/" && data.substring(0, 2) != "//") { // Check if it's a command.
-			// Remove the / from thee message, it's not needed any more!
+		if (data === "") {
+			return;
+		}
+
+		if (data.substring(0, 1) == "/" && data.substring(0, 2) != "//") { // Check if it's a command
+			// Remove / from the message, it's not needed any more!
 			data = data.substring(1, data.length);
-			// Send it to the command handler.
+			// Pass it to the command handler
 			this.command(data);
 		} else {
 			var updateMessage;
-			// Normal Message.
+			// Normal message
 			this.socket.emit("send-raw", ["PRIVMSG", client.getFocused().focusedSource, data]);
-			// Display it.
+			// Display it
 			updateMessage = {
 				type: "privmsg",
 				head: client.getFocused().nick,
@@ -379,7 +377,7 @@ var IncomingMessages = (function () {
 			case "mode":
 				break;
 			case "join":
-				// Make sure the joined channel is in the current saved channel object.
+				// Make sure the joined channel is in the current saved channel object
 				if (network.sources[data.args[0]] === undefined) {
 					network.sources[data.args[0]] = {};
 				}
@@ -397,7 +395,7 @@ var IncomingMessages = (function () {
 					}
 				}
 
-				// Add the join message to the console.
+				// Display join message
 				updateMessage = {
 					type: "join",
 					head: "-->",
@@ -459,11 +457,13 @@ var IncomingMessages = (function () {
 					k;
 
 				for (k in data.args) {
-					messages = k + " "; // I think this should work?
+					if (typeof data.args[k] !== undefined) {
+						messages = messages + data.args[k] + " "; // I think this should work?
+					}
 				}
 
 				updateMessage = {
-					type: "rp_myinfo",
+					type: "rpl_myinfo",
 					head: ">",
 					nick: "SERVER",
 					channel: "SERVER",
@@ -471,6 +471,11 @@ var IncomingMessages = (function () {
 				};
 				break;
 			case "005":
+				// The number isnt the same for every network. Redo this.
+				if (typeof data.args[9] === undefined) {
+					return;
+				}
+
 				var networkName = data.args[9].split("NETWORK=");
 
 				if (networkName.length > 1) {
@@ -499,6 +504,10 @@ var IncomingMessages = (function () {
 				}
 				// MADISON
 				network.sources[data.args[1]].connectionId = connectionId;
+
+				if (typeof data.args[2] === undefined) {
+					data.args[2] = ""
+				}
 
 				// Save the topic
 				network.sources[data.args[1]].topic = data.args[2];

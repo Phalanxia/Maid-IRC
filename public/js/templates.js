@@ -2,8 +2,8 @@ var Templates = {
 	messageSource: {
 		source: '<ul class="message-source-list"><li class="server" data-connection-id="{{connectionId}}" data-value="server"><h2>{{serverName}}</h2></li>{{#with sources}}<li class="channel" data-connection-id="{{data.connectionId}}" data-value="{{key}}" data-alert=""><i class="fa fa-comments-o"></i><span>{{key}}</span></li>{{/with}}</ul>'
 	},
-	usersList: {
-		source: '{{#with user}}<li><p data-rank="{{data.rank}}" data-rank-icon="{{data.icon}}">{{data.nick}}</p></li>{{/with}}'
+	userList: {
+		source: '<li><p data-rank="{{rank}}" data-rank-icon="{{{icon}}}">{{nick}}</p></li>'
 	},
 	message: {
 		source: '<article class="consoleMessage" data-messageType="{{type}}" data-source="{{source}}"><aside><time>{{timestamp}}</time><span>{{head}}</span></aside><p>{{{message}}}</p></article><article class="filler"><div></div></article>'
