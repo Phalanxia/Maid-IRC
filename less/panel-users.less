@@ -4,12 +4,10 @@
 #users {
 	width: 200px;
 	height: 100%;
-	background-color: @white-2;
-	-webkit-user-select: none;
-	   -moz-user-select: none;
-			user-select: none;
 	flex: 0 0 auto;
 	order: 2;
+	background-color: @white-2;
+	.m-user-select(none);
 }
 #users header { box-shadow: inset 1px 0 0 0px fadeout(@darkBlue, 90%) }
 #users header p {
@@ -27,7 +25,7 @@
 	padding: 0;
 	margin: 0;
 	overflow-y: scroll;
-	overflow-x: hide;
+	overflow-x: hidden;
 	list-style: none;
 	border-left: 1px solid @white-4;
 	flex: 1 1 auto;
@@ -39,15 +37,7 @@
 	.m-transition(background-color .1s ease-in-out);
 	&:hover {
 		cursor: pointer;
-		background-color: darken(@white-2,4%);
-	}
-	&:after {
-		content: attr(data-rank-icon);
-		position: absolute;
-		top: 0;
-		right: 10px;
-		font-family: FontAwesome;
-		color: @lightBlue;
+		background-color: darken(@white-2, 4%);
 	}
 	&:hover:after {
 		content: attr(data-rank);
@@ -60,6 +50,14 @@
 	font-size: .85em;
 	line-height: 34px;
 	color: @darkBlue;
+	&:after {
+		position: absolute;
+		top: 0;
+		right: 10px;
+		font-family: FontAwesome;
+		color: @lightBlue;
+		content: attr(data-rank-icon);
+	}
 }
 #users footer {
 	display: none;
