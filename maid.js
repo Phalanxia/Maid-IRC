@@ -104,12 +104,12 @@ var server,
 
 function httpServer () {
 	var server = http.createServer(app).listen(config.http_port, config.http_host);
-	maidIrc(io.listen(server));
+	maidIrc(io.listen(server), env);
 }
 
 function httpsServer () {
 	var server = http.createServer({key: config.private_key, cert: config.certificate}, app).listen(config.https_port, config.http_host);
-	maidIrc(io.listen(server));
+	maidIrc(io.listen(server), env);
 }
 
 if (config.enable_https >= 1) { // If HTTPS
