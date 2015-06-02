@@ -1,60 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
+    <meta charset="UTF-8">
     <title>Maid-irc by Phalanxia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
-    <header>
-      <div class="inner">
-        <h1>Maid-irc</h1>
-        <h2>A modern web IRC client. Built on Node.js</h2>
-        <a href="https://github.com/Phalanxia/Maid-IRC" class="button"><small>View project on</small>GitHub</a>
-      </div>
-    </header>
+    <section class="page-header">
+      <h1 class="project-name">Maid-irc</h1>
+      <h2 class="project-tagline">A modern web IRC client. Built on Node.js</h2>
+      <a href="https://github.com/Phalanxia/Maid-IRC" class="btn">View on GitHub</a>
+      <a href="https://github.com/Phalanxia/Maid-IRC/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Phalanxia/Maid-IRC/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <p><a href="https://github.com/Phalanxia/Maid-IRC"><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/public/img/logo.png" alt="Maid IRC"></a></p>
+    <section class="main-content">
+      <p><a href="https://github.com/Phalanxia/Maid-IRC"><img src="public/img/logo.png" alt="Maid IRC"></a></p>
 
 <p>A modern web IRC client. Built on <a href="http://nodejs.org">Node</a>.</p>
 
-<p><a href="https://gemnasium.com/Phalanxia/Maid-IRC"><img src="https://gemnasium.com/Phalanxia/Maid-IRC.png" alt="Dependency Status"></a> <a href="https://travis-ci.org/Phalanxia/Maid-IRC"><img src="https://travis-ci.org/Phalanxia/Maid-IRC.svg?branch=master" alt="Build Status"></a></p>
+<p><a href="https://www.npmjs.org/package/maid-irc"><img src="http://img.shields.io/npm/v/maid-irc.svg?style=flat" alt="NPM version"></a> <a href="https://gemnasium.com/Phalanxia/Maid-IRC"><img src="http://img.shields.io/gemnasium/Phalanxia/Maid-IRC.svg?style=flat" alt="Dependency Status"></a> <a href="https://travis-ci.org/Phalanxia/Maid-IRC"><img src="http://img.shields.io/travis/Phalanxia/Maid-IRC.svg?branch=master&amp;style=flat" alt="Build Status"></a> <a href="https://www.npmjs.org/package/maid-irc"><img src="https://img.shields.io/npm/dm/maid-irc.svg?style=flat" alt="Downloads"></a></p>
+
+<p><img class="emoji" title=":warning:" alt=":warning:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/26a0.png" height="20" width="20" align="absmiddle"> Currently doesn't work. Redoing a lot of it! <img class="emoji" title=":warning:" alt=":warning:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/26a0.png" height="20" width="20" align="absmiddle"></p>
 
 <h2>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<ol>
-<li><p>Download dependencies. <code>$ npm install</code> for development, and <code>$ npm install --production</code> for production.</p></li>
-<li><p>Edit config.js</p></li>
-</ol><h2>
-<a name="running" class="anchor" href="#running"><span class="octicon octicon-link"></span></a>Running</h2>
+<div class="highlight highlight-bash"><pre>$ npm install</pre></div>
 
-<ol>
-<li><p>Please define the node enviroment varible. Supported varibles are <code>development</code> and <code>production</code>. If not defined it will assume it's development.</p></li>
-<li><p>Run Maid IRC. Use this command in the main directory of Maid IRC: <code>node app.js</code></p></li>
-</ol><h2>
-<a name="screenshots" class="anchor" href="#screenshots"><span class="octicon octicon-link"></span></a>Screenshots</h2>
+<p>For development:</p>
 
-<p><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/screenshots/login.png" alt="Login Screen"></p>
+<div class="highlight highlight-bash"><pre>$ npm install --dev</pre></div>
 
-<p><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/screenshots/client.png" alt="Login Screen"></p>
+<p><strong>Note:</strong> Maid IRC requires Node.js v0.10 or newer.</p>
 
 <h2>
-<a name="community" class="anchor" href="#community"><span class="octicon octicon-link"></span></a>Community</h2>
+<a id="running" class="anchor" href="#running" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running</h2>
+
+<div class="highlight highlight-bash"><pre>$ node maid.js</pre></div>
+
+<p><strong>Note:</strong> Please define the node environment variable. Supported variables are <code>development</code> and <code>production</code>. Will default to production if not defined.</p>
+
+<h2>
+<a id="screenshots" class="anchor" href="#screenshots" aria-hidden="true"><span class="octicon octicon-link"></span></a>Screenshots</h2>
+
+<p><img src="screenshots/login.png" alt="Connect"></p>
+
+<p><img src="screenshots/client.png" alt="Client"></p>
+
+<h2>
+<a id="community" class="anchor" href="#community" aria-hidden="true"><span class="octicon octicon-link"></span></a>Community</h2>
+
+<p>Found a bug? Have a feature request? Please <a href="https://github.com/Phalanxia/Maid-IRC/issues">submit an issue.</a></p>
 
 <p>Need support? Want to chat? Join our channel on the Freenode IRC network.</p>
 
@@ -63,46 +64,17 @@ CHANNEL: ##phalanxia
 </code></pre>
 
 <h2>
-<a name="copyright-and-license" class="anchor" href="#copyright-and-license"><span class="octicon octicon-link"></span></a>Copyright and license</h2>
+<a id="copyright-and-license" class="anchor" href="#copyright-and-license" aria-hidden="true"><span class="octicon octicon-link"></span></a>Copyright and license</h2>
 
-<p>The MIT License (MIT)</p>
+<p><a href="LICENSE">MIT License</a></p>
 
-<p>Copyright (c) 2014 Madison Tries</p>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Phalanxia/Maid-IRC">Maid-irc</a> is maintained by <a href="https://github.com/Phalanxia">Phalanxia</a>.</span>
 
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:</p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
 
-<p>The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.</p>
-
-<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/Phalanxia/Maid-IRC/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/Phalanxia/Maid-IRC/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/Phalanxia/Maid-IRC"></a> is maintained by <a href="https://github.com/Phalanxia">Phalanxia</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
+    </section>
 
             <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -117,3 +89,4 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 
   </body>
 </html>
+
