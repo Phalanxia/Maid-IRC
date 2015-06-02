@@ -48,7 +48,6 @@ var maidIrc = function (io) {
 		});
 
 		client.on("raw", function (message) {
-			// console.log(message);
 			socket.emit("raw", [clientId, message]);
 		});
 
