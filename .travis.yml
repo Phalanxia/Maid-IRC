@@ -3,3 +3,10 @@ node_js:
   - "0.10"
 matrix:
   fast_finish: true
+deploy:
+  provider: npm
+  email: madisontries@gmail.com
+  api_key: "Sh0xwsyJDIe9OZJIfG6gvFVq/MtIl6mfph9R6wVBAotlR0UReOmyhuKybEY4MXyPKSH4vWHQ3Ig4UwXF8Vr7V1XVi6DretZ8PH7DcdB5YEa2k
+  hG6afu3klqe1OD/ivIofQH6MtRQNGhyuoUInnDbs5emIQ1XERbBv4NLdwZnKok="
+  on:
+    branch: master

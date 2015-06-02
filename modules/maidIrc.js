@@ -3,7 +3,7 @@
 var irc = require("irc");
 var allClients = [];
 
-var maidIrc = function (io) {
+var maidIrc = function (io, env) {
 	function createClient (socket, info, clientId) {
 		// Create the IRC client instance
 		console.log("Creating new IRC client instance.");
@@ -48,6 +48,10 @@ var maidIrc = function (io) {
 		});
 
 		client.on("raw", function (message) {
+			if (env === "development") {
+				console.log(message);
+			}
+			
 			socket.emit("raw", [clientId, message]);
 		});
 
