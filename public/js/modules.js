@@ -41,16 +41,20 @@ var UpdateInterface = (function () {
 				obj.classList.remove("focusedSource");
 			});
 
-			switch (type) {
+
+			switch (type.toLowerCase()) {
 				case "channel":
 					var channel = network.sources[source];
 
-					select("#channel-console header input").value = channel.topic;
-					select("#channel-console header input").disabled = false;
-					select("#users").style.display = "";
+					if (typeof channel !== undefined) {
+						parentThis.topic(channel.topic);
+						select("#channel-console header input").disabled = false;
+						select("#users").style.display = "";
 
-					// Update user list
-					parentThis.users(source, connectionId);
+						// Update user list
+						parentThis.users(source, connectionId);
+					}
+
 					break;
 				case "pm":
 					select("#channel-console header input").value = "Private Message";
@@ -58,7 +62,7 @@ var UpdateInterface = (function () {
 					select("#users").style.display = "none";
 					break;
 				case "server":
-					select("#channel-console header input").value = network.name;
+					select("#channel-console header input").value = network.name || "Server";
 					select("#channel-console header input").disabled = true;
 					select("#users").style.display = "none";
 					break;
@@ -81,7 +85,7 @@ var UpdateInterface = (function () {
 
 		[].map.call(selectAll(".message-source-list li"), function (obj) {
 			obj.onclick = function () {
-				renderAll(obj.getAttribute("data-connection-id").toLowerCase(), obj.getAttribute("data-value").toLowerCase(), obj.className);
+				renderAll(obj.getAttribute("data-connection-id"), obj.getAttribute("data-value"), obj.className);
 			}
 		});
 	};
@@ -210,7 +214,7 @@ var UpdateInterface = (function () {
 		// Insert message into the console
 		output.insertAdjacentHTML("beforeend", Templates.message.compiled({
 				connectionId: connectionId,
-				source: data.channel.toLowerCase(),
+				source: data.channel,
 				type: data.type,
 				timestamp: timestamp,
 				head: data.head,
@@ -254,7 +258,7 @@ var ConnectToNetwork = (function () {
 		network.nick = data.nick;
 		network.highlights = data.nick;
 		// Set default focused source to server
-		network.focusedSource = "server";
+		network.focusedSource = "SERVER";
 		network.sources = {};
 
 		this.connect(data, connectionId);
@@ -472,7 +476,7 @@ var IncomingMessages = (function () {
 				break;
 			case "005":
 				// The number isnt the same for every network. Redo this.
-				if (typeof data.args[9] === undefined) {
+				/*if (typeof data.args[9] === undefined) {
 					return;
 				}
 
@@ -486,7 +490,7 @@ var IncomingMessages = (function () {
 						// select('#network-panel ul h2').innerHTML = data.server;
 						network.name = data.server;
 					}
-				}
+				}*/
 				break;
 			case "251":
 				updateMessage = {

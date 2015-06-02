@@ -25,7 +25,10 @@ var client = {
 	init: function (connectInfo) {
 		"use strict";
 
-		var socket = io.connect(window.location.origin, { "reconnect": false });
+		var socket = io.connect(window.location.origin, {
+			"reconnection": true,
+			"timeout": 20000
+		});
 
 		// Modules
 		var updateInterface = new UpdateInterface(),
@@ -49,7 +52,7 @@ var client = {
 		socket.on("disconnect", function () {
 			client.status.connection = false;
 			client.status.pastDisconnect = true;
-			console.log("Lost connection.");
+			console.warn("Connection lost.");
 		});
 
 		// IRC
