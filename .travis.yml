@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
 matrix:
   fast_finish: true
 deploy:
   provider: npm
   email: madisontries@gmail.com
-  api_key: "Sh0xwsyJDIe9OZJIfG6gvFVq/MtIl6mfph9R6wVBAotlR0UReOmyhuKybEY4MXyPKSH4vWHQ3Ig4UwXF8Vr7V1XVi6DretZ8PH7DcdB5YEa2k
-  hG6afu3klqe1OD/ivIofQH6MtRQNGhyuoUInnDbs5emIQ1XERbBv4NLdwZnKok="
+  api_key:
+    secure: J7RZaTTGK4tChYON9skrWy4m7fcV4l/P3F0p2VPjg7Yx3zS1VFQ4p+VNnfC+jnmeqhXABj9Up/xenUpVEK6+elcSFMhYmqTPRp2Yw9UE/8lNJ63HnV/07m88/5bEdfQh7Vd1UhGjSmHxwzp7st70xveWOPi1cW9zDO0pg48F22g=
   on:
-    branch: master
+    repo: Phalanxia/Maid-IRC
