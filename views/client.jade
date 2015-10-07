@@ -48,7 +48,7 @@ html(lang="en")
 						div
 				footer
 					input(type="text")
-					button.btn(type="button") Send
+					button.btn.fa.fa-commenting(type="button")
 			.panel#users
 				header
 					p
@@ -99,11 +99,17 @@ html(lang="en")
 				a(href="https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/LICENSE", target="_blank") License
 				include ./includes/licenses.jade
 
+	// Libraries
 	script(src="https://cdn.socket.io/socket.io-1.3.5.js")
 	script(src="js/lib/Autolinker.min.js")
 	script(src="js/lib/handlebars.min.js")
 	script(src="js/lib/uuid.js")
-	script(src="js/templates.js")
-	script(src="js/modules.js")
+	// Modules
+	script(src="js/modules/NetworkConnect.js")
+	script(src="js/modules/IncomingMessages.js")
+	script(src="js/modules/OutgoingMessages.js")
+	script(src="js/modules/UI.js")
+	// Core scripts
 	script(src="js/client.js")
 	script(src="js/ui.js")
+	script(src="js/templates.js")

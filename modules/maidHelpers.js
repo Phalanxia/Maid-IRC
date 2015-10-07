@@ -1,20 +1,18 @@
-var maidHelpers = function () {
-	"use strict";
+'use strict';
 
-	var helpers = function () { };
+class Helpers {
+	constructors() {}
 
-	helpers.prototype.stopMaid = function (reason) {
+	stopMaid(reason) {
 		if (reason) {
-			reason = " Reason: " + reason;
+			reason = ' Reason: ' + reason;
 		} else {
-			reason = "";
+			reason = '';
 		}
 
-		console.log("\nGracefully shutting down." + reason);
+		console.log('\nGracefully shutting down.' + reason);
 		process.exit();
 	}
+}
 
-	return new helpers();
-};
-
-module.exports = maidHelpers();
+module.exports = new Helpers();
