@@ -3,7 +3,7 @@
   "version": "0.0.18",
   "description": "A modern web IRC client. Built on Node.",
   "author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
-  "homepage": "https://phalanxia.github.io/Maid-IRC/",
+  "homepage": "http://madi.moe/Maid-IRC/",
   "dependencies": {
     "body-parser": "^1.12.4",
     "compression": "^1.6.0",
