@@ -16,11 +16,11 @@ var Templates = {
 var Partials = {
 	settingsPartial: '',
 	connectPartial: ''
-}
+};
 
-Handlebars.registerHelper("with", function (context, options) {
+Handlebars.registerHelper('with', function(context, options) {
 	// console.log(JSON.stringify(options.data.root));
-	var content = (function () {
+	var content = (function() {
 		var results = [];
 		for (var key in context) {
 			var value = context[key];
@@ -30,9 +30,11 @@ Handlebars.registerHelper("with", function (context, options) {
 				data: options.data.root
 			}));
 		}
+
 		return results;
 	})();
-	return content.join("");
+
+	return content.join('');
 });
 
 // Compile templates and save them back in the template object

@@ -1,12 +1,17 @@
-"use strict";
+'use strict';
 
-var irc = require("irc");
-var allClients = [];
+const irc = require('irc');
+let allClients = [];
 
-var maidIrc = function (io, env) {
-	function createClient (socket, info, clientId) {
+function maidIrc(io, env) {
+	function createClient(socket, info, clientId) {
 		// Create the IRC client instance
-		console.log("Creating new IRC client instance.");
+		console.log('Creating new IRC client instance.');
+		let _debug = false;
+
+		if (env === 'development') {
+			_debug = true;
+		}
 
 		var client = new irc.Client(info.server, info.nick, {
 			userName: info.nick,
@@ -14,7 +19,7 @@ var maidIrc = function (io, env) {
 			password: info.nicknamePassword,
 			port: info.port,
 			localAddress: null,
-			debug: false,
+			debug: _debug,
 			showErrors: true,
 			autoRejoin: true,
 			autoConnect: false,
@@ -31,49 +36,51 @@ var maidIrc = function (io, env) {
 			messageSplit: 512,
 			encoding: false,
 			webirc: {
-				pass: "",
-				ip: "",
-				user: ""
+				pass: '',
+				ip: '',
+				user: ''
 			}
 		});
 
-		client.on("registered", function () {
-			console.log("001 message recieved.");
+		client.on('registered', function() {
+			console.log('001 message recieved.');
 		});
 
-		client.on("abort", function () {
-			socket.emit("error", {
-				type: "connection"
+		client.on('abort', function() {
+			socket.emit('error', {
+				type: 'connection'
 			});
 		});
 
-		client.on("raw", function (message) {
-			if (env === "development") {
+		client.on('raw', function(message) {
+			if (env === 'development') {
 				console.log(message);
 			}
-			
-			socket.emit("raw", [clientId, message]);
+
+			socket.emit('raw', [clientId, message]);
 		});
 
-		client.on("error", function (message) {
-			console.log("Node-IRC Error: " + JSON.stringify(message));
+		client.on('error', function(message) {
+			console.log('Node-IRC Error: ' + JSON.stringify(message));
 		});
 
 		return client;
 	}
 
-	io.sockets.on("connection", function (socket) {
-		var i, thisClient = {};
-		console.log("Client connected from: " + socket.handshake.address);
+	io.sockets.on('connection', function(socket) {
+		console.log('Client connected from: ' + socket.handshake.address);
 
-		socket.on("connectToNetwork", function (data) {
+		let i;
+		let thisClient = {};
+
+		socket.on('connectToNetwork', function(data) {
 			if (typeof data === undefined) {
-				socket.disconnect("unauthorized");
+				socket.disconnect('unauthorized');
 			} else {
-				var networkName = data[0].name,
-					options = data[0].options,
-					connectionId = data[1],
-					clientInstance;
+				const networkName = data[0].name;
+				const options = data[0].options;
+				const connectionId = data[1];
+				let clientInstance;
 
 				thisClient[connectionId] = createClient(socket, data[0], connectionId);
 				clientInstance = thisClient[connectionId];
@@ -84,14 +91,14 @@ var maidIrc = function (io, env) {
 					// It didn't connect?
 				}
 
-				socket.on("disconnect", function (reason) {
-					console.log("Client disconnected: " + reason);
-					clientInstance.disconnect("Connection closed");
+				socket.on('disconnect', function(reason) {
+					console.log('Client disconnected: ' + reason);
+					clientInstance.disconnect('Connection closed');
 
 					delete thisClient[connectionId];
 				});
 
-				socket.on("send-raw", function (message) {
+				socket.on('send-raw', function(message) {
 					clientInstance.send.apply(null, message);
 				});
 
@@ -99,20 +106,20 @@ var maidIrc = function (io, env) {
 			}
 		});
 
-		socket.on("disconnectFromNetwork", function (id) {
+		socket.on('disconnectFromNetwork', function(id) {
 			// Needs error checking
 			thisClient[id].disconnect();
 			delete thisClient[id];
 		});
 
 		// Find the correct event for a socket disconnection
-		socket.on("liveDisconnect", function(data) {
+		socket.on('liveDisconnect', function() {
 			Object.keys(thisClient, function(key) {
-				thisClient[key].disconnect() // Or however you do that :P
+				thisClient[key].disconnect(); // Or however you do that :P
 			});
 			allClients.splice(i, 1);
 		});
 	});
-};
+}
 
 module.exports = maidIrc;

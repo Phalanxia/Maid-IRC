@@ -1,13 +1,13 @@
-var maidSession = function (app) {
-	"use strict";
+'use strict';
 
+function maidSession(app) {
 	// Define the express routes.
-	app.route("/").get(function (req, res) {
+	app.route('/').get((req, res) => {
 		// Fetch the version number for the about page.
-		var pjson = require('../package.json').version;
+		const pjson = require('../package.json').version;
 
-		res.render("client", {version: pjson});
+		res.render('client', {version: pjson});
 	});
-};
+}
 
 module.exports = maidSession;
