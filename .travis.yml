@@ -1,26 +1,26 @@
 language: node_js
 node_js:
-	- 'node'
-	- '4.1'
-	- '4.0'
+  - 'node'
+  - '4.1'
+  - '4.0'
 sudo: false
 os:
-	- linux
-	- osx
+  - linux
+  - osx
 matrix:
-	fast_finish: true
-	allow_failures:
-		- os: osx
-env:
-	- NODE_ENV=test
+  fast_finish: true
+  allow_failures:
+    - os: osx
 deploy:
-	provider: npm
-	email: madisontries@gmail.com
-	api_key:
-		secure: J7RZaTTGK4tChYON9skrWy4m7fcV4l/P3F0p2VPjg7Yx3zS1VFQ4p+VNnfC+jnmeqhXABj9Up/xenUpVEK6+elcSFMhYmqTPRp2Yw9UE/8lNJ63HnV/07m88/5bEdfQh7Vd1UhGjSmHxwzp7st70xveWOPi1cW9zDO0pg48F22g=
-	on:
-		repo: Phalanxia/Maid-IRC
+  provider: npm
+  email: madisontries@gmail.com
+  api_key:
+    secure: J7RZaTTGK4tChYON9skrWy4m7fcV4l/P3F0p2VPjg7Yx3zS1VFQ4p+VNnfC+jnmeqhXABj9Up/xenUpVEK6+elcSFMhYmqTPRp2Yw9UE/8lNJ63HnV/07m88/5bEdfQh7Vd1UhGjSmHxwzp7st70xveWOPi1cW9zDO0pg48F22g=
+  on:
+    repo: Phalanxia/Maid-IRC
+env:
+  - NODE_ENV=test
 install:
-	- npm install
+  - npm install
 before_script:
-	- node maid.js
+  - node maid.js
