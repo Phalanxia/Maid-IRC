@@ -13,7 +13,7 @@ const env = process.env.NODE_ENV || argEnv || 'production';
 console.log('Starting Maid IRC.\nEnvironment: ' + env);
 
 // Check to see if it is a supported environment variable
-if (['production', 'development', 'debug'].indexOf(env.toLowerCase()) < 0) {
+if (['production', 'development', 'test', 'debug'].indexOf(env.toLowerCase()) < 0) {
 	console.warn('Sorry! NODE_ENV: "' + env + '" is not recognized. Try "development" or "production".');
 }
 
@@ -150,3 +150,8 @@ maidStatic(app);
 process.on('SIGINT', () => {
 	maidHelpers.stopMaid('SIGINT');
 });
+
+// Close Maid-IRC after seccessfully getting to everything above without crashing. (This is probably a really bad way of handling this)
+if (env === 'test') {
+	maidHelpers.stopMaid('Maid-IRC seems to have started successfully');
+}
