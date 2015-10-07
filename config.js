@@ -3,7 +3,7 @@
 const config = {
 	// Host/Port which you want the webserver to serve on.
 	HTTP_HOST: process.env.HOST || '0.0.0.0', // Change to '0.0.0.0' to make this public.
-	HTTP_PORT: process.env.PORT || 80,
+	HTTP_PORT: process.env.PORT || 4848,
 
 	// HTTPS settings
 	ENABLE_HTTPS: 0, // 0 = false, 1 = true, 2 = force
