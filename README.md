@@ -1,10 +1,12 @@
-[![Maid IRC](public/img/logo.png)](https://github.com/Phalanxia/Maid-IRC)
+[![Maid IRC](public/img/logo_medium.png)](https://github.com/Phalanxia/Maid-IRC)
+[![Build Status](https://img.shields.io/travis/Phalanxia/Maid-IRC.svg?branch=master&style=flat-square)](https://travis-ci.org/Phalanxia/Maid-IRC) [![NPM version](https://img.shields.io/npm/v/maid-irc.svg?style=flat-square)](https://www.npmjs.org/package/maid-irc) [![Dependency Status](https://img.shields.io/gemnasium/Phalanxia/Maid-IRC.svg?style=flat-square)](https://gemnasium.com/Phalanxia/Maid-IRC) [![Downloads](https://img.shields.io/npm/dm/maid-irc.svg?style=flat-square)](https://www.npmjs.org/package/maid-irc)
+=============
 
-A modern web IRC client. Built on [Node](http://nodejs.org).
+A modern web IRC client. Built on [Node](https://nodejs.org).
 
-[![NPM version](http://img.shields.io/npm/v/maid-irc.svg?style=flat)](https://www.npmjs.org/package/maid-irc) [![Dependency Status](http://img.shields.io/gemnasium/Phalanxia/Maid-IRC.svg?style=flat)](https://gemnasium.com/Phalanxia/Maid-IRC) [![Build Status](http://img.shields.io/travis/Phalanxia/Maid-IRC.svg?branch=master&style=flat)](https://travis-ci.org/Phalanxia/Maid-IRC) [![Downloads](https://img.shields.io/npm/dm/maid-irc.svg?style=flat)](https://www.npmjs.org/package/maid-irc)
+*Still in early development. Features and bugs may or may not be included.*
 
-:warning: Currently doesn't work. Redoing a lot of it! :warning:
+---
 
 ## Installation
 ```bash
@@ -16,7 +18,7 @@ For development:
 $ npm install --dev
 ```
 
-**Note:** Maid IRC requires Node.js v0.10 or newer.
+**Note:** Maid-IRC requires Node.js v4.x or newer.
 
 ## Running
 ```bash
