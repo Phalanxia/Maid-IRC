@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-- '0.10'
+  - '4.0.0'
+  - 'node'
 matrix:
   fast_finish: true
 deploy:
@@ -10,3 +11,7 @@ deploy:
     secure: J7RZaTTGK4tChYON9skrWy4m7fcV4l/P3F0p2VPjg7Yx3zS1VFQ4p+VNnfC+jnmeqhXABj9Up/xenUpVEK6+elcSFMhYmqTPRp2Yw9UE/8lNJ63HnV/07m88/5bEdfQh7Vd1UhGjSmHxwzp7st70xveWOPi1cW9zDO0pg48F22g=
   on:
     repo: Phalanxia/Maid-IRC
+install:
+  - npm install
+before_script:
+  - node maid.js
