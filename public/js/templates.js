@@ -6,7 +6,7 @@ var Templates = {
 		source: '<li><p data-rank="{{rank}}" data-rank-icon="{{{icon}}}">{{nick}}</p></li>'
 	},
 	message: {
-		source: '<article class="consoleMessage" data-messageType="{{type}}" data-source="{{source}}"><aside><time>{{timestamp}}</time><span>{{head}}</span></aside><p>{{{message}}}</p></article><article class="filler"><div></div></article>'
+		source: '<article class="consoleMessage" data-messageType="{{type}}" data-source="{{source}}"><aside><time>{{timestamp}}</time><span class="{{icon}}">{{head}}</span></aside><p>{{{message}}}</p></article><article class="filler"><div></div></article>'
 	},
 	modal: {
 		source: '<div class="modal"><header>{{title}}<button type="button">&times;</button></header>{{> modalContent}}</div>'

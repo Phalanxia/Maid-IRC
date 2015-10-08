@@ -49,7 +49,7 @@ class IncomingMessages {
 
 				// If its the focused channel update the userlist
 				if (network.sources[data.args[0]].users !== undefined) {
-					if (data.args[0] == network.focusedSource || network.focusedSource == '') {
+					if (data.args[0] === network.focusedSource || network.focusedSource === '') {
 						this.updateInterface.users(data.args[0], connectionId);
 					}
 				}
@@ -60,14 +60,53 @@ class IncomingMessages {
 					head: '-->',
 					nick: data.nick,
 					channel: data.args[0],
-					message: data.nick + ' (' + data.prefix + ') has joined ' + data.args[0]
+					message: data.nick + ' (' + data.prefix + ') has Joined (' + data.args[0] + ')'
 				};
 				break;
 			case 'part':
 				break;
 			case 'quit':
+				for (let channel in network.sources) {
+					if (data.nick === network.nick) {
+						updateMessage = {
+							type: 'quit',
+							head: ['icon', 'fa-angle-double-left'],
+							nick: network.nick,
+							channel: channel,
+							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')'
+						};
+					} else if (data.nick in channel.users) {
+						updateMessage = {
+							type: 'quit',
+							head: ['icon', 'fa-angle-double-left'],
+							nick: data.nick,
+							channel: channel,
+							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')'
+						};
+					}
+				}
 				break;
 			case 'nick':
+				break;
+			case 'error':
+				for (let channel in network.sources) {
+					updateMessage = {
+						type: 'error',
+						head: ['icon', 'fa-exclamation-circle'],
+						nick: 'SERVER',
+						channel: channel,
+						message: 'Error: ' + data.args[0]
+					};
+				}
+
+				// Also send it to the SERVER "channel"
+				updateMessage = {
+					type: 'error',
+					head: ['icon', 'fa-exclamation-circle'],
+					nick: 'SERVER',
+					channel: "SERVER",
+					message: 'Error: ' + data.args[0]
+				};
 				break;
 			default:
 				break;
