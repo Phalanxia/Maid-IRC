@@ -97,7 +97,7 @@ class UpdateInterface {
 	};
 
 	users(channel, connectionId) {
-		console.log('UpdateInterface: New userlist.');
+		console.log('Interface: New userlist.');
 
 		// Clear users bar
 		select('#users ul').innerHTML = '';
@@ -175,7 +175,6 @@ class UpdateInterface {
 		// Create get the time for the timestamp
 		const output = select('#channel-console output');
 		const rawTime = new Date();
-		let scrollInfoView;
 
 		// Lets format the timestamp
 		var timestamp = ('0' + rawTime.getHours()).slice(-2) + ':' + ('0' + rawTime.getMinutes()).slice(-2) + ':' + ('0' + rawTime.getSeconds()).slice(-2);
@@ -201,6 +200,8 @@ class UpdateInterface {
 			data.channel = client.networks[connectionId].focusedSource;
 		}
 
+		let scrollInfoView;
+
 		// If scrolled at the bottom set scrollIntoView as true
 		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
 			scrollInfoView = true;
@@ -209,14 +210,29 @@ class UpdateInterface {
 		// Remove the filler message the console
 		output.removeChild(select('article.filler'));
 
+		let _head = '';
+		let _icon = '';
+
+		if (typeof data.head === 'object') {
+			if (data.head[0] === 'text') {
+ 				_head = data.head[1];
+			} else if (data.head[0] === 'icon') {
+				_head = '';
+				_icon = `fa ${data.head[1]}`;
+			}
+		} else {
+			_head = data.head;
+		}
+
 		// Insert message into the console
 		output.insertAdjacentHTML('beforeend', Templates.message.compiled({
 				connectionId: connectionId,
 				source: data.channel,
 				type: data.type,
 				timestamp: timestamp,
-				head: data.head,
-				message: message
+				head: _head,
+				message: message,
+				icon: _icon
 			})
 		);
 

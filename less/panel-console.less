@@ -70,6 +70,7 @@
 		padding: 0 8px 0 0;
 		font-size: 14px;
 		color: @lightBlue;
+		line-height: 24px;
 	}
 }
 #channel-console output article p {
@@ -104,6 +105,13 @@
 		flex: 1;
 	}
 	&:hover { background: 0 !important; }
+}
+// Special messages
+#channel-console output article[data-messagetype="error"] {
+	background-color: fadeout(@red-1, 60%);
+	&:hover { background-color: fadeout(@red-1, 70%); }
+	aside span { color: @red-1; }
+	p { border-left: 1px solid fadeout(@red-1, 60%); }
 }
 #channel-console footer {
 	display: flex;
