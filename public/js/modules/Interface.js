@@ -2,12 +2,12 @@
 
 class UpdateInterface {
 	constructor() {
-    this.autolinker = new Autolinker({
-    	 stripPrefix: false,
-    	 twitter: false,
-    	 phone: false
-    });
-  }
+		this.autolinker = new Autolinker({
+			 stripPrefix: false,
+			 twitter: false,
+			 phone: false
+		});
+	}
 
 	messageSources(connectionId) {
 		var _this = this;
