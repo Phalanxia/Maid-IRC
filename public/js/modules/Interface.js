@@ -29,7 +29,7 @@ class UpdateInterface {
 			var network = client.networks[connectionId];
 
 			// If you're already viewing it, there's no point in this so lets do nothing
-			if (source == network.focusedSource) {
+			if (source === network.focusedSource) {
 				return;
 			}
 
@@ -89,7 +89,7 @@ class UpdateInterface {
 	};
 
 	topic(topic) {
-		if (!topic || typeof topic == undefined || topic == 'undefined') {
+		if (!topic || typeof topic === undefined || topic === 'undefined') {
 			topic = '';
 		}
 
@@ -112,7 +112,6 @@ class UpdateInterface {
 
 		// Sort the user list based on rank and alphabetization
 		userList.sort(function(a, b) {
-			// var rankString = "\r~&@%+";
 			const rankString = '\r+%@&~';
 			var rankA = rankString.indexOf(users[a]);
 			var rankB = rankString.indexOf(users[b]);
@@ -163,7 +162,8 @@ class UpdateInterface {
 	};
 
 	message(data, connectionId) {
-		// console.log("New Message:" + JSON.stringify(data));
+		// console.log('New Message:' + JSON.stringify(data));
+
 		// Filter the message of html unfriendly characters
 		var message = data.message
 			.replace(/&/g, '&amp;')
@@ -222,6 +222,10 @@ class UpdateInterface {
 			}
 		} else {
 			_head = data.head;
+
+			if (typeof _head !== 'undefined' && _head.length > 15) {
+				_head = _head.substring(0, 13) + '...';
+			}
 		}
 
 		// Insert message into the console

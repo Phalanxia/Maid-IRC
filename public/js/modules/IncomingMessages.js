@@ -26,7 +26,7 @@ class IncomingMessages {
 			case 'notice':
 				updateMessage = {
 					type: 'notice',
-					head: data.nick,
+					head: '-notice-',
 					nick: data.nick,
 					channel: data.args[0],
 					message: data.args[1]
@@ -57,7 +57,7 @@ class IncomingMessages {
 				// Display join message
 				updateMessage = {
 					type: 'join',
-					head: '-->',
+					head: ['icon', 'fa-sign-in'],
 					nick: data.nick,
 					channel: data.args[0],
 					message: data.nick + ' (' + data.prefix + ') has Joined (' + data.args[0] + ')'
@@ -273,10 +273,21 @@ class IncomingMessages {
 					message: data.args[1]
 				};
 				break;
-			case '443':
+			case '412':
+				// err_notexttosend
 				updateMessage = {
-					type: 'err_nicknameinuse',
-					head: '>',
+					type: 'warning',
+					head: ['icon', 'fa-exclamation-triangle'],
+					nick: 'SERVER',
+					channel: 'SERVER',
+					message: data.args[1] + ': ' + data.args[2]
+				};
+				break;
+			case '443':
+				// err_nicknameinuse
+				updateMessage = {
+					type: 'warning',
+					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
 					channel: 'SERVER',
 					message: data.args[1] + ': ' + data.args[2]

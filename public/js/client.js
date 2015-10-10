@@ -21,7 +21,7 @@ var client = {
 	},
 
 	getFocused() {
-		return this.networks[this.networks.focusedServer].focusedSource;
+		return this.networks[this.networks.focusedServer];
 	},
 
 	init(connectInfo) {

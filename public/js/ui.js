@@ -16,7 +16,7 @@ selectAll('.modal header button').forEach(obj => {
 
 function hideModals() {
 	select('#pageCover').classList.remove('displayed');
-	[].map.call(selectAll('.modal'), function(obj) {
+	selectAll('.modal').forEach(obj => {
 		obj.classList.remove('displayed');
 	});
 }
@@ -28,7 +28,7 @@ select('#network-panel header button.fa-cog').onclick = function() {
 };
 
 // Show connect modal.
-select('#network-panel header button.fa.fa-plus').onclick = function() {
+select('#network-panel header button.fa-sign-in').onclick = function() {
 	select('#pageCover').classList.add('displayed');
 	select('#connect').classList.add('displayed');
 };
@@ -39,7 +39,8 @@ for (i = 0; i < settingsItems.length; i++) {
 	settingsItems[i].i = i;
 	settingsItems[i].onclick = function() {
 		var theNumber = this.i;
-		[].map.call(selectAll('#settings nav > ul li'), function(obj) {
+
+		selectAll('#settings nav > ul li').forEach(obj => {
 			obj.classList.remove('focused');
 		});
 
@@ -60,7 +61,7 @@ select('#connect-basic footer button:last-child').onclick = function() {
 		select('#connect-advanced').classList.remove('animation-login-advanced');
 		select('#connect-advanced').classList.add('animation-login-basic');
 
-		[].map.call(selectAll('input'), function(obj) {
+		selectAll('input').forEach(obj => {
 			obj.tabIndex = '1';
 		});
 	} else {
