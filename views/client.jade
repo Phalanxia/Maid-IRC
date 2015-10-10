@@ -68,7 +68,7 @@ html(lang="en")
 					input#name(type="text", placeholder="Nickname", name="nick", spellcheck="false", autofocus, required)
 					section
 						input#server(type="text", placeholder="Server", name="server", spellcheck="false", required)
-						input#port(type="number", placeholder="Port", name="port", maxlength="4", max="9999", required)
+						input#port(type="number", placeholder="Port", name="port", maxlength="4", max="65535", required)
 					input#channel(type="text", placeholder="Channel", name="channel", spellcheck="false", required)
 					footer
 						button.btn#submit(type="submit", name="connect") Connect
