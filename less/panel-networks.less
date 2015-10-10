@@ -82,39 +82,17 @@
 		background-color: @white-1;
 	}
 }
-#network-panel header #status {
-	float: left;
-	width: 12px;
-	height: 12px;
-	margin: 14px 8px 8px 52px;
-	background-color: @red;
-	border-radius: 6px;
-	// Temp
-	display: none;
-}
 // Networks/Message Sources
-.message-source-list li h2 {
-	padding-left: 13px;
-	margin: 0;
-	font-size: 16px;
-	font-weight: 400;
-	color: @white-1;
-	&:hover {
-		cursor: pointer;
-		background-color: @darkBlue;
-	}
-}
 .message-source-list {
+	flex: 1 1 auto;
+	order: 1;
 	width: inherit;
 	padding: 0;
 	margin: 0;
 	list-style: none;
-	flex: 1 1 auto;
-	order: 1;
 }
 .message-source-list li {
 	position: relative;
-	width: inherit;
 	height: 40px;
 	line-height: 40px;
 	color: @white-1;
@@ -125,7 +103,8 @@
 	}
 	&:nth-child(odd) { background-color: darken(@darkBlue, 2%); }
 }
-.message-source-list li[data-alert]:after  {
+.message-source-list li.channel { margin: 0 0 0 14px; }
+.message-source-list li[data-alert]:after {
 	float: right;
 	height: 20px;
 	min-width: 16px;
@@ -160,11 +139,11 @@
 .message-source-list span { font-size: 14px; }
 // Footer
 #network-panel footer {
+	flex: 0 1 auto;
+	order: 2;
 	width: inherit;
 	height: 40px;
 	background-color: @darkestBlue;
-	flex: 0 1 auto;
-	order: 2;
 }
 #network-panel footer button {
 	float: left;
