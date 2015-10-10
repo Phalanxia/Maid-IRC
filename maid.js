@@ -9,20 +9,23 @@ process.argv.forEach((val, index) => {
 });
 
 const env = process.env.NODE_ENV || argEnv || 'production';
+const config = require('./config.js');
 
-console.log('Starting Maid IRC.\nEnvironment: ' + env);
+console.log('Starting Maid IRC.\nEnvironment: ' + env + '\nHost: ' + config.HTTP_HOST + '\nPort: ' + config.HTTP_PORT);
 
 // Check to see if it is a supported environment variable
 if (['production', 'development', 'test', 'debug'].indexOf(env.toLowerCase()) < 0) {
 	console.warn('Sorry! NODE_ENV: "' + env + '" is not recognized. Try "development" or "production".');
 }
 
+// Get config
+
 // Requirements
 const http = require('http');
 const express = require('express');
 const path = require('path');
 
-	// Middleware
+// Middleware
 const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
@@ -63,9 +66,6 @@ switch (env) {
 	default:
 		break;
 }
-
-// Get config
-const config = require('./config.js');
 
 // Set up express
 app.set('views', `${__dirname}/views`);
