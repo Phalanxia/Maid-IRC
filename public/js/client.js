@@ -3,6 +3,12 @@
 const select = document.querySelector.bind(document);
 const selectAll = selection => Array.prototype.slice.call(document.querySelectorAll(selection));
 
+window.onbeforeunload = function() {
+	if (client.status.connection) {
+		return 'You have attempted to leave this page. Doing so will disconnect you from IRC.';
+	}
+};
+
 var client = {
 	settings: {
 		awayMessage: 'Away',
@@ -46,19 +52,21 @@ var client = {
 		// Lets handle all the socket.io stuff here for now. :3
 		socket.on('connect', () => {
 			client.status.connection = true;
-			console.log('Connected.');
+			console.log('Connected to server back end');
 		});
 
 		socket.on('disconnect', () => {
 			client.status.connection = false;
 			client.status.pastDisconnect = true;
-			console.warn('Connection lost.');
+			console.warn('Connection lost');
 		});
 
 		// IRC
 		socket.on('raw', (data) => {
 			let connectionId = data[0];
 			let message = data[1];
+
+			console.log(data);
 
 			// Handle different command types differently (normal, reply, error)
 			if (message.commandType === 'normal') {
@@ -79,7 +87,7 @@ var client = {
 		}
 
 		select('#channel-console footer input').onkeydown = function() {
-			if (event.which == 13) { // Enter Key
+			if (event.which === 13) { // Enter Key
 				enterMessage();
 			}
 		};
@@ -90,7 +98,7 @@ var client = {
 	}
 };
 
-// Handle Login Info
+// Handle connection information
 select('#submit').onclick = function(event) {
 	event.preventDefault();
 
@@ -127,4 +135,71 @@ select('#submit').onclick = function(event) {
 			select('#connect').classList.remove('invalid');
 		}, 500);
 	}
+};
+
+select('#pageCover').onclick = function() {
+	hideModals();
+};
+
+selectAll('.modal header button').forEach(obj => {
+	obj.onclick = function() {
+		hideModals();
+	};
+});
+
+function hideModals() {
+	select('#pageCover').classList.remove('displayed');
+	selectAll('.modal').forEach(obj => {
+		obj.classList.remove('displayed');
+	});
+}
+
+// Show settings modal.
+select('#network-panel header button.fa-cog').onclick = function() {
+	select('#pageCover').classList.add('displayed');
+	select('#settings').classList.add('displayed');
+};
+
+// Show connect modal.
+select('#network-panel header button.fa-sign-in').onclick = function() {
+	select('#pageCover').classList.add('displayed');
+	select('#connect').classList.add('displayed');
+};
+
+// Settings
+var settingsItems = select('#settings nav > ul').getElementsByTagName('li');
+for (let i = 0; i < settingsItems.length; i++) {
+	settingsItems[i].i = i;
+	settingsItems[i].onclick = function() {
+		var theNumber = this.i;
+
+		selectAll('#settings nav > ul li').forEach(obj => {
+			obj.classList.remove('focused');
+		});
+
+		select('#settings nav > ul li:nth-of-type(' + (theNumber + 1) + ')').classList.add('focused');
+
+		selectAll('#settings .page').forEach(obj => {
+			obj.style.display = 'none';
+		});
+
+		selectAll('#settings .page:nth-of-type(' + (theNumber + 1) + ')')[0].style.display = 'block';
+	};
+}
+
+// Connection screen
+var advanced = false;
+select('#connect-basic footer button:last-child').onclick = function() {
+	if (advanced) {
+		select('#connect-advanced').classList.remove('animation-login-advanced');
+		select('#connect-advanced').classList.add('animation-login-basic');
+
+		selectAll('input').forEach(obj => {
+			obj.tabIndex = '1';
+		});
+	} else {
+		select('#connect-advanced').style.display = 'block';
+	}
+
+	advanced = !advanced;
 };
