@@ -11,14 +11,7 @@ process.argv.forEach((val, index) => {
 const env = process.env.NODE_ENV || argEnv || 'production';
 const config = require('./config.js');
 
-console.log('Starting Maid IRC.\nEnvironment: ' + env + '\nHost: ' + config.HTTP_HOST + '\nPort: ' + config.HTTP_PORT);
-
-// Check to see if it is a supported environment variable
-if (['production', 'development', 'test', 'debug'].indexOf(env.toLowerCase()) < 0) {
-	console.warn('Sorry! NODE_ENV: "' + env + '" is not recognized. Try "development" or "production".');
-}
-
-// Get config
+console.log(`Starting Maid-IRC.\nEnvironment: ${env}\nHost: ${config.HTTP_HOST}\nPort: ${config.HTTP_PORT}\n`);
 
 // Requirements
 const http = require('http');
@@ -32,7 +25,7 @@ const methodOverride = require('method-override');
 const lessMiddleware = require('less-middleware');
 const compression = require('compression');
 
-	// Maid IRC modules
+// Maid IRC modules
 const maidStatic = require('./modules/maidStatic');
 const maidIrc = require('./modules/maidIrc');
 const maidHelpers = require('./modules/maidHelpers');
@@ -51,7 +44,7 @@ switch (env) {
 		const morgan = require('morgan');
 		app.use(morgan('dev'));
 
-	// Set less middleware variables
+		// Set less middleware variables
 		forceCompile = true;
 		lessDebug = true;
 		break;
@@ -60,10 +53,12 @@ switch (env) {
 		app.use(minify());
 		break;
 	case 'debug':
-
 		// For socket.io debug
 		break;
+	case 'test':
+		break;
 	default:
+		console.warn(`Sorry! NODE_ENV "${env}" is not recognized. Try "development" or "production".`);
 		break;
 }
 
