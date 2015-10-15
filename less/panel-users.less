@@ -6,10 +6,13 @@
 	height: 100%;
 	flex: 0 0 auto;
 	order: 2;
-	background-color: @white-2;
+	background-color: @white-3;
 	.m-user-select(none);
 }
-#users header { box-shadow: inset 1px 0 0 0px fadeout(@darkBlue, 90%) }
+#users header {
+	box-shadow: inset 1px 0 0 0px fadeout(@darkBlue, 90%);
+	&:hover { cursor: default; }
+}
 #users header p {
 	width: inherit;
 	padding: 0;
@@ -37,7 +40,7 @@
 	.m-transition(background-color .1s ease-in-out);
 	&:hover {
 		cursor: pointer;
-		background-color: darken(@white-2, 4%);
+		background-color: lighten(@white-3, 4%);
 	}
 	&:hover:after {
 		content: attr(data-rank);
