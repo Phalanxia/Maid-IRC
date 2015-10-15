@@ -1,8 +1,9 @@
 @import: "colors";
 @import: "polyfills";
+@import: "z-index";
 
 #pageCover {
-	z-index: 2;
+	z-index: @zIndex-8;
 	// Will Tranition
 	visibility: hidden;
 	opacity: 0;
@@ -18,7 +19,7 @@
 	visibility: visible;
 }
 .modal {
-	z-index: 3;
+	z-index: @zIndex-9;
 	position: absolute;
 	top: 50%;
 	left: 50%;
