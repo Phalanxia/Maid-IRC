@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 		concat: {
 			options: {
 				stripBanners: true,
-				banner: `/*! ${pkg.name} - v${version} - ${grunt.template.today('yyyy-mm-dd')} */`
+				banner: `/*! Maid-IRC - v${version} - ${grunt.template.today('yyyy-mm-dd')} */`
 			},
 			dist: {
 				src: [
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
 				src: ['build', 'dist/public/js/built.js']
 			},
 			afterDist: {
-				src: ['dist/**/*', `!dist/${pkg.name}_v${version}.zip`]
+				src: ['dist/**/*', `!dist/maid-irc_v${version}.zip`]
 			}
 		},
 
@@ -142,7 +142,7 @@ module.exports = function(grunt) {
 		compress: {
 			dist: {
 				options: {
-					archive: `dist/${pkg.name}_v${version}.zip`
+					archive: `dist/maid-irc_v${version}.zip`
 				},
 				files: [
 					{

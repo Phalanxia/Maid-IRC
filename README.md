@@ -37,7 +37,7 @@ Generating a production ready zip file
 $ grunt:package
 ```
 
-**Note:** Maid-IRC requires Node.js v4.x or newer.
+**Note:** Maid-IRC requires Node.js v4.1.x or newer.
 
 ## Running
 ```bash
