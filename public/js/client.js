@@ -66,8 +66,6 @@ var client = {
 			let connectionId = data[0];
 			let message = data[1];
 
-			console.log(data);
-
 			// Handle different command types differently (normal, reply, error)
 			if (message.commandType === 'normal') {
 				incomingMessages.normal(connectionId, message);

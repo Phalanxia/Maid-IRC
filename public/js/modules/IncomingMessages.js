@@ -11,31 +11,31 @@ class IncomingMessages {
 		var network = client.networks[connectionId];
 
 		switch (data.command.toLowerCase()) {
-			// Commands
 			case 'ping':
 				break;
 			case 'privmsg':
 				updateMessage = {
 					type: 'privmsg',
+					channel: data.args[0],
 					head: data.nick,
 					nick: data.nick,
-					channel: data.args[0],
-					message: data.args[1]
+					message: data.args[1],
+					highlightable: true
 				};
 				break;
 			case 'notice':
 				updateMessage = {
 					type: 'notice',
+					channel: data.args[0],
 					head: '-notice-',
 					nick: data.nick,
-					channel: data.args[0],
-					message: data.args[1]
+					message: data.args[1],
+					highlightable: true
 				};
 				break;
 			case 'mode':
 				break;
 			case 'join':
-
 				// Make sure the joined channel is in the current saved channel object
 				if (network.sources[data.args[0]] === undefined) {
 					network.sources[data.args[0]] = {};
@@ -57,9 +57,9 @@ class IncomingMessages {
 				// Display join message
 				updateMessage = {
 					type: 'join',
+					channel: data.args[0],
 					head: ['icon', 'fa-sign-in'],
 					nick: data.nick,
-					channel: data.args[0],
 					message: data.nick + ' (' + data.prefix + ') has Joined (' + data.args[0] + ')'
 				};
 				break;
@@ -70,17 +70,17 @@ class IncomingMessages {
 					if (data.nick === network.nick) {
 						updateMessage = {
 							type: 'quit',
+							channel: channel,
 							head: ['icon', 'fa-angle-double-left'],
 							nick: network.nick,
-							channel: channel,
 							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')'
 						};
 					} else if (data.nick in channel.users) {
 						updateMessage = {
 							type: 'quit',
+							channel: channel,
 							head: ['icon', 'fa-angle-double-left'],
 							nick: data.nick,
-							channel: channel,
 							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')'
 						};
 					}
@@ -92,9 +92,9 @@ class IncomingMessages {
 				for (let channel in network.sources) {
 					updateMessage = {
 						type: 'error',
+						channel: channel,
 						head: ['icon', 'fa-exclamation-circle'],
 						nick: 'SERVER',
-						channel: channel,
 						message: 'Error: ' + data.args[0]
 					};
 				}
@@ -102,9 +102,9 @@ class IncomingMessages {
 				// Also send it to the SERVER "channel"
 				updateMessage = {
 					type: 'error',
+					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-circle'],
 					nick: 'SERVER',
-					channel: "SERVER",
 					message: 'Error: ' + data.args[0]
 				};
 				break;
@@ -113,6 +113,7 @@ class IncomingMessages {
 		}
 
 		if (Object.keys(updateMessage).length !== 0) {
+			updateMessage.connectionId = connectionId;
 			this.updateInterface.message(updateMessage, connectionId);
 		}
 	}
@@ -126,27 +127,27 @@ class IncomingMessages {
 				network.nick = data.args[0];
 				updateMessage = {
 					type: 'rpl_welcome',
+					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: data.args[1]
 				};
 				break;
 			case '002':
 				updateMessage = {
 					type: 'rpl_yourhost',
+					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: data.args[1]
 				};
 				break;
 			case '003':
 				updateMessage = {
 					type: 'rpl_created',
+					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: data.args[1]
 				};
 				break;
@@ -162,20 +163,20 @@ class IncomingMessages {
 
 				updateMessage = {
 					type: 'rpl_myinfo',
+					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: messages
 				};
 				break;
 			case '005':
-
-				// The number isnt the same for every network. Redo this.
-				/*if (typeof data.args[9] === undefined) {
+				/*
+				The number isnt the same for every network. Redo this.
+				if (typeof data.args[9] === undefined) {
 					return;
 				}
 
-				var networkName = data.args[9].split("NETWORK=");
+				var networkName = data.args[9].split('NETWORK=');
 
 				if (networkName.length > 1) {
 					if (typeof networkName !== undefined) {
@@ -190,14 +191,13 @@ class IncomingMessages {
 			case '251':
 				updateMessage = {
 					type: 'rpl_luserclient',
+					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: data.args[1]
 				};
 				break;
 			case '332':
-
 				// If we dont have the channel stored, lets do that now!
 				if (network.sources[data.args[1]] === undefined) {
 					network.sources[data.args[1]] = {};
@@ -221,14 +221,13 @@ class IncomingMessages {
 				const topicDate = new Date(data.args[3] * 1000);
 				updateMessage = {
 					type: 'rpl_topicwhotime',
+					channel: data.args[1],
 					head: '>',
 					nick: 'SERVER',
-					channel: data.args[1],
 					message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
 				};
 				break;
 			case '353':
-
 				// Build the user list and set the joined channels
 				const _re = new RegExp('^([+~&@%]*)(.+)$');
 				var _channel = data.args[2];
@@ -248,7 +247,7 @@ class IncomingMessages {
 					}
 				}
 
-				if (network.sources[_channel] == network.focusedSource) {
+				if (network.sources[_channel] === network.focusedSource) {
 					this.updateInterface.users(_channel, connectionId);
 				}
 
@@ -258,18 +257,18 @@ class IncomingMessages {
 			case '372':
 				updateMessage = {
 					type: 'rpl_motd',
+					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: data.args[1]
 				};
 				break;
 			case '376':
 				updateMessage = {
 					type: 'rpl_endofmotd',
+					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: data.args[1]
 				};
 				break;
@@ -277,9 +276,9 @@ class IncomingMessages {
 				// err_notexttosend
 				updateMessage = {
 					type: 'warning',
+					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: data.args[1] + ': ' + data.args[2]
 				};
 				break;
@@ -287,15 +286,16 @@ class IncomingMessages {
 				// err_nicknameinuse
 				updateMessage = {
 					type: 'warning',
+					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
-					channel: 'SERVER',
 					message: data.args[1] + ': ' + data.args[2]
 				};
 				break;
 		}
 
 		if (Object.keys(updateMessage).length !== 0) {
+			updateMessage.connectionId = connectionId;
 			this.updateInterface.message(updateMessage, connectionId);
 		}
 	};
@@ -310,6 +310,7 @@ class IncomingMessages {
 		}
 
 		if (Object.keys(updateMessage).length !== 0) {
+			updateMessage.connectionId = connectionId;
 			this.updateInterface.message(updateMessage, connectionId);
 		}
 	};

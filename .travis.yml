@@ -15,12 +15,24 @@ env:
 - NODE_ENV=test
 install:
 - npm install
-before_script:
+- npm install -g grunt-cli
+script:
 - node maid.js
+before_deploy:
+- grunt package
 deploy:
-  provider: npm
-  email: madisontries@gmail.com
-  api_key:
-    secure: AMQGEmhn1b3mQyQ33xlIzKSCgs3JRTNjf8/TXanXI3hXwWDHZjKIvr8iJHCoon6JGP0/B8FCcMoH4tzTSl98ZVZUrsou75FN3ynIx5LB8nKZMZts3BehutXRECrP3NRUl4YPnJXeA4EeAYx+h3G/KEaOAosEWNKNxCEYqYdyJf4=
-  on:
-    repo: Phalanxia/Maid-IRC
+  - provider: npm
+    email: madisontries@gmail.com
+    api_key:
+      secure: AMQGEmhn1b3mQyQ33xlIzKSCgs3JRTNjf8/TXanXI3hXwWDHZjKIvr8iJHCoon6JGP0/B8FCcMoH4tzTSl98ZVZUrsou75FN3ynIx5LB8nKZMZts3BehutXRECrP3NRUl4YPnJXeA4EeAYx+h3G/KEaOAosEWNKNxCEYqYdyJf4=
+    on:
+      repo: Phalanxia/Maid-IRC
+      tags: true
+  - provider: releases
+    api_key:
+      secure: Jy2ONVftaq9u4mKoOFmqBKc0YIhoNWt/doX4IDkiX6o+RoJr+IrGgv72lStnI7J90RpM690vV7Kg3d3BQ4kIywasDhajJ2gk5Gk37tVEddefRLpr9WoXBo8KzKH6R35jVbL4DQxt79qnMtRdFU8F+gdy1efxEnuYKvWYjuXMROw=
+    file: 'dist/maid-irc_v*.zip'
+    on:
+      repo: Phalanxia/Maid-IRC
+      tags: true
+    skip_cleanup: true

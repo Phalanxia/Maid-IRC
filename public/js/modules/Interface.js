@@ -86,7 +86,7 @@ class UpdateInterface {
 				renderAll(obj.getAttribute('data-connection-id'), obj.getAttribute('data-value'), obj.className);
 			};
 		});
-	};
+	}
 
 	topic(topic) {
 		if (!topic || typeof topic === undefined || topic === 'undefined') {
@@ -94,10 +94,10 @@ class UpdateInterface {
 		}
 
 		select('#channel-console header input').value = topic;
-	};
+	}
 
 	users(channel, connectionId) {
-		console.log('Interface: New userlist.');
+		console.log('Interface: New userlist');
 
 		// Clear users bar
 		select('#users ul').innerHTML = '';
@@ -159,10 +159,10 @@ class UpdateInterface {
 
 		// Get user count
 		select('#users header p').innerHTML = userList.length + ' users';
-	};
+	}
 
 	message(data, connectionId) {
-		// console.log('New Message:' + JSON.stringify(data));
+		const output = select('#channel-console output');
 
 		// Filter the message of html unfriendly characters
 		var message = data.message
@@ -173,14 +173,11 @@ class UpdateInterface {
 			.replace(/>/g, '&gt;');
 
 		// Create get the time for the timestamp
-		const output = select('#channel-console output');
 		const rawTime = new Date();
-
-		// Lets format the timestamp
-		var timestamp = ('0' + rawTime.getHours()).slice(-2) + ':' + ('0' + rawTime.getMinutes()).slice(-2) + ':' + ('0' + rawTime.getSeconds()).slice(-2);
+		const timestamp = ('0' + rawTime.getHours()).slice(-2) + ':' + ('0' + rawTime.getMinutes()).slice(-2) + ':' + ('0' + rawTime.getSeconds()).slice(-2);
 
 		// If it's not a message from the server
-		if (data.channel !== 'SERVER') {
+		if (data.channel.toLowerCase() !== 'server' && data.highlightable) {
 			// Lets highlight your nick!
 			function highlightNick(name, input) {
 				var exp = new RegExp('\\b(' + name + ')', 'ig');
@@ -249,5 +246,5 @@ class UpdateInterface {
 		if (scrollInfoView) {
 			output.scrollTop = output.scrollHeight;
 		}
-	};
+	}
 }

@@ -42,9 +42,11 @@ function maidIrc(io, env) {
 			}
 		});
 
-		client.on('registered', function() {
-			console.log('001 message recieved.');
-		});
+		if (env === 'development') {
+			client.on('registered', function() {
+				console.log('001 message recieved.');
+			});
+		}
 
 		client.on('abort', function() {
 			socket.emit('error', {
