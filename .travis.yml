@@ -5,11 +5,8 @@ node_js:
 sudo: false
 os:
   - linux
-  - osx
 matrix:
   fast_finish: true
-  allow_failures:
-    - os: osx
 env:
   - NODE_ENV=test
 install:
