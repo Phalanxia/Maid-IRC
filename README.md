@@ -7,7 +7,15 @@ A modern web IRC client. Built on [Node](https://nodejs.org).
 
 *Still in early development. Features and bugs may or may not be included.*
 
+** [Screenshots](#screenshots) | [Building](#building) | [Running](#running) | [Community](#community) | [License](#license) **
+
 ---
+
+## Screenshots
+
+![Connect](screenshots/login.png "Login screenshot")
+
+![Client](screenshots/client.png "Client screenshot")
 
 ## Building
 Don't feel like building? Prebuilt versions are available [here](https://github.com/Phalanxia/Maid-IRC/releases). Prebuilds are intended for production environments only and don't include files not necessary in production.
@@ -47,21 +55,15 @@ $ node maid.js
 
 **Optional:** (Not available in prebuilts) Please define the node environment variable. Supported variables are `development` and `production`. Will default to production if not defined.
 
-## Screenshots
-
-![Connect](screenshots/login.png "Login screenshot")
-
-![Client](screenshots/client.png "Client screenshot")
-
 ## Community
 
-Found a bug? Have a feature request? Please [submit an issue.](https://github.com/Phalanxia/Maid-IRC/issues)
+Found a bug? Have a feature request? Please [submit an issue](https://github.com/Phalanxia/Maid-IRC/issues).
 
-Need support? Want to chat? Join our channel on the Freenode IRC network.
+Need support? Wanna chat? Join our channel on the Freenode IRC network.
 
 	HOST: irc.freenode.net
 	CHANNEL: ##phalanxia
 
-## Copyright and license
+## License
 
-[MIT License](LICENSE)
+[MIT License](LICENSE) © 2015 Madison Tries
