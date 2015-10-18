@@ -108,7 +108,7 @@ module.exports = function(grunt) {
 					{
 						src: ['README.md'],
 						dest: 'dist/README.md'
-					}
+					},
 					{
 						src: ['LICENSE'],
 						dest: 'dist/LICENSE'
@@ -175,7 +175,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('build:js', function() {
-		grunt.log.writeln(`Compiling ${pkg.name}'s public javascript`);
+		grunt.log.writeln("Compiling Maid-IRC's public javascript");
 		grunt.task.run([
 			'concat:dist',
 			'babel:dist',
@@ -184,14 +184,14 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('build:css', function() {
-		grunt.log.writeln(`Compiling ${pkg.name}'s less files`);
+		grunt.log.writeln("Compiling Maid-IRC's less files");
 		grunt.task.run([
 			'less:development'
 		]);
 	});
 
 	grunt.registerTask('package', function() {
-		grunt.log.writeln(`Packaging ${pkg.name}`);
+		grunt.log.writeln('Packaging Maid-IRC');
 		grunt.task.run([
 			'clean:beforeDist',
 			'copy:dist',
