@@ -6,4 +6,6 @@ pids
 
 node_modules/
 rubbish/
+dist/*
+build/*
 public/css/*

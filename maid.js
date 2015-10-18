@@ -22,17 +22,12 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const lessMiddleware = require('less-middleware');
 const compression = require('compression');
 
 // Maid IRC modules
 const maidStatic = require('./modules/maidStatic');
 const maidIrc = require('./modules/maidIrc');
 const maidHelpers = require('./modules/maidHelpers');
-
-// Less middleware
-let forceCompile = false;
-let lessDebug = false;
 
 // Define express for the next part
 const app = express();
@@ -43,10 +38,7 @@ switch (env) {
 	case 'development':
 		const morgan = require('morgan');
 		app.use(morgan('dev'));
-
-		// Set less middleware variables
-		forceCompile = true;
-		lessDebug = true;
+		app.use(require('errorhandler')());
 		break;
 	case 'production':
 		const minify = require('express-minify');
@@ -67,32 +59,11 @@ app.set('views', `${__dirname}/views`);
 app.set('view engine', 'jade');
 
 // Middleware
-app.use(require('errorhandler')());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 app.use(methodOverride());
-
-// Set up less.css middleware
-app.use(lessMiddleware(`${__dirname}/less`, {
-	dest: `${__dirname}/public`,
-	compiler: {
-		compress: true,
-		sourceMap: true,
-		yuicompress: true
-	},
-	preprocess: {
-		path(pathname) {
-			return pathname.replace('css' + path.sep, '');
-		}
-	},
-	parser: {
-		optimization: 2
-	},
-	debug: lessDebug,
-	force: forceCompile
-}));
 
 app.use(express.static(`${__dirname}/public`, {
 	maxAge: '1w'
@@ -139,7 +110,7 @@ if (config.ENABLE_HTTPS >= 1) {
 }
 
 // Now that thats done with lets pass it of to maidStatic.js and maidIrc.js
-maidStatic(app);
+maidStatic(app, env);
 
 // Technical
 process.on('SIGINT', () => {
