@@ -20,57 +20,80 @@
 
     <section class="main-content">
       <h1>
-<a id="" class="anchor" href="#" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://github.com/Phalanxia/Maid-IRC" title="Maid-IRC"><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/public/img/logo_medium.png" alt="Maid IRC"></a>
+<a id="" class="anchor" href="#" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="https://github.com/Phalanxia/Maid-IRC" title="Maid-IRC"><img src="https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/public/img/logo_medium.png" alt="Maid IRC"></a>
 </h1>
 
-<p><a href="https://travis-ci.org/Phalanxia/Maid-IRC"><img src="https://img.shields.io/travis/Phalanxia/Maid-IRC.svg?branch=master&amp;style=flat-square" alt="Build Status"></a> <a href="https://www.npmjs.org/package/maid-irc"><img src="https://img.shields.io/npm/v/maid-irc.svg?style=flat-square" alt="NPM version"></a> <a href="https://gemnasium.com/Phalanxia/Maid-IRC"><img src="https://img.shields.io/gemnasium/Phalanxia/Maid-IRC.svg?style=flat-square" alt="Dependency Status"></a> <a href="https://www.npmjs.org/package/maid-irc"><img src="https://img.shields.io/npm/dm/maid-irc.svg?style=flat-square" alt="Downloads"></a></p>
+<p><a href="https://travis-ci.org/Phalanxia/Maid-IRC"><img src="https://img.shields.io/travis/Phalanxia/Maid-IRC.svg?style=flat-square" alt="Build Status"></a> <a href="https://www.npmjs.org/package/maid-irc"><img src="https://img.shields.io/npm/v/maid-irc.svg?style=flat-square" alt="NPM version"></a> <a href="https://gemnasium.com/Phalanxia/Maid-IRC"><img src="https://img.shields.io/gemnasium/Phalanxia/Maid-IRC.svg?style=flat-square" alt="Dependency Status"></a> <a href="https://www.npmjs.org/package/maid-irc"><img src="https://img.shields.io/npm/dm/maid-irc.svg?style=flat-square" alt="Downloads"></a></p>
 
 <p>A modern web IRC client. Built on <a href="https://nodejs.org">Node</a>.</p>
 
 <p><em>Still in early development. Features and bugs may or may not be included.</em></p>
 
+<p><strong><a href="#screenshots">Screenshots</a> | <a href="#building">Building</a> | <a href="#running">Running</a> | <a href="#community">Community</a> | <a href="#license">License</a></strong></p>
+
 <hr>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="screenshots" class="anchor" href="#screenshots" aria-hidden="true"><span class="octicon octicon-link"></span></a>Screenshots</h2>
+
+<p><img src="https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/screenshots/login.png" alt="Connect" title="Login screenshot"></p>
+
+<p><img src="https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/screenshots/client.png" alt="Client" title="Client screenshot"></p>
+
+<h2>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building</h2>
+
+<p>Don't feel like building? Prebuilt versions are available <a href="https://github.com/Phalanxia/Maid-IRC/releases">here</a>. Prebuilds are intended for production environments only and don't include files not necessary in production.</p>
+
+<p>Install dependencies</p>
 
 <div class="highlight highlight-source-shell"><pre>$ npm install</pre></div>
 
-<p>For development:</p>
+<p>Install grunt-cli</p>
 
-<div class="highlight highlight-source-shell"><pre>$ npm install --dev</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ npm install -g grunt-cli</pre></div>
 
-<p><strong>Note:</strong> Maid-IRC requires Node.js v4.x or newer.</p>
+<p>Compile .less files</p>
+
+<div class="highlight highlight-source-shell"><pre>$ grunt:css</pre></div>
+
+<p>Compile public JavaScript with babel</p>
+
+<div class="highlight highlight-source-shell"><pre>$ grunt:js</pre></div>
+
+<h5>
+<a id="optional" class="anchor" href="#optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional:</h5>
+
+<p>Generating a production ready zip file</p>
+
+<div class="highlight highlight-source-shell"><pre>$ grunt:package</pre></div>
+
+<p><strong>Note:</strong> Maid-IRC requires Node.js v4.1.x or newer.</p>
 
 <h2>
 <a id="running" class="anchor" href="#running" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running</h2>
 
 <div class="highlight highlight-source-shell"><pre>$ node maid.js</pre></div>
 
-<p><strong>Note:</strong> Please define the node environment variable. Supported variables are <code>development</code> and <code>production</code>. Will default to production if not defined.</p>
+<p><strong>Recomended:</strong> Look at 'config.js' and configure it to your liking.</p>
 
-<h2>
-<a id="screenshots" class="anchor" href="#screenshots" aria-hidden="true"><span class="octicon octicon-link"></span></a>Screenshots</h2>
-
-<p><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/screenshots/login.png" alt="Connect" title="Login screenshot"></p>
-
-<p><img src="https://github.com/Phalanxia/Maid-IRC/raw/master/screenshots/client.png" alt="Client" title="Client screenshot"></p>
+<p><strong>Optional:</strong> (Not available in prebuilts) Please define the node environment variable. Supported variables are <code>development</code> and <code>production</code>. Will default to production if not defined.</p>
 
 <h2>
 <a id="community" class="anchor" href="#community" aria-hidden="true"><span class="octicon octicon-link"></span></a>Community</h2>
 
-<p>Found a bug? Have a feature request? Please <a href="https://github.com/Phalanxia/Maid-IRC/issues">submit an issue.</a></p>
+<p>Found a bug? Have a feature request? Please <a href="https://github.com/Phalanxia/Maid-IRC/issues">submit an issue</a>.</p>
 
-<p>Need support? Want to chat? Join our channel on the Freenode IRC network.</p>
+<p>Need support? Wanna chat? Join our channel on the Freenode IRC network.</p>
 
 <pre><code>HOST: irc.freenode.net
 CHANNEL: ##phalanxia
 </code></pre>
 
 <h2>
-<a id="copyright-and-license" class="anchor" href="#copyright-and-license" aria-hidden="true"><span class="octicon octicon-link"></span></a>Copyright and license</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
-<p><a href="LICENSE">MIT License</a></p>
+<p><a href="LICENSE">MIT License</a> © 2015 Madison Tries</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/Phalanxia/Maid-IRC">Maid-IRC</a> is maintained by <a href="https://github.com/Phalanxia">Phalanxia</a>.</span>
