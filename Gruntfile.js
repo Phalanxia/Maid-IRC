@@ -178,7 +178,7 @@ module.exports = function(grunt) {
 		grunt.log.writeln("Compiling Maid-IRC's public javascript");
 		grunt.task.run([
 			'concat:dist',
-			'babel:dist',
+			'babel:development',
 			'clean:dist'
 		]);
 	});
