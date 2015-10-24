@@ -42,10 +42,6 @@
 		cursor: pointer;
 		background-color: lighten(@white-3, 4%);
 	}
-	&:hover:after {
-		content: attr(data-rank);
-		font-family: 'Open Sans', Helvetica, sans-serif;
-	}
 }
 #users ul li p {
 	padding: 0 0 0 20px;
@@ -60,6 +56,10 @@
 		font-family: FontAwesome;
 		color: @lightBlue;
 		content: attr(data-rank-icon);
+	}
+	&:hover:after {
+		content: attr(data-rank);
+		font-family: 'Open Sans', Helvetica, sans-serif;
 	}
 }
 #users footer {
