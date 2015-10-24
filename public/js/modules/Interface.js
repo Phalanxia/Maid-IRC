@@ -26,7 +26,7 @@ class UpdateInterface {
 		);
 
 		function renderAll(connectionId, source, type) {
-			var network = client.networks[connectionId];
+			let network = client.networks[connectionId];
 
 			// If you're already viewing it, there's no point in this so lets do nothing
 			if (source === network.focusedSource) {
@@ -67,8 +67,8 @@ class UpdateInterface {
 					break;
 			}
 
-			// Update Displayed.
-			select('[data-connection-id="' + connectionId + '"][data-value="' + source + '"]').classList.add('focusedSource');
+			// Update displayed focused source in the networks panel
+			select(`[data-connection-id="${connectionId}"][data-value="${source}"]`).classList.add('focusedSource');
 
 			// Hide all messages
 			selectAll('#channel-console output article').forEach(obj => {
@@ -76,7 +76,7 @@ class UpdateInterface {
 			});
 
 			// Show messages that are from the focused source
-			selectAll('#channel-console output article[data-source="' + client.networks[connectionId].focusedSource + '"]').forEach(obj => {
+			selectAll(`#channel-console output article[data-source="${client.networks[connectionId].focusedSource}"][data-connection-id="${connectionId}"]`).forEach(obj => {
 				obj.style.display = '';
 			});
 		};
@@ -84,6 +84,9 @@ class UpdateInterface {
 		selectAll('.message-source-list li').forEach(obj => {
 			obj.onclick = () => {
 				renderAll(obj.getAttribute('data-connection-id'), obj.getAttribute('data-value'), obj.className);
+
+				const output = select('#channel-console output');
+				output.scrollTop = output.scrollHeight;
 			};
 		});
 	}
@@ -97,8 +100,6 @@ class UpdateInterface {
 	}
 
 	users(channel, connectionId) {
-		console.log('Interface: New userlist');
-
 		// Clear users bar
 		select('#users ul').innerHTML = '';
 		select('#users header p').innerHTML = '';
@@ -158,7 +159,7 @@ class UpdateInterface {
 		});
 
 		// Get user count
-		select('#users header p').innerHTML = userList.length + ' users';
+		select('#users header p').innerHTML = `${userList.length} users`;
 	}
 
 	message(data, connectionId) {
@@ -238,7 +239,7 @@ class UpdateInterface {
 		);
 
 		// Hide messages not from the focused channel
-		selectAll('#channel-console output article:not([data-source="' + client.networks[connectionId].focusedSource + '"])').forEach(obj => {
+		selectAll(`#channel-console output article:not([data-source="${client.networks[connectionId].focusedSource}"])`).forEach(obj => {
 			obj.style.display = 'none';
 		});
 

@@ -1,41 +1,57 @@
 'use strict';
 
 class IncomingMessages {
-	constructor(socket, updateInterface) {
-		this.socket = socket;
+	constructor(updateInterface) {
 		this.updateInterface = updateInterface;
+		this.connectionId;
 	}
 
-	normal(connectionId, data) {
-		var updateMessage = {};
-		var network = client.networks[connectionId];
+	addMessage(content) {
+		let _content = content;
 
-		switch (data.command.toLowerCase()) {
-			case 'ping':
-				break;
-			case 'privmsg':
-				updateMessage = {
+		_content.connectionId = this.connectionId;
+		this.updateInterface.message(_content, this.connectionId);
+	}
+
+	handler(connectionId, data) {
+		var network = client.networks[connectionId];
+		this.connectionId = connectionId;
+
+		const messageTable = {
+			'default': () => {
+				console.log(data);
+			},
+
+			/*
+				Normal messages
+			*/
+
+			'ping': () => {
+			},
+
+			'privmsg': () => {
+				this.addMessage({
 					type: 'privmsg',
 					channel: data.args[0],
 					head: data.nick,
 					nick: data.nick,
 					message: data.args[1],
 					highlightable: true
-				};
-				break;
-			case 'notice':
-				updateMessage = {
+				});
+			},
+
+			'notice': () => {
+				this.addMessage({
 					type: 'notice',
 					channel: data.args[0],
 					head: '-notice-',
 					nick: data.nick,
 					message: data.args[1],
 					highlightable: true
-				};
-				break;
-			case 'mode':
-				break;
-			case 'join':
+				});
+			},
+
+			'join': () => {
 				// Make sure the joined channel is in the current saved channel object
 				if (network.sources[data.args[0]] === undefined) {
 					network.sources[data.args[0]] = {};
@@ -55,149 +71,122 @@ class IncomingMessages {
 				}
 
 				// Display join message
-				updateMessage = {
+				this.addMessage({
 					type: 'join',
 					channel: data.args[0],
 					head: ['icon', 'fa-sign-in'],
 					nick: data.nick,
 					message: data.nick + ' (' + data.prefix + ') has Joined (' + data.args[0] + ')'
-				};
-				break;
-			case 'part':
-				break;
-			case 'quit':
+				});
+			},
+
+			'quit': () => {
 				for (let channel in network.sources) {
 					if (data.nick === network.nick) {
-						updateMessage = {
+						this.addMessage({
 							type: 'quit',
 							channel: channel,
 							head: ['icon', 'fa-angle-double-left'],
 							nick: network.nick,
 							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')'
-						};
+						});
 					} else if (data.nick in channel.users) {
-						updateMessage = {
+						this.addMessage({
 							type: 'quit',
 							channel: channel,
 							head: ['icon', 'fa-angle-double-left'],
 							nick: data.nick,
 							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')'
-						};
+						});
 					}
 				}
-				break;
-			case 'nick':
-				break;
-			case 'error':
+			},
+
+			'error': () => {
 				for (let channel in network.sources) {
-					updateMessage = {
+					this.addMessage({
 						type: 'error',
 						channel: channel,
 						head: ['icon', 'fa-exclamation-circle'],
 						nick: 'SERVER',
 						message: 'Error: ' + data.args[0]
-					};
+					});
 				}
 
 				// Also send it to the SERVER "channel"
-				updateMessage = {
+				this.addMessage({
 					type: 'error',
 					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-circle'],
 					nick: 'SERVER',
 					message: 'Error: ' + data.args[0]
-				};
-				break;
-			default:
-				break;
-		}
+				});
+			},
 
-		if (Object.keys(updateMessage).length !== 0) {
-			updateMessage.connectionId = connectionId;
-			this.updateInterface.message(updateMessage, connectionId);
-		}
-	}
+			/*
+				Reply messages
+			*/
 
-	reply(connectionId, data) {
-		var updateMessage = {};
-		var network = client.networks[connectionId];
-
-		switch (data.rawCommand) {
-			case '001':
+			'001': () => {
 				network.nick = data.args[0];
-				updateMessage = {
-					type: 'rpl_welcome',
+				this.addMessage({
+					type: 'RPL_WELCOME',
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1]
-				};
-				break;
-			case '002':
-				updateMessage = {
-					type: 'rpl_yourhost',
-					channel: 'SERVER',
-					head: '>',
-					nick: 'SERVER',
-					message: data.args[1]
-				};
-				break;
-			case '003':
-				updateMessage = {
-					type: 'rpl_created',
-					channel: 'SERVER',
-					head: '>',
-					nick: 'SERVER',
-					message: data.args[1]
-				};
-				break;
-			case '004':
-				var messages;
-				var k;
+				});
+			},
 
-				for (k in data.args) {
+			'002': () => {
+				this.addMessage({
+					type: 'RPL_YOURHOST',
+					channel: 'SERVER',
+					head: '>',
+					nick: 'SERVER',
+					message: data.args[1]
+				});
+			},
+
+			'003': () => {
+				this.addMessage({
+					type: 'RPL_CREATED',
+					channel: 'SERVER',
+					head: '>',
+					nick: 'SERVER',
+					message: data.args[1]
+				});
+			},
+
+			'004': () => {
+				var messages;
+
+				for (let k in data.args) {
 					if (typeof data.args[k] !== undefined) {
 						messages = messages + data.args[k] + ' '; // I think this should work?
 					}
 				}
 
-				updateMessage = {
-					type: 'rpl_myinfo',
+				this.addMessage({
+					type: 'RPL_MYINFO',
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
 					message: messages
-				};
-				break;
-			case '005':
-				/*
-				The number isnt the same for every network. Redo this.
-				if (typeof data.args[9] === undefined) {
-					return;
-				}
+				});
+			},
 
-				var networkName = data.args[9].split('NETWORK=');
-
-				if (networkName.length > 1) {
-					if (typeof networkName !== undefined) {
-						// select('#network-panel ul h2').innerHTML = networkName[1];
-						network.name = networkName[1];
-					} else {
-						// select('#network-panel ul h2').innerHTML = data.server;
-						network.name = data.server;
-					}
-				}*/
-				break;
-			case '251':
-				updateMessage = {
-					type: 'rpl_luserclient',
+			'251': () => {
+				this.addMessage({
+					type: 'RPL_LUSERCLIENT',
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1]
-				};
-				break;
-			case '332':
+				});
+			},
+
+			'332': () => {
 				// If we dont have the channel stored, lets do that now!
 				if (network.sources[data.args[1]] === undefined) {
 					network.sources[data.args[1]] = {};
@@ -215,22 +204,24 @@ class IncomingMessages {
 				if (network.focusedSource === data.args[1]) {
 					select('#channel-console header input').value = data.args[2];
 				}
+			},
 
-				break;
-			case '333':
+			'333': () => {
 				const topicDate = new Date(data.args[3] * 1000);
-				updateMessage = {
-					type: 'rpl_topicwhotime',
+
+				this.addMessage({
+					type: 'RPL_TOPICWHOTIME',
 					channel: data.args[1],
 					head: '>',
 					nick: 'SERVER',
 					message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
-				};
-				break;
-			case '353':
+				});
+			},
+
+			'353': () => {
 				// Build the user list and set the joined channels
 				const _re = new RegExp('^([+~&@%]*)(.+)$');
-				var _channel = data.args[2];
+				const _channel = data.args[2];
 				var _names = data.args[3].split(' ');
 				let _values;
 
@@ -240,7 +231,7 @@ class IncomingMessages {
 
 				network.sources[_channel].users = {};
 
-				for (var i = _names.length - 1; i >= 0; i--) {
+				for (let i = _names.length - 1; i >= 0; i--) {
 					if (_names[i] !== '') {
 						_values = _re.exec(_names[i]);
 						network.sources[_channel].users[_values[2]] = _values[1];
@@ -250,68 +241,64 @@ class IncomingMessages {
 				if (network.sources[_channel] === network.focusedSource) {
 					this.updateInterface.users(_channel, connectionId);
 				}
+			},
 
-				break;
-			case '366':
-				break;
-			case '372':
-				updateMessage = {
-					type: 'rpl_motd',
+			'372': () => {
+				this.addMessage({
+					type: 'RPL_MOTD',
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1]
-				};
-				break;
-			case '376':
-				updateMessage = {
-					type: 'rpl_endofmotd',
+				});
+			},
+
+			'376': () => {
+				this.addMessage({
+					type: 'RPL_ENDOFMOTD',
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1]
-				};
-				break;
-			case '412':
-				// err_notexttosend
-				updateMessage = {
+				});
+			},
+
+			/*
+				Error messages
+			*/
+
+			'412': () => {
+				this.addMessage({
 					type: 'warning',
 					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
 					message: data.args[1] + ': ' + data.args[2]
-				};
-				break;
-			case '443':
-				// err_nicknameinuse
-				updateMessage = {
+				});
+			},
+
+			'433': () => {
+				this.addMessage({
 					type: 'warning',
 					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
 					message: data.args[1] + ': ' + data.args[2]
-				};
-				break;
-		}
+				});
+			},
 
-		if (Object.keys(updateMessage).length !== 0) {
-			updateMessage.connectionId = connectionId;
-			this.updateInterface.message(updateMessage, connectionId);
-		}
-	};
+			'461': () => {
+				this.addMessage({
+					type: 'warning',
+					channel: 'SERVER',
+					head: ['icon', 'fa-exclamation-triangle'],
+					nick: 'SERVER',
+					message: data.args[1] + ': ' + data.args[2]
+				});
+			}
+		};
 
-	error(connectionId, data) {
-		var updateMessage = {};
-		var network = client.networks[connectionId];
-
-		switch (data.rawCommand) {
-			case '001':
-				break;
-		}
-
-		if (Object.keys(updateMessage).length !== 0) {
-			updateMessage.connectionId = connectionId;
-			this.updateInterface.message(updateMessage, connectionId);
-		}
-	};
+		// Invoke command
+		(messageTable[data.rawCommand.toLowerCase()] || messageTable['default'])();
+	}
 }
