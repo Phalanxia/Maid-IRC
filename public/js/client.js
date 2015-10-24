@@ -3,12 +3,6 @@
 const select = document.querySelector.bind(document);
 const selectAll = selection => Array.prototype.slice.call(document.querySelectorAll(selection));
 
-window.onbeforeunload = function() {
-	if (client.status.connection) {
-		return 'You have attempted to leave this page. Doing so will disconnect you from IRC.';
-	}
-};
-
 var client = {
 	settings: {
 		awayMessage: 'Away',
@@ -39,17 +33,15 @@ var client = {
 		// Modules
 		const updateInterface = new UpdateInterface();
 		const outgoingMessages = new OutgoingMessages(socket, updateInterface);
-		const incomingMessages = new IncomingMessages(socket, updateInterface);
+		const incomingMessages = new IncomingMessages(updateInterface);
 		const connectToNetwork = new ConnectToNetwork(socket, updateInterface);
 
 		connectToNetwork.setup(connectInfo);
 
-		// Respond to pings
 		socket.on('ping', (data) => {
 			socket.emit('pong', {beat: 1});
 		});
 
-		// Lets handle all the socket.io stuff here for now. :3
 		socket.on('connect', () => {
 			client.status.connection = true;
 			console.log('Connected to server back end');
@@ -61,25 +53,20 @@ var client = {
 			console.warn('Connection lost');
 		});
 
-		// IRC
+		// Handle recieved IRC messages
 		socket.on('raw', (data) => {
-			let connectionId = data[0];
-			let message = data[1];
+			const connectionId = data[0];
+			const message = data[1];
 
-			// Handle different command types differently (normal, reply, error)
-			if (message.commandType === 'normal') {
-				incomingMessages.normal(connectionId, message);
-			} else if (message.commandType === 'reply') {
-				incomingMessages.reply(connectionId, message);
-			} else if (message.commandType === 'error') {
-				incomingMessages.error(connectionId, message);
+			if (message.commandType === 'normal' || message.commandType === 'reply' || message.commandType === 'error') {
+				incomingMessages.handler(connectionId, message);
 			} else {
-				console.warn('Error: Unknown command type ' + '"' + message.commandType + '"');
+				console.warn('Error: Unknown command type "' + message.commandType + '"');
 			}
 		});
 
 		function enterMessage() {
-			var input = select('#channel-console footer input');
+			const input = select('#channel-console footer input');
 			outgoingMessages.send(input.value);
 			input.value = '';
 		}
@@ -96,6 +83,12 @@ var client = {
 	}
 };
 
+window.onbeforeunload = function() {
+	if (client.status.connection) {
+		return 'You have attempted to leave this page. Doing so will disconnect you from IRC.';
+	}
+};
+
 // Handle connection information
 select('#submit').onclick = function(event) {
 	event.preventDefault();
@@ -106,12 +99,12 @@ select('#submit').onclick = function(event) {
 	selectAll('#connect input').forEach(obj => {
 		connectInfo[obj.name] = obj.value;
 
-		// If the input is no longer invalid remove the invalid class.
+		// If the input is no longer invalid remove the invalid class
 		if (obj.classList.contains && obj.validity.valid) {
 			obj.classList.remove('invalid');
 		}
 
-		// If the input is invalid add the invalid class to the input.
+		// If the input is invalid add the invalid class to the input
 		if (!obj.validity.valid) {
 			obj.classList.add('invalid');
 			invalid = true;
@@ -135,6 +128,19 @@ select('#submit').onclick = function(event) {
 	}
 };
 
+// Stop form redirect on submit
+select('#submit').submit = function(event) {
+	event.preventDefault();
+	return false;
+}
+
+function hideModals() {
+	select('#pageCover').classList.remove('displayed');
+	selectAll('.modal').forEach(obj => {
+		obj.classList.remove('displayed');
+	});
+}
+
 select('#pageCover').onclick = function() {
 	hideModals();
 };
@@ -145,27 +151,20 @@ selectAll('.modal header button').forEach(obj => {
 	};
 });
 
-function hideModals() {
-	select('#pageCover').classList.remove('displayed');
-	selectAll('.modal').forEach(obj => {
-		obj.classList.remove('displayed');
-	});
-}
-
-// Show settings modal.
+// Show settings modal
 select('#network-panel header button.fa-cog').onclick = function() {
 	select('#pageCover').classList.add('displayed');
 	select('#settings').classList.add('displayed');
 };
 
-// Show connect modal.
+// Show connect modal
 select('#network-panel header button.fa-sign-in').onclick = function() {
 	select('#pageCover').classList.add('displayed');
 	select('#connect').classList.add('displayed');
 };
 
 // Settings
-var settingsItems = select('#settings nav > ul').getElementsByTagName('li');
+const settingsItems = select('#settings nav > ul').getElementsByTagName('li');
 for (let i = 0; i < settingsItems.length; i++) {
 	settingsItems[i].i = i;
 	settingsItems[i].onclick = function() {
@@ -175,13 +174,13 @@ for (let i = 0; i < settingsItems.length; i++) {
 			obj.classList.remove('focused');
 		});
 
-		select('#settings nav > ul li:nth-of-type(' + (theNumber + 1) + ')').classList.add('focused');
+		select(`#settings nav > ul li:nth-of-type(${theNumber + 1})`).classList.add('focused');
 
 		selectAll('#settings .page').forEach(obj => {
 			obj.style.display = 'none';
 		});
 
-		selectAll('#settings .page:nth-of-type(' + (theNumber + 1) + ')')[0].style.display = 'block';
+		selectAll(`#settings .page:nth-of-type(${theNumber + 1})`)[0].style.display = 'block';
 	};
 }
 
