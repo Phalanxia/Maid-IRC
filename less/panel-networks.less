@@ -102,9 +102,19 @@
 		cursor: pointer;
 		background-color: @darkBlue;
 	}
-	&:nth-child(odd) { background-color: darken(@darkBlue, 2%); }
 }
-.message-source-list li.channel { margin: 0 0 0 14px; }
+.message-source-list li.server { background-color: darken(@darkBlue, 2%); }
+.message-source-list li.channel {
+	margin: 0 0 0 14px;
+	&:before {
+		display: block;
+		position: absolute;
+		top: 5px;
+		height: 30px;
+		border-left: 2px dashed @lightBlue;
+		content: "";
+	}
+}
 .message-source-list li[data-alert]:after {
 	float: right;
 	height: 20px;
@@ -119,19 +129,28 @@
 	border-radius: 4px;
 	content: attr(data-alert);
 }
+.message-source-list li .arrow {
+	display: none;
+	position: absolute;
+	top: 5px;
+	right: 0;
+	overflow: hidden;
+	width: 30px;
+	height: 30px;
+}
+.message-source-list li .arrow span {
+	float: left;
+  margin-left: 25px;
+  width: 30px;
+  height: 30px;
+  background-color: @white-2;
+  border-radius: 2px;
+  transform: rotateZ(45deg);
+}
 .message-source-list li[data-alert=""]:after { display: none; }
 .message-source-list li.focusedSource {
 	&:hover { background-color: @darkBlue; };
-	&:before {
-		position: absolute;
-		top: 12px;
-		right: 0;
-		height: 0;
-		border-top: 7px solid transparent;
-		border-bottom: 7px solid transparent;
-		border-right: 7px solid @white-2;
-		content: "";
-	}
+	.arrow { display: block; }
 }
 .message-source-list i {
 	padding: 0 14px;

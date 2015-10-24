@@ -3,8 +3,8 @@ html(lang="en")
 	head
 		meta(charset="utf-8")
 		meta(http-equiv="x-ua-compatible", content="ie=edge")
-		title Maid IRC
-		meta(name="description", content="Maid IRC")
+		title Maid-IRC
+		meta(name="description", content="Maid-IRC")
 		meta(name="viewport", content="width=device-width", initial-scale="1", user-scalable="no")
 		meta(name="mobile-web-app-capable", content="yes")
 		meta(name="theme-color", content="rgb(81,176,255)")
@@ -68,8 +68,8 @@ html(lang="en")
 					input#name(type="text", placeholder="Nickname", name="nick", spellcheck="false", autofocus, required)
 					section
 						input#server(type="text", placeholder="Server", name="server", spellcheck="false", required)
-						input#port(type="number", placeholder="Port", name="port", maxlength="4", max="65535", required)
-					input#channel(type="text", placeholder="Channel", name="channel", spellcheck="false", required)
+						input#port(type="number", placeholder="Port", name="port", maxlength="5", max="65535", required)
+					input#channel(type="text", placeholder="Channel", name="channel", spellcheck="false")
 					footer
 						button.btn#submit(type="submit", name="connect") Connect
 						button.btn.fa.fa-gear(type="button")
@@ -95,10 +95,10 @@ html(lang="en")
 			.page#about
 				h1 Maid
 					span IRC
-				p.version Version #{version}
-				a(href="https://github.com/Phalanxia/Maid-IRC", target="_blank") GitHub
-				a(href="https://github.com/Phalanxia/Maid-IRC/issues", target="_blank") Report an issue
-				a(href="https://raw.githubusercontent.com/Phalanxia/Maid-IRC/master/LICENSE", target="_blank") License
+				p.version Running version #{version}
+				a(class="update" href="https://github.com/Phalanxia/Maid-IRC/releases/latest", target="_blank") Check for updates
+				a(class="update" href="https://github.com/Phalanxia/Maid-IRC/blob/master/LICENSE", target="_blank") License
+				br
 				include ./includes/licenses.jade
 
 	// Libraries

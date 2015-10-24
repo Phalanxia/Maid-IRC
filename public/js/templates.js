@@ -1,9 +1,11 @@
+'use strict';
+
 var Templates = {
 	messageSource: {
-		source: '<ul class="message-source-list"><li class="server" data-connection-id="{{connectionId}}" data-value="SERVER"><i class="fa fa-server"></i><span>{{serverName}}</span></li>{{#with sources}}<li class="channel" data-connection-id="{{data.connectionId}}" data-value="{{key}}" data-alert=""><i class="fa fa-comments-o"></i><span>{{key}}</span></li>{{/with}}</ul>'
+		source: '<ul class="message-source-list"><li class="server" data-connection-id="{{connectionId}}" data-value="SERVER"><i class="fa fa-server"></i><span>{{serverName}}</span><div class="arrow"><span></div></li>{{#with sources}}<li class="channel" data-connection-id="{{data.connectionId}}" data-value="{{key}}" data-alert=""><i class="fa fa-comments-o"></i><span>{{key}}</span><div class="arrow"><span></div></li>{{/with}}</ul>'
 	},
 	userList: {
-		source: '<li><p title="{{rank}}" data-rank="{{rank}}" data-rank-icon="{{{icon}}}">{{nick}}</p></li>'
+		source: '<li><p data-rank="{{rank}}" data-rank-icon="{{{icon}}}">{{nick}}</p></li>'
 	},
 	message: {
 		source: '<article class="consoleMessage" data-messageType="{{type}}" data-connection-id="{{connectionId}}" data-source="{{source}}"><aside><time>{{timestamp}}</time><span class="{{icon}}">{{head}}</span></aside><p>{{{message}}}</p></article><article class="filler"><div></div></article>'
@@ -21,7 +23,7 @@ var Partials = {
 Handlebars.registerHelper('with', function(context, options) {
 	var content = (function() {
 		var results = [];
-		for (var key in context) {
+		for (let key in context) {
 			var value = context[key];
 			results.push(options.fn({
 				key: key,
@@ -37,7 +39,7 @@ Handlebars.registerHelper('with', function(context, options) {
 });
 
 // Compile templates and save them back in the template object
-for (var index in Templates) {
+for (let index in Templates) {
 	Templates[index].compiled = Handlebars.compile(Templates[index].source);
 }
 
