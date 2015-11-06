@@ -18,7 +18,14 @@ A modern web IRC client. Built on [Node](https://nodejs.org).
 ![Client](screenshots/client.png "Client screenshot")
 
 ## Building
+
 Don't feel like building? Prebuilt versions are available [here](https://github.com/Phalanxia/Maid-IRC/releases). Prebuilds are intended for production environments only and don't include files not necessary in production.
+
+Before building, download and install the Node binaries from the official [Node.js site](https://nodejs.org/en/download/stable/).
+
+**Note:** Maid-IRC requires Node.js v4.1.x or newer.
+
+---
 
 Install dependencies
 ```bash
@@ -32,20 +39,18 @@ $ npm install -g grunt-cli
 
 Compile .less files
 ```bash
-$ grunt:css
+$ grunt build:css
 ```
 Compile public JavaScript with babel
 ```bash
-$ grunt:js
+$ grunt build:js
 ```
 
 ##### Optional:
 Generating a production ready zip file
 ```bash
-$ grunt:package
+$ grunt package
 ```
-
-**Note:** Maid-IRC requires Node.js v4.1.x or newer.
 
 ## Running
 ```bash
