@@ -23,17 +23,22 @@ Don't feel like building? Prebuilt versions are available [here](https://github.
 
 ### Prerequisites
 
-**Note:** Maid-IRC requires Node.js v4.1.x or newer. Package manager-provided versions may not satisfy this requirement. [Node.js site](https://nodejs.org/en/download/stable/) provides recent binaries for all the platforms.
+Maid-IRC requires Node.js v4.1.x or newer.
 
-### Building on debian and derivatives
+**Note:** Package manager-provided versions may not satisfy this requirement. The [Node.js site](https://nodejs.org/en/download/stable/) provides recent binaries for all the platforms.
+
+#### Building on Debian and derivatives
+
+At the time of writing Debian 8 "jessie" provides Node.js version 0.10.29. You may use nvm, n, nave or download directly from the aforementioned official site to meet the requirements for this app. [npm](https://www.npmjs.com/), which may or may not be packaged with Node.js, is also required.
+
+ICU dev headers are needed to successfully build npm dependencies.
 
 Install the prerequisites:
 ```bash
 $ sudo apt-get install libicu-dev git
 ```
-Note that at the time of writing debian 8 "jessie" provides nodejs version 0.10.29. You may use nvm, n, nave or download directly from the aforementioned official site to meet the requirements for this app. [npm](https://www.npmjs.com/), which may or may not be packaged with nodejs, is also required.
 
-ICU dev headers are needed to successfully build npm dependencies.
+---
 
 Install grunt-cli:
 ```bash
