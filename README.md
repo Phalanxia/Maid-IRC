@@ -21,27 +21,39 @@ A modern web IRC client. Built on [Node](https://nodejs.org).
 
 Don't feel like building? Prebuilt versions are available [here](https://github.com/Phalanxia/Maid-IRC/releases). Prebuilds are intended for production environments only and don't include files not necessary in production.
 
-Before building, download and install the Node binaries from the official [Node.js site](https://nodejs.org/en/download/stable/).
+### Prerequisites
 
-**Note:** Maid-IRC requires Node.js v4.1.x or newer.
+**Note:** Maid-IRC requires Node.js v4.1.x or newer. Package manager-provided versions may not satisfy this requirement. [Node.js site](https://nodejs.org/en/download/stable/) provides recent binaries for all the platforms.
 
----
+### Building on debian and derivatives
 
-Install dependencies
+Install the prerequisites:
 ```bash
-$ npm install
+$ sudo apt-get install libicu-dev git
+```
+Note that at the time of writing debian 8 "jessie" provides nodejs version 0.10.29. You may use nvm, n, nave or download directly from the aforementioned official site to meet the requirements for this app. npm, which may or may not be packaged with nodejs, is also required
+
+Install grunt-cli:
+```bash
+$ sudo npm install -g grunt-cli
 ```
 
-Install grunt-cli
+Clone the repository:
 ```bash
-$ npm install -g grunt-cli
+$ git clone https://github.com/Phalanxia/Maid-IRC.git
 ```
 
-Compile .less files
+Set the working directory to the freshly obtained copy and install the nodejs dependencies
+```bash
+$ cd Maid-IRC; npm install
+```
+
+Compile .less files:
 ```bash
 $ grunt build:css
 ```
-Compile public JavaScript with babel
+
+Compile public JavaScript with babel:
 ```bash
 $ grunt build:js
 ```
