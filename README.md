@@ -31,7 +31,9 @@ Install the prerequisites:
 ```bash
 $ sudo apt-get install libicu-dev git
 ```
-Note that at the time of writing debian 8 "jessie" provides nodejs version 0.10.29. You may use nvm, n, nave or download directly from the aforementioned official site to meet the requirements for this app. npm, which may or may not be packaged with nodejs, is also required
+Note that at the time of writing debian 8 "jessie" provides nodejs version 0.10.29. You may use nvm, n, nave or download directly from the aforementioned official site to meet the requirements for this app. [npm](https://www.npmjs.com/), which may or may not be packaged with nodejs, is also required.
+
+ICU dev headers are needed to successfully build npm dependencies.
 
 Install grunt-cli:
 ```bash
