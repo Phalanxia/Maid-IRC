@@ -13,7 +13,7 @@ function maidIrc(io, env) {
 			_debug = true;
 		}
 
-		var client = new irc.Client(info.server, info.nick, {
+		let client = new irc.Client(info.server, info.nick, {
 			userName: info.nick,
 			realName: info.realName,
 			password: info.nicknamePassword,

@@ -7,10 +7,10 @@ class ConnectToNetwork {
 	}
 
 	setup(data) {
-		var connectionId = uuid.v4();
+		const connectionId = uuid.v4();
 		client.networks[connectionId] = {};
 
-		var network = client.networks[connectionId];
+		let network = client.networks[connectionId];
 
 		if (!network.realName) {
 			network.realName = 'MaidIRC';

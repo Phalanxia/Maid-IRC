@@ -14,7 +14,7 @@ class IncomingMessages {
 	}
 
 	handler(connectionId, data) {
-		var network = client.networks[connectionId];
+		let network = client.networks[connectionId];
 		this.connectionId = connectionId;
 
 		const messageTable = {
@@ -36,7 +36,7 @@ class IncomingMessages {
 					head: data.nick,
 					nick: data.nick,
 					message: data.args[1],
-					highlightable: true
+					highlightable: true,
 				});
 			},
 
@@ -47,7 +47,7 @@ class IncomingMessages {
 					head: '-notice-',
 					nick: data.nick,
 					message: data.args[1],
-					highlightable: true
+					highlightable: true,
 				});
 			},
 
@@ -76,7 +76,7 @@ class IncomingMessages {
 					channel: data.args[0],
 					head: ['icon', 'fa-sign-in'],
 					nick: data.nick,
-					message: data.nick + ' (' + data.prefix + ') has Joined (' + data.args[0] + ')'
+					message: data.nick + ' (' + data.prefix + ') has Joined (' + data.args[0] + ')',
 				});
 			},
 
@@ -88,7 +88,7 @@ class IncomingMessages {
 							channel: channel,
 							head: ['icon', 'fa-angle-double-left'],
 							nick: network.nick,
-							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')'
+							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')',
 						});
 					} else if (data.nick in channel.users) {
 						this.addMessage({
@@ -96,7 +96,7 @@ class IncomingMessages {
 							channel: channel,
 							head: ['icon', 'fa-angle-double-left'],
 							nick: data.nick,
-							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')'
+							message: data.nick + ' (' + data.prefix + ') has Quit (' + data.args[0] + ')',
 						});
 					}
 				}
@@ -109,7 +109,7 @@ class IncomingMessages {
 						channel: channel,
 						head: ['icon', 'fa-exclamation-circle'],
 						nick: 'SERVER',
-						message: 'Error: ' + data.args[0]
+						message: 'Error: ' + data.args[0],
 					});
 				}
 
@@ -119,7 +119,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-circle'],
 					nick: 'SERVER',
-					message: 'Error: ' + data.args[0]
+					message: 'Error: ' + data.args[0],
 				});
 			},
 
@@ -134,7 +134,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					message: data.args[1]
+					message: data.args[1],
 				});
 			},
 
@@ -144,7 +144,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					message: data.args[1]
+					message: data.args[1],
 				});
 			},
 
@@ -154,12 +154,12 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					message: data.args[1]
+					message: data.args[1],
 				});
 			},
 
 			'004': () => {
-				var messages;
+				let messages;
 
 				for (let k in data.args) {
 					if (typeof data.args[k] !== undefined) {
@@ -172,7 +172,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					message: messages
+					message: messages,
 				});
 			},
 
@@ -182,7 +182,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					message: data.args[1]
+					message: data.args[1],
 				});
 			},
 
@@ -214,7 +214,7 @@ class IncomingMessages {
 					channel: data.args[1],
 					head: '>',
 					nick: 'SERVER',
-					message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate
+					message: 'Topic for ' + data.args[1] + ' set by ' + data.args[2] + ' at ' + topicDate,
 				});
 			},
 
@@ -222,7 +222,7 @@ class IncomingMessages {
 				// Build the user list and set the joined channels
 				const _re = new RegExp('^([+~&@%]*)(.+)$');
 				const _channel = data.args[2];
-				var _names = data.args[3].split(' ');
+				const _names = data.args[3].split(' ');
 				let _values;
 
 				if (network.sources[_channel] === undefined) {
@@ -249,7 +249,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					message: data.args[1]
+					message: data.args[1],
 				});
 			},
 
@@ -259,7 +259,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: '>',
 					nick: 'SERVER',
-					message: data.args[1]
+					message: data.args[1],
 				});
 			},
 
@@ -273,7 +273,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
-					message: data.args[1] + ': ' + data.args[2]
+					message: data.args[1] + ': ' + data.args[2],
 				});
 			},
 
@@ -283,7 +283,7 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
-					message: data.args[1] + ': ' + data.args[2]
+					message: data.args[1] + ': ' + data.args[2],
 				});
 			},
 
@@ -293,9 +293,9 @@ class IncomingMessages {
 					channel: 'SERVER',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
-					message: data.args[1] + ': ' + data.args[2]
+					message: data.args[1] + ': ' + data.args[2],
 				});
-			}
+			},
 		};
 
 		// Invoke command

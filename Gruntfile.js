@@ -12,24 +12,24 @@ module.exports = function(grunt) {
 				options: {
 					stdout: false,
 					stderr: false,
-					stdin: false
+					stdin: false,
 				},
-				command: 'npm install'
+				command: 'npm install',
 			},
 			dist: {
 				options: {
 					stdout: true,
 					stderr: true,
-					stdin: false
+					stdin: false,
 				},
-				command: 'cd ./dist && npm install --production'
-			}
+				command: 'cd ./dist && npm install --production',
+			},
 		},
 
 		concat: {
 			options: {
 				stripBanners: true,
-				banner: `/*! Maid-IRC - v${version} - ${grunt.template.today('yyyy-mm-dd')} */`
+				banner: `/*! Maid-IRC - v${version} - ${grunt.template.today('yyyy-mm-dd')} */`,
 			},
 			dist: {
 				src: [
@@ -38,39 +38,39 @@ module.exports = function(grunt) {
 					'public/js/modules/NetworkConnect.js',
 					'public/js/modules/Interface.js',
 					'public/js/templates.js',
-					'public/js/client.js'
+					'public/js/client.js',
 				],
-				dest: 'dist/public/js/built.js'
-			}
+				dest: 'dist/public/js/built.js',
+			},
 		},
 
 		babel: {
 			options: {
 				sourceMap: true,
-				comments: false
+				comments: false,
 			},
 			development: {
 				files: {
-					'public/js/app.js': 'dist/public/js/built.js'
-				}
+					'public/js/app.js': 'dist/public/js/built.js',
+				},
 			},
 			dist: {
 				files: {
-					'dist/public/js/app.js': 'dist/public/js/built.js'
-				}
-			}
+					'dist/public/js/app.js': 'dist/public/js/built.js',
+				},
+			},
 		},
 
 		clean: {
 			beforeDist: {
-				src: ['dist/**/*']
+				src: ['dist/**/*'],
 			},
 			dist: {
-				src: ['build', 'dist/public/js/built.js']
+				src: ['build', 'dist/public/js/built.js'],
 			},
 			afterDist: {
-				src: ['dist/**/*', `!dist/maid-irc_v${version}.zip`]
-			}
+				src: ['dist/**/*', `!dist/maid-irc_v${version}.zip`],
+			},
 		},
 
 		copy: {
@@ -89,70 +89,70 @@ module.exports = function(grunt) {
 							'!public/js/modules/**',
 							'!public/js/client.js',
 							'!public/js/templates.js',
-							'!public/css/**'
+							'!public/css/**',
 						],
-						dest: 'dist'
+						dest: 'dist',
 					},
 					{
 						src: ['maid.js'],
-						dest: 'dist/maid.js'
+						dest: 'dist/maid.js',
 					},
 					{
 						src: ['config.js'],
-						dest: 'dist/config.js'
+						dest: 'dist/config.js',
 					},
 					{
 						src: ['package.json'],
-						dest: 'dist/package.json'
+						dest: 'dist/package.json',
 					},
 					{
 						src: ['README.md'],
-						dest: 'dist/README.md'
+						dest: 'dist/README.md',
 					},
 					{
 						src: ['LICENSE'],
-						dest: 'dist/LICENSE'
-					}
+						dest: 'dist/LICENSE',
+					},
 				]
-			}
+			},
 		},
 
 		less: {
 			development: {
 				options: {
-					paths: []
+					paths: [],
 				},
 				files: {
-					'public/css/client.css': 'less/client.less'
-				}
+					'public/css/client.css': 'less/client.less',
+				},
 			},
 			dist: {
 				options: {
 					paths: [],
 					plugins: [],
 					compress: true,
-					optimization: 0
+					optimization: 0,
 				},
 				files: {
-					'dist/public/css/client.css': 'less/client.less'
-				}
-			}
+					'dist/public/css/client.css': 'less/client.less',
+				},
+			},
 		},
 
 		compress: {
 			dist: {
 				options: {
-					archive: `dist/maid-irc_v${version}.zip`
+					archive: `dist/maid-irc_v${version}.zip`,
 				},
 				files: [
 					{
 						expand: true,
 						cwd: './dist',
-						src: ['**']
+						src: ['**'],
 					}
-				]
-			}
-		}
+				],
+			},
+		},
 	});
 
 	// Load grunt contribution tasks
@@ -179,14 +179,14 @@ module.exports = function(grunt) {
 		grunt.task.run([
 			'concat:dist',
 			'babel:development',
-			'clean:dist'
+			'clean:dist',
 		]);
 	});
 
 	grunt.registerTask('build:css', function() {
 		grunt.log.writeln("Compiling Maid-IRC's less files");
 		grunt.task.run([
-			'less:development'
+			'less:development',
 		]);
 	});
 
@@ -201,7 +201,7 @@ module.exports = function(grunt) {
 			'clean:dist',
 			'shell:dist',
 			'compress:dist',
-			'clean:afterDist'
+			'clean:afterDist',
 		]);
 	});
 };
