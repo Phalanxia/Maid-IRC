@@ -52,7 +52,7 @@ class OutgoingMessages {
 				head: client.getFocused().nick,
 				nick: client.getFocused().nick,
 				channel: client.getFocused().focusedSource,
-				message: data
+				message: data,
 			};
 
 			this.updateInterface.message(updateMessage, client.networks.focusedServer);

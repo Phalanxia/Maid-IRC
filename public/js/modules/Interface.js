@@ -10,7 +10,7 @@ class UpdateInterface {
 	}
 
 	messageSources(connectionId) {
-		var _this = this;
+		let _this = this;
 
 		// Remove all the current items in the list
 		selectAll('#network-panel > ul').forEach(obj => {
@@ -43,7 +43,7 @@ class UpdateInterface {
 
 			switch (type.toLowerCase()) {
 				case 'channel':
-					var channel = network.sources[source];
+					const channel = network.sources[source];
 
 					if (typeof channel !== undefined) {
 						_this.topic(channel.topic);
@@ -105,17 +105,17 @@ class UpdateInterface {
 		select('#users header p').innerHTML = '';
 
 		// Set up user list.
-		var network = client.networks[connectionId];
-		var userList = [];
-		var users = network.sources[channel].users;
+		let network = client.networks[connectionId];
+		let users = network.sources[channel].users;
+		let userList = [];
 
 		userList = Object.keys(users);
 
 		// Sort the user list based on rank and alphabetization
 		userList.sort(function(a, b) {
 			const rankString = '\r+%@&~';
-			var rankA = rankString.indexOf(users[a]);
-			var rankB = rankString.indexOf(users[b]);
+			const rankA = rankString.indexOf(users[a]);
+			const rankB = rankString.indexOf(users[b]);
 
 			var rankSort = rankA == rankB ? 0 : (rankA > rankB ? 1 : -1);
 			if (rankSort === 0) {
@@ -126,7 +126,7 @@ class UpdateInterface {
 		});
 
 		userList.forEach(function(element, index, array) {
-			var identifyer = {};
+			let identifyer = {};
 			identifyer.rank = users[element];
 			identifyer.icon = '';
 
@@ -181,12 +181,11 @@ class UpdateInterface {
 		if (data.channel.toLowerCase() !== 'server' && data.highlightable) {
 			// Lets highlight your nick!
 			function highlightNick(name, input) {
-				var exp = new RegExp('\\b(' + name + ')', 'ig');
+				const exp = new RegExp('\\b(' + name + ')', 'ig');
 				return input.replace(exp, '<span class="highlighted">$1</span>');
 			}
 
-			var i;
-			for (i = 0; i < client.settings.highlights.length; i++) {
+			for (let i = 0; i < client.settings.highlights.length; i++) {
 				message = highlightNick(client.settings.highlights[i], message);
 			}
 		}

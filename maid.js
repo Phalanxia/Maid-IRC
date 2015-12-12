@@ -61,12 +61,12 @@ app.set('view engine', 'jade');
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-	extended: true
+	extended: true,
 }));
 app.use(methodOverride());
 
 app.use(express.static(`${__dirname}/public`, {
-	maxAge: '1w'
+	maxAge: '1w',
 }));
 app.use(favicon(`${__dirname}/public/img/icons/favicon.ico`));
 
@@ -81,14 +81,14 @@ function httpServer() {
 function httpsServer() {
 	const server = http.createServer({
 		key: config.PRIVATE_KEY,
-		cert: config.certificate
+		cert: config.CERTIFICATE,
 	}, app).listen(config.HTTPS_PORT, config.HTTP_HOST);
 	maidIrc(io.listen(server), env);
 }
 
 // If HTTPS
 if (config.ENABLE_HTTPS >= 1) {
-	if (config.PRIVATE_KEY && config.certificate) {
+	if (config.PRIVATE_KEY && config.CERTIFICATE) {
 		switch (config.ENABLE_HTTPS) {
 		case 1: // Both HTTP and HTTPS
 			httpServer();

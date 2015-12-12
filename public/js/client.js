@@ -7,17 +7,17 @@ var client = {
 	settings: {
 		awayMessage: 'Away',
 		ignoreList: [],
-		highlights: []
+		highlights: [],
 	},
 
 	status: {
 		connection: false,
 		pastDisconnect: false,
-		away: false
+		away: false,
 	},
 
 	networks: {
-		focusedServer: ''
+		focusedServer: '',
 	},
 
 	getFocused() {
@@ -25,9 +25,9 @@ var client = {
 	},
 
 	init(connectInfo) {
-		var socket = io.connect(window.location.origin, {
+		const socket = io.connect(window.location.origin, {
 			reconnection: true,
-			timeout: 20000
+			timeout: 20000,
 		});
 
 		// Modules
@@ -93,8 +93,8 @@ window.onbeforeunload = function() {
 select('#submit').onclick = function(event) {
 	event.preventDefault();
 
-	var connectInfo = {};
-	var invalid = false;
+	let connectInfo = {};
+	let invalid = false;
 
 	selectAll('#connect input').forEach(obj => {
 		connectInfo[obj.name] = obj.value;
@@ -168,7 +168,7 @@ const settingsItems = select('#settings nav > ul').getElementsByTagName('li');
 for (let i = 0; i < settingsItems.length; i++) {
 	settingsItems[i].i = i;
 	settingsItems[i].onclick = function() {
-		var theNumber = this.i;
+		let theNumber = this.i;
 
 		selectAll('#settings nav > ul li').forEach(obj => {
 			obj.classList.remove('focused');
@@ -185,7 +185,7 @@ for (let i = 0; i < settingsItems.length; i++) {
 }
 
 // Connection screen
-var advanced = false;
+let advanced = false;
 select('#connect-basic footer button:last-child').onclick = function() {
 	if (advanced) {
 		select('#connect-advanced').classList.remove('animation-login-advanced');
