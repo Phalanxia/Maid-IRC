@@ -24,7 +24,7 @@
 	top: 50%;
 	left: 50%;
 	box-shadow: 0 1px 2px rgba(0,0,0,.2);
-	visibility: hidden; // Will Tranition
+	visibility: hidden; // Will tranition
 	.m-transform(translate(-50%, -50%));
 }
 .modal.displayed {
@@ -57,16 +57,13 @@
 	color: @white-1;
 	background: none;
 	border: none;
+	border-top-right-radius: 4px;
 	.m-transition(background-color .2s ease-in-out);
 	&:hover {
 		cursor: pointer;
 		background-color: darken(@lightBlue, 4%);
-		border-top-right-radius: 4px;
 	}
-	&:active {
-		background-color: darken(@lightBlue, 8%);
-		border-top-right-radius: 4px;
-	}
+	&:active { background-color: darken(@lightBlue, 8%); }
 }
 .modal .page {
 	display: none;
@@ -100,7 +97,7 @@
 	}
 	span.title {
 		font-weight: 600;
-		white-space: pre;
+		white-space: pre-line;
 	}
 }
 .modal--alert {
