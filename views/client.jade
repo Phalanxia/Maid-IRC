@@ -38,10 +38,12 @@ html(lang="en")
 				header
 					h1
 						span Maid
-						| IRC
-					button.fa.fa-cog
-					button.fa.fa-sign-in
+						|  IRC
+					button.btn.btn--clear.fa.fa-cog
 				ul.message-source-list
+				footer
+					button.btn.fa.fa-sign-in
+
 			.panel#channel-console
 				header
 					input(type="text")
@@ -51,12 +53,11 @@ html(lang="en")
 				footer
 					input(type="text")
 					button.btn.fa.fa-commenting(type="button")
+
 			.panel#users
 				header
 					p
 				ul
-				footer
-					input(type="search", placeholder="Search...")
 
 		// Modals
 		.modal.displayed#connect
@@ -101,8 +102,10 @@ html(lang="en")
 				br
 				include ./includes/licenses.jade
 
-	// Libraries
+	// External libraries
 	script(src="https://cdn.socket.io/socket.io-1.3.7.js", async)
+
+	// Local libraries
 	script(src="js/lib/Autolinker.min.js", async)
 	script(src="js/lib/handlebars.min.js")
 	script(src="js/lib/uuid.js", async)

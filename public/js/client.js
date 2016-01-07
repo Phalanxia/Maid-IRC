@@ -158,7 +158,7 @@ select('#network-panel header button.fa-cog').onclick = function() {
 };
 
 // Show connect modal
-select('#network-panel header button.fa-sign-in').onclick = function() {
+select('#network-panel footer button.fa-sign-in').onclick = function() {
 	select('#pageCover').classList.add('displayed');
 	select('#connect').classList.add('displayed');
 };
