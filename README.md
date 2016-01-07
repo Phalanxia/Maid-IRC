@@ -13,7 +13,7 @@ A modern web IRC client. Built on [Node](https://nodejs.org).
 
 ## Screenshots
 
-![Connect](screenshots/login.png "Login screenshot")
+![Connect](screenshots/login.png "Connection screen screenshot")
 
 ![Client](screenshots/client.png "Client screenshot")
 
