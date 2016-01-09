@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				src: [
-					'public/js/modules/services/templates.js',
+					'public/js/modules/services/Templates.js',
 					'public/js/modules/IncomingMessages.js',
 					'public/js/modules/OutgoingMessages.js',
 					'public/js/modules/NetworkConnect.js',
