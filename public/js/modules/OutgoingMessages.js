@@ -20,12 +20,14 @@ class OutgoingMessages {
 
 		// If it's a supported command
 		if (commands.indexOf(command)) {
+
 			// Depending on the command, lets do someething
 			switch (command) {
 				case '':
 					break;
 			}
 		} else {
+
 			// It's not one of our commands
 			this.socket.emit('send-raw', message);
 		}
@@ -36,7 +38,7 @@ class OutgoingMessages {
 			return;
 		}
 
-		if (data.substring(0, 1) == '/' && data.substring(0, 2) != '//') { // Check if it's a command
+		if (data.substring(0, 1) === '/' && data.substring(0, 2) !== '//') { // Check if it's a command
 			// Remove / from the message, it's not needed any more!
 			data = data.substring(1, data.length);
 

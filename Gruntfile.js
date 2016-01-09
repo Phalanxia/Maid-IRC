@@ -33,14 +33,14 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				src: [
+					'public/js/modules/services/templates.js',
 					'public/js/modules/IncomingMessages.js',
 					'public/js/modules/OutgoingMessages.js',
 					'public/js/modules/NetworkConnect.js',
 					'public/js/modules/Interface.js',
-					'public/js/templates.js',
 					'public/js/client.js',
 				],
-				dest: 'dist/public/js/built.js',
+				dest: 'dist/public/built.js',
 			},
 		},
 
@@ -51,12 +51,12 @@ module.exports = function(grunt) {
 			},
 			development: {
 				files: {
-					'public/js/app.js': 'dist/public/js/built.js',
+					'public/app.js': 'dist/public/built.js',
 				},
 			},
 			dist: {
 				files: {
-					'dist/public/js/app.js': 'dist/public/js/built.js',
+					'dist/public/app.js': 'dist/public/built.js',
 				},
 			},
 		},
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 				src: ['dist/**/*'],
 			},
 			dist: {
-				src: ['build', 'dist/public/js/built.js'],
+				src: ['build', 'dist/public/built.js'],
 			},
 			afterDist: {
 				src: ['dist/**/*', `!dist/maid-irc_v${version}.zip`],
@@ -80,16 +80,12 @@ module.exports = function(grunt) {
 						expand: true,
 						src: [
 							'public/**',
+							'!public/js/**',
+							'!public/css/**',
+							'public/js/lib/**',
 							'views/**',
 							'modules/**',
 							'screenshots/**',
-							'public/js/lib/Autolinker.min.js',
-							'public/js/lib/handlebars.min.js',
-							'public/js/lib/uuid.js',
-							'!public/js/modules/**',
-							'!public/js/client.js',
-							'!public/js/templates.js',
-							'!public/css/**',
 						],
 						dest: 'dist',
 					},
@@ -153,12 +149,30 @@ module.exports = function(grunt) {
 				],
 			},
 		},
+
+		watch: {
+			less: {
+				files: ['less/*.less'],
+				tasks: ['build:css'],
+				options: {
+					span: false,
+				},
+			},
+			scripts: {
+				files: ['public/js/*.js'],
+				tasks: ['build:js'],
+				options: {
+					span: false,
+				},
+			},
+		},
 	});
 
 	// Load grunt contribution tasks
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-less');
 
@@ -202,6 +216,19 @@ module.exports = function(grunt) {
 			'shell:dist',
 			'compress:dist',
 			'clean:afterDist',
+		]);
+	});
+
+	grunt.registerTask('watch:js', function() {
+		grunt.log.writeln('Watching .js files in public/js');
+		grunt.task.run([
+			'watch:scripts',
+		]);
+	});
+
+	grunt.registerTask('watch:less', function() {
+		grunt.task.run([
+			'watch:less',
 		]);
 	});
 };

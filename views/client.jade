@@ -108,17 +108,7 @@ html(lang="en")
 
 	// Local libraries
 	script(src="js/lib/Autolinker.min.js", async)
-	script(src="js/lib/handlebars.min.js")
 	script(src="js/lib/uuid.js", async)
-	
-	if env === "production"
-		script(src="js/app.js")
-	else
-		// Modules
-		script(src="js/modules/NetworkConnect.js", async)
-		script(src="js/modules/IncomingMessages.js", async)
-		script(src="js/modules/OutgoingMessages.js", async)
-		script(src="js/modules/Interface.js", async)
-		// Core scripts
-		script(src="js/client.js")
-		script(src="js/templates.js")
+	script(src="js/lib/handlebars.min.js")
+
+	script(src="app.js")
