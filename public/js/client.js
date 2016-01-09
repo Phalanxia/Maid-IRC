@@ -136,13 +136,17 @@ select('#submit').submit = function(event) {
 
 function hideModals() {
 	select('#pageCover').classList.remove('displayed');
-	selectAll('.modal').forEach(obj => {
-		obj.classList.remove('displayed');
-	});
+	selectAll('.modal').forEach(obj => obj.classList.remove('displayed'));
 }
 
-select('#pageCover').onclick = function() {
-	hideModals();
+select('#pageCover').onclick = () => hideModals();
+
+select('#channel-console .fa-bars').onclick = function() {
+	if (select('#network-panel').classList.contains('collapsed')) {
+		select('#network-panel').classList.remove('collapsed');
+	} else {
+		select('#network-panel').classList.add('collapsed');
+	}
 };
 
 selectAll('.modal header button').forEach(obj => {

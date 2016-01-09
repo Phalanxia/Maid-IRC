@@ -5,7 +5,7 @@ class UpdateInterface {
 		this.autolinker = new Autolinker({
 			 stripPrefix: false,
 			 twitter: false,
-			 phone: false
+			 phone: false,
 		});
 	}
 
@@ -18,10 +18,10 @@ class UpdateInterface {
 		});
 
 		// Render the template
-		select('#network-panel header').insertAdjacentHTML('afterend', Templates.messageSource.compiled({
+		select('#network-panel header').insertAdjacentHTML('afterend', templates.messageSource.compiled({
 				serverName: client.networks[connectionId].name || 'Server',
 				connectionId: connectionId,
-				sources: client.networks[connectionId].sources
+				sources: client.networks[connectionId].sources,
 			})
 		);
 
@@ -151,10 +151,10 @@ class UpdateInterface {
 			}
 
 			// Display the user in the list
-			select('#users ul').insertAdjacentHTML('afterbegin', Templates.userList.compiled({
+			select('#users ul').insertAdjacentHTML('afterbegin', templates.userList.compiled({
 				rank: identifyer.rank,
 				icon: identifyer.icon,
-				nick: element
+				nick: element,
 			}));
 		});
 
@@ -226,14 +226,14 @@ class UpdateInterface {
 		}
 
 		// Insert message into the console
-		output.insertAdjacentHTML('beforeend', Templates.message.compiled({
+		output.insertAdjacentHTML('beforeend', templates.message.compiled({
 				connectionId: connectionId,
 				source: data.channel,
 				type: data.type,
 				timestamp: timestamp,
 				head: _head,
 				message: message,
-				icon: _icon
+				icon: _icon,
 			})
 		);
 
