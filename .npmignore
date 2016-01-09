@@ -10,5 +10,5 @@ dist/*
 build/*
 public/css/*
 
-public/js/app.js
-public/js/app.js.map
+public/app.js
+public/app.js.map

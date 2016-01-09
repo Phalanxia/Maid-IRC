@@ -2,7 +2,7 @@
 
 const templates = {
 	messageSource: {
-		source: '<ul class="message-source-list"><li class="server" data-connection-id="{{connectionId}}" data-value="SERVER"><i class="fa fa-server"></i><span>{{serverName}}</span><div class="arrow"><span></div></li>{{#with sources}}<li class="channel" data-connection-id="{{data.connectionId}}" data-value="{{key}}" data-alert=""><i class="fa fa-comments-o"></i><span>{{key}}</span><div class="arrow"><span></div></li>{{/with}}</ul>',
+		source: '<ul class="message-source-list"><li class="server" data-connection-id="{{connectionId}}" data-value="SERVER"><span class="fa fa-angle-down"></span><span>{{serverName}}</span><div class="arrow"><span></div></li>{{#with sources}}<li class="channel" data-connection-id="{{data.connectionId}}" data-value="{{key}}" data-alert=""><span class="fa fa-comments-o"></span><span title="{{key}}">{{key}}</span><div class="arrow"><span></div></li>{{/with}}</ul>',
 	},
 	userList: {
 		source: '<li><p data-rank="{{rank}}" data-rank-icon="{{{icon}}}">{{nick}}</p></li>',
