@@ -41,14 +41,14 @@
 	order: 1;
 	flex-direction: column;
 	background: @white-2;
-	// Until I can find a monospace version of OpenSans
-	font-family: Monaco, Consolas, "Lucida Console", monospace;
+	font-family: "Roboto Mono", Monaco, Consolas, "Lucida Console", monospace;
 }
 #channel-console output article {
 	float: left;
 	width: 100%;
 	line-height: 25px;
 	flex: 0 0 auto;
+	font-size: .84em;
 	&:hover { background-color: @white-3; }
 }
 #channel-console output article aside {
@@ -70,7 +70,6 @@
 		align-self: auto;
 		float: left;
 		padding: 0 8px 0 0;
-		font-size: 14px;
 		color: @f-grey;
 		text-align: center;
 	}
@@ -79,7 +78,6 @@
 		flex: 1 1 auto;
 		align-self: auto;
 		float: right;
-		font-size: 14px;
 		color: @lightBlue;
 		line-height: 24px;
 		text-align: right;
@@ -88,7 +86,6 @@
 #channel-console output article p {
 	padding: 0 8px;
 	margin: 0 0 0 200px;
-	font-size: 14px;
 	line-height: 24px;
 	color: @darkBlue;
 	word-wrap: break-word;
@@ -109,10 +106,6 @@
 		display: block;
 		padding: 0 8px;
 		margin: 0 0 0 200px;
-		font-size: 14px;
-		color: @darkestBlue;
-		word-wrap: break-word;
-		white-space: pre-wrap;
 		border-left: 1px solid @white-4;
 		flex: 1;
 	}
