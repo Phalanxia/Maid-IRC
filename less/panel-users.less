@@ -6,7 +6,7 @@
 	height: 100%;
 	flex: 0 0 auto;
 	order: 2;
-	background-color: @white-3;
+	background-color: @white-2;
 	.m-user-select(none);
 }
 #users header {
@@ -36,7 +36,7 @@
 }
 #users ul li {
 	position: relative;
-	height: 34px;
+	height: 40px;
 	.m-transition(background-color .1s ease-in-out);
 	&:hover {
 		cursor: pointer;
@@ -47,7 +47,7 @@
 	padding: 0 0 0 8px;
 	margin: 0;
 	font-size: .85em;
-	line-height: 34px;
+	line-height: 40px;
 	color: @darkBlue;
 	&:after {
 		position: absolute;
@@ -59,6 +59,6 @@
 	}
 	&:hover:after {
 		content: attr(data-rank);
-		font-family: 'Open Sans', Helvetica, sans-serif;
+		font-family: Roboto, Helvetica, sans-serif;
 	}
 }
