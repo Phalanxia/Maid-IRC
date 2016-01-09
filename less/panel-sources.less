@@ -8,13 +8,24 @@
 	flex: 0 0 auto;
 	order: 0;
 	flex-flow: column wrap;
+	.m-transition(all .25s ease-in-out);
 	.m-user-select(none);
 }
+#network-panel.collapsed {
+	width: 8px;
+	header h1,
+	header button,
+	.message-source-list,
+	footer { display: none; }
+}
 // Header
-#network-panel header { box-shadow: inset -1px 0 0 0 fadeout(@darkBlue, 90%); }
+#network-panel header {
+	box-shadow: inset -1px 0 0 0 fadeout(@darkBlue, 90%);
+	overflow: hidden;
+}
 #network-panel header h1 {
 	float: left;
-	width: 70px;
+	width: 72px;
 	padding: 0 0 0 16px;
 	margin: 0;
 	font-size: 1.1em;

@@ -29,7 +29,7 @@ const maidStatic = require('./modules/maidStatic');
 const maidIrc = require('./modules/maidIrc');
 const maidHelpers = require('./modules/maidHelpers');
 
-// Define express for the next part
+// Pre-define express
 const app = express();
 app.use(compression());
 
@@ -98,12 +98,12 @@ if (config.ENABLE_HTTPS >= 1) {
 			httpsServer();
 			break;
 		default: // Typo? :p
-			console.warn('The setting in ENABLE_HTTPS in config.js only accepts 0-2. Starting in HTTPS only mode.');
+			console.warn('The setting "ENABLE_HTTPS" in config.js only accepts 0-2. Starting in HTTPS only mode.');
 			httpsServer();
 			break;
 		}
 	} else {
-		maidHelpers.stopMaid('To use HTTPS, PRIVATE_KEY and certificate both need to be set in config.js!');
+		maidHelpers.stopMaid('To use HTTPS, "PRIVATE_KEY" and "CERTIFICATE" both need to be set in config.js!');
 	}
 } else { // If HTTP only
 	httpServer();
@@ -117,7 +117,7 @@ process.on('SIGINT', () => {
 	maidHelpers.stopMaid('SIGINT');
 });
 
-// Close Maid-IRC after seccessfully getting to everything above without crashing. (This is probably a really bad way of handling this)
+// Close Maid-IRC after seccessfully getting to everything above without crashing (This is probably a really bad way of handling this)
 if (env === 'test') {
 	maidHelpers.stopMaid('Maid-IRC seems to have started successfully');
 }
