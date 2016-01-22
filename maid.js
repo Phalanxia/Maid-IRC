@@ -33,7 +33,7 @@ const maidHelpers = require('./modules/maidHelpers');
 const app = express();
 app.use(compression());
 
-// Do things depending on which environment were in
+// Do enviroment specific tasks
 switch (env) {
 	case 'development':
 		const morgan = require('morgan');
@@ -109,7 +109,7 @@ if (config.ENABLE_HTTPS >= 1) {
 	httpServer();
 }
 
-// Now that thats done with lets pass it of to maidStatic.js and maidIrc.js
+// Pass express to maidStatic module
 maidStatic(app, env);
 
 // Technical

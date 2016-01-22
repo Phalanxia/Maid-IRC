@@ -1,6 +1,6 @@
 'use strict';
 
-class UpdateInterface {
+class UI {
 	constructor() {
 		this.autolinker = new Autolinker({
 			 stripPrefix: false,
@@ -13,12 +13,10 @@ class UpdateInterface {
 		let _this = this;
 
 		// Remove all the current items in the list
-		selectAll('#network-panel > ul').forEach(obj => {
-			obj.parentNode.removeChild(obj);
-		});
+		selectAll('#network-panel > ul').forEach(obj => obj.parentNode.removeChild(obj));
 
 		// Render the template
-		select('#network-panel header').insertAdjacentHTML('afterend', templates.messageSource.compiled({
+		select('#network-panel header').insertAdjacentHTML('afterend', client.Templates['public/views/sources.hbs']({
 				serverName: client.networks[connectionId].name || 'Server',
 				connectionId: connectionId,
 				sources: client.networks[connectionId].sources,
@@ -37,9 +35,7 @@ class UpdateInterface {
 			network.focusedSource = source;
 
 			// Reset focused source class
-			selectAll('.message-source-list li').forEach(obj => {
-				obj.classList.remove('focusedSource');
-			});
+			selectAll('.message-source-list li').forEach(obj => obj.classList.remove('focusedSource'));
 
 			switch (type.toLowerCase()) {
 				case 'channel':
@@ -117,7 +113,7 @@ class UpdateInterface {
 			const rankA = rankString.indexOf(users[a]);
 			const rankB = rankString.indexOf(users[b]);
 
-			var rankSort = rankA == rankB ? 0 : (rankA > rankB ? 1 : -1);
+			let rankSort = rankA == rankB ? 0 : (rankA > rankB ? 1 : -1);
 			if (rankSort === 0) {
 				return a.toLowerCase() < b.toLowerCase() ? 1 : -1;
 			}
@@ -125,7 +121,7 @@ class UpdateInterface {
 			return rankSort;
 		});
 
-		userList.forEach(function(element, index, array) {
+		userList.forEach((element, index, array) => {
 			let identifyer = {};
 			identifyer.rank = users[element];
 			identifyer.icon = '';
@@ -151,7 +147,7 @@ class UpdateInterface {
 			}
 
 			// Display the user in the list
-			select('#users ul').insertAdjacentHTML('afterbegin', templates.userList.compiled({
+			select('#users ul').insertAdjacentHTML('afterbegin', client.Templates['public/views/users.hbs']({
 				rank: identifyer.rank,
 				icon: identifyer.icon,
 				nick: element,
@@ -163,84 +159,18 @@ class UpdateInterface {
 	}
 
 	message(data, connectionId) {
+		let NewMessage = new Message(data, connectionId);
+
+		NewMessage.filter();
+		NewMessage.display();
+
 		const output = select('#channel-console output');
-
-		// Filter the message of html unfriendly characters
-		var message = data.message
-			.replace(/&/g, '&amp;')
-			.replace(/"/g, '&quot;')
-			.replace(/'/g, '&apos;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;');
-
-		// Create get the time for the timestamp
-		const rawTime = new Date();
-		const timestamp = ('0' + rawTime.getHours()).slice(-2) + ':' + ('0' + rawTime.getMinutes()).slice(-2) + ':' + ('0' + rawTime.getSeconds()).slice(-2);
-
-		// If it's not a message from the server
-		if (data.channel.toLowerCase() !== 'server' && data.highlightable) {
-			// Lets highlight your nick!
-			function highlightNick(name, input) {
-				const exp = new RegExp('\\b(' + name + ')', 'ig');
-				return input.replace(exp, '<span class="highlighted">$1</span>');
-			}
-
-			for (let i = 0; i < client.settings.highlights.length; i++) {
-				message = highlightNick(client.settings.highlights[i], message);
-			}
-		}
-
-		message = this.autolinker.link(message);
-
-		// If there is no specified channel just use the one the client is currently focused on
-		if (typeof data.channel === 'undefined') {
-			data.channel = client.networks[connectionId].focusedSource;
-		}
-
 		let scrollInfoView;
 
 		// If scrolled at the bottom set scrollIntoView as true
 		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
 			scrollInfoView = true;
 		}
-
-		// Remove the filler message the console
-		output.removeChild(select('article.filler'));
-
-		let _head = '';
-		let _icon = '';
-
-		if (typeof data.head === 'object') {
-			if (data.head[0] === 'text') {
- 				_head = data.head[1];
-			} else if (data.head[0] === 'icon') {
-				_head = '';
-				_icon = `fa ${data.head[1]}`;
-			}
-		} else {
-			_head = data.head;
-
-			if (typeof _head !== 'undefined' && _head.length > 15) {
-				_head = _head.substring(0, 13) + '...';
-			}
-		}
-
-		// Insert message into the console
-		output.insertAdjacentHTML('beforeend', templates.message.compiled({
-				connectionId: connectionId,
-				source: data.channel,
-				type: data.type,
-				timestamp: timestamp,
-				head: _head,
-				message: message,
-				icon: _icon,
-			})
-		);
-
-		// Hide messages not from the focused channel
-		selectAll(`#channel-console output article:not([data-source="${client.networks[connectionId].focusedSource}"])`).forEach(obj => {
-			obj.style.display = 'none';
-		});
 
 		// Scroll to bottom unless the user is scrolled up
 		if (scrollInfoView) {

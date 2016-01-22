@@ -10,5 +10,6 @@ dist/*
 build/*
 public/css/*
 
+public/js/modules/handlebars/compiled.js
 public/app.js
 public/app.js.map

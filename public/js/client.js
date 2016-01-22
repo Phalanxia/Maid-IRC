@@ -3,11 +3,21 @@
 const select = document.querySelector.bind(document);
 const selectAll = selection => Array.prototype.slice.call(document.querySelectorAll(selection));
 
-var client = {
+let client = {
 	settings: {
 		awayMessage: 'Away',
 		ignoreList: [],
 		highlights: [],
+		messages: {
+			emojis: true,
+			autolink: true,
+		},
+		defaults: {
+			messages: {
+				emojis: true,
+				autolink: true,
+			},
+		},
 	},
 
 	status: {
@@ -30,17 +40,14 @@ var client = {
 			timeout: 20000,
 		});
 
-		// Modules
-		const updateInterface = new UpdateInterface();
-		const outgoingMessages = new OutgoingMessages(socket, updateInterface);
-		const incomingMessages = new IncomingMessages(updateInterface);
-		const connectToNetwork = new ConnectToNetwork(socket, updateInterface);
+		const ui = new UI();
+		const outgoingMessages = new OutgoingMessages(socket, ui);
+		const incomingMessages = new IncomingMessages(ui);
+		const connectToNetwork = new ConnectToNetwork(socket, ui);
 
 		connectToNetwork.setup(connectInfo);
 
-		socket.on('ping', (data) => {
-			socket.emit('pong', {beat: 1});
-		});
+		socket.on('ping', data => socket.emit('pong', {beat: 1}));
 
 		socket.on('connect', () => {
 			client.status.connection = true;
@@ -54,14 +61,14 @@ var client = {
 		});
 
 		// Handle recieved IRC messages
-		socket.on('raw', (data) => {
+		socket.on('raw', data => {
 			const connectionId = data[0];
 			const message = data[1];
 
-			if (message.commandType === 'normal' || message.commandType === 'reply' || message.commandType === 'error') {
+			if (['normal', 'reply', 'error'].indexOf(message.commandType) > -1) {
 				incomingMessages.handler(connectionId, message);
 			} else {
-				console.warn('Error: Unknown command type "' + message.commandType + '"');
+				console.warn('Error: Unknown message type "' + message.commandType + '"');
 			}
 		});
 
@@ -77,9 +84,7 @@ var client = {
 			}
 		};
 
-		select('#channel-console footer button').onclick = function() {
-			enterMessage();
-		};
+		select('#channel-console footer button').onclick = () => enterMessage();
 	}
 };
 
@@ -150,9 +155,7 @@ select('#channel-console .fa-bars').onclick = function() {
 };
 
 selectAll('.modal header button').forEach(obj => {
-	obj.onclick = function() {
-		hideModals();
-	};
+	obj.onclick = () => hideModals();
 });
 
 // Show settings modal
@@ -174,15 +177,11 @@ for (let i = 0; i < settingsItems.length; i++) {
 	settingsItems[i].onclick = function() {
 		let theNumber = this.i;
 
-		selectAll('#settings nav > ul li').forEach(obj => {
-			obj.classList.remove('focused');
-		});
+		selectAll('#settings nav > ul li').forEach(obj => obj.classList.remove('focused'));
 
 		select(`#settings nav > ul li:nth-of-type(${theNumber + 1})`).classList.add('focused');
 
-		selectAll('#settings .page').forEach(obj => {
-			obj.style.display = 'none';
-		});
+		selectAll('#settings .page').forEach(obj => obj.style.display = 'none');
 
 		selectAll(`#settings .page:nth-of-type(${theNumber + 1})`)[0].style.display = 'block';
 	};
@@ -195,9 +194,7 @@ select('#connect-basic footer button:last-child').onclick = function() {
 		select('#connect-advanced').classList.remove('animation-login-advanced');
 		select('#connect-advanced').classList.add('animation-login-basic');
 
-		selectAll('input').forEach(obj => {
-			obj.tabIndex = '1';
-		});
+		selectAll('input').forEach(obj => obj.tabIndex = '1');
 	} else {
 		select('#connect-advanced').style.display = 'block';
 	}

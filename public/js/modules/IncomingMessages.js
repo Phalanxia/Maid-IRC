@@ -26,8 +26,7 @@ class IncomingMessages {
 				Normal messages
 			*/
 
-			'ping': () => {
-			},
+			'ping': () => {},
 
 			'privmsg': () => {
 				this.addMessage({
@@ -108,7 +107,7 @@ class IncomingMessages {
 						type: 'error',
 						channel: channel,
 						head: ['icon', 'fa-exclamation-circle'],
-						nick: 'SERVER',
+						nick: 'server',
 						message: 'Error: ' + data.args[0],
 					});
 				}
@@ -116,7 +115,7 @@ class IncomingMessages {
 				// Also send it to the SERVER "channel"
 				this.addMessage({
 					type: 'error',
-					channel: 'SERVER',
+					channel: 'server',
 					head: ['icon', 'fa-exclamation-circle'],
 					nick: 'SERVER',
 					message: 'Error: ' + data.args[0],
@@ -131,7 +130,7 @@ class IncomingMessages {
 				network.nick = data.args[0];
 				this.addMessage({
 					type: 'RPL_WELCOME',
-					channel: 'SERVER',
+					channel: 'server',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1],
@@ -141,7 +140,7 @@ class IncomingMessages {
 			'002': () => {
 				this.addMessage({
 					type: 'RPL_YOURHOST',
-					channel: 'SERVER',
+					channel: 'server',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1],
@@ -151,7 +150,7 @@ class IncomingMessages {
 			'003': () => {
 				this.addMessage({
 					type: 'RPL_CREATED',
-					channel: 'SERVER',
+					channel: 'server',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1],
@@ -169,7 +168,7 @@ class IncomingMessages {
 
 				this.addMessage({
 					type: 'RPL_MYINFO',
-					channel: 'SERVER',
+					channel: 'server',
 					head: '>',
 					nick: 'SERVER',
 					message: messages,
@@ -179,7 +178,7 @@ class IncomingMessages {
 			'251': () => {
 				this.addMessage({
 					type: 'RPL_LUSERCLIENT',
-					channel: 'SERVER',
+					channel: 'server',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1],
@@ -246,7 +245,7 @@ class IncomingMessages {
 			'372': () => {
 				this.addMessage({
 					type: 'RPL_MOTD',
-					channel: 'SERVER',
+					channel: 'server',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1],
@@ -256,7 +255,7 @@ class IncomingMessages {
 			'376': () => {
 				this.addMessage({
 					type: 'RPL_ENDOFMOTD',
-					channel: 'SERVER',
+					channel: 'server',
 					head: '>',
 					nick: 'SERVER',
 					message: data.args[1],
@@ -270,7 +269,7 @@ class IncomingMessages {
 			'412': () => {
 				this.addMessage({
 					type: 'warning',
-					channel: 'SERVER',
+					channel: 'server',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
 					message: data.args[1] + ': ' + data.args[2],
@@ -280,7 +279,7 @@ class IncomingMessages {
 			'433': () => {
 				this.addMessage({
 					type: 'warning',
-					channel: 'SERVER',
+					channel: 'server',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
 					message: data.args[1] + ': ' + data.args[2],
@@ -290,7 +289,7 @@ class IncomingMessages {
 			'461': () => {
 				this.addMessage({
 					type: 'warning',
-					channel: 'SERVER',
+					channel: 'server',
 					head: ['icon', 'fa-exclamation-triangle'],
 					nick: 'SERVER',
 					message: data.args[1] + ': ' + data.args[2],
