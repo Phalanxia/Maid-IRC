@@ -38,13 +38,16 @@ class OutgoingMessages {
 			return;
 		}
 
-		if (data.substring(0, 1) === '/' && data.substring(0, 2) !== '//') { // Check if it's a command
+		// Check if it's a command
+		if (data.substring(0, 1) === '/' && data.substring(0, 2) !== '//') {
+
 			// Remove / from the message, it's not needed any more!
 			data = data.substring(1, data.length);
 
 			// Pass it to the command handler
 			this.command(data);
 		} else {
+
 			// Normal message
 			this.socket.emit('send-raw', ['PRIVMSG', client.getFocused().focusedSource, data]);
 

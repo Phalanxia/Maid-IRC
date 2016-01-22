@@ -8,6 +8,7 @@ html(lang="en")
 		meta(name="viewport", content="width=device-width", initial-scale="1", user-scalable="no")
 		meta(name="mobile-web-app-capable", content="yes")
 		meta(name="theme-color", content="rgb(81,176,255)")
+
 		// Icons
 		link(rel="shortcut icon", href="img/icons/favicon.ico")
 		link(rel="apple-touch-icon", sizes="57x57", href="img/icons/apple-touch-icon-57x57.png")
@@ -26,12 +27,15 @@ html(lang="en")
 		meta(name="msapplication-TileColor", content="#2b5797")
 		meta(name="msapplication-TileImage", content="img/icons/mstile-144x144.png")
 		meta(name="msapplication-config", content="img/icons/browserconfig.xml")
+
 		// CSS
 		link(rel="stylesheet", href="css/client.css", type="text/css")
+
 		// Preconnections
-		link(rel="prefetch", href="https://cdn.socket.io/socket.io-1.3.7.js", as="script")
+		link(rel="prefetch", href="https://cdn.socket.io/socket.io-1.4.3.js", as="script")
 	body
 		#pageCover.displayed
+
 		// Client
 		#client
 			.panel#network-panel
@@ -104,11 +108,6 @@ html(lang="en")
 				include ./includes/licenses.jade
 
 	// External libraries
-	script(src="https://cdn.socket.io/socket.io-1.3.7.js", async)
-
-	// Local libraries
-	script(src="js/lib/Autolinker.min.js", async)
-	script(src="js/lib/uuid.js", async)
-	script(src="js/lib/handlebars.min.js")
+	script(src="https://cdn.socket.io/socket.io-1.4.3.js", async)
 
 	script(src="app.js")
