@@ -40,4 +40,4 @@ Need support? Wanna chat? Join our channel on the Freenode IRC network.
 
 ## License
 
-[MIT License](LICENSE) © 2015 Madison Tries
+[MIT License](LICENSE) © 2013-2016 Madison Tries
