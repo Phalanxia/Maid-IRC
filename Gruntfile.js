@@ -241,7 +241,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('build:js', function() {
-		grunt.log.writeln("Compiling Maid-IRC's public javascript");
+		grunt.log.writeln(`Compiling Maid-IRC's public javascript`);
 		grunt.task.run([
 			'concat:dist',
 			'babel:development',
@@ -252,14 +252,14 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('build:css', function() {
-		grunt.log.writeln("Compiling Maid-IRC's less files");
+		grunt.log.writeln(`Compiling Maid-IRC's less files`);
 		grunt.task.run([
 			'less:development',
 		]);
 	});
 
 	grunt.registerTask('build:handlebars', function() {
-		grunt.log.writeln("Compiling Maid-IRC's handlebars files");
+		grunt.log.writeln(`Compiling Maid-IRC's handlebars files`);
 		grunt.task.run([
 			'handlebars:compile',
 		]);
@@ -291,12 +291,14 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('watch:less', function() {
+		grunt.log.writeln('Watching .less files in less');
 		grunt.task.run([
 			'watch:less',
 		]);
 	});
 
 	grunt.registerTask('watch:handlebars', function() {
+		grunt.log.writeln('Watching .hbs files (Handlebar templates) in public/views');
 		grunt.task.run([
 			'watch:handlebars',
 		]);
