@@ -16,7 +16,7 @@ const config = {
 	*/
 
 	// Check GitHub for avaliable updates on startup
-	CECK_FOR_UPDATES: true,
+	CHECK_FOR_UPDATES: true,
 };
 
 module.exports = config;
