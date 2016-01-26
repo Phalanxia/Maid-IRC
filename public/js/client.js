@@ -188,16 +188,16 @@ for (let i = 0; i < settingsItems.length; i++) {
 }
 
 // Connection screen
-let advanced = false;
-select('#connect-basic footer button:last-child').onclick = function() {
-	if (advanced) {
-		select('#connect-advanced').classList.remove('animation-login-advanced');
-		select('#connect-advanced').classList.add('animation-login-basic');
-
-		selectAll('input').forEach(obj => obj.tabIndex = '1');
-	} else {
-		select('#connect-advanced').style.display = 'block';
-	}
-
-	advanced = !advanced;
-};
+var btnAdv = selectAll('.connectBtnAdv');
+for(var i = 0; i < btnAdv.length; i++){
+	btnAdv[i].onclick = function() {
+		var advanced = select('#connect-basic').style.display === 'none';
+		if (advanced) {
+			select('#connect-advanced').style.display = 'none';
+			select('#connect-basic').style.display = 'block';
+		} else {
+			select('#connect-advanced').style.display = 'block';
+			select('#connect-basic').style.display = 'none';
+		}
+	};
+}
