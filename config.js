@@ -9,7 +9,14 @@ const config = {
 	ENABLE_HTTPS: 0, // 0 = false, 1 = true, 2 = force
 	HTTPS_PORT: 443,
 	PRIVATE_KEY: '',
-	CERTIFICATE: ''
+	CERTIFICATE: '',
+
+ 	/*
+		Misc
+	*/
+
+	// Check GitHub for avaliable updates on startup
+	CECK_FOR_UPDATES: true,
 };
 
 module.exports = config;

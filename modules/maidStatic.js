@@ -1,14 +1,11 @@
 'use strict';
 
-function maidSession(app, env) {
+function maidSession(app, env, version) {
 	// Define the express routes.
 	app.route('/').get((req, res) => {
-		// Fetch the version number for the about page.
-		const pjson = require('../package.json').version;
-
 		res.render('client', {
 			env,
-			version: pjson
+			version,
 		});
 	});
 }

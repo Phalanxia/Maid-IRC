@@ -8,13 +8,14 @@ process.argv.forEach((val, index) => {
 	}
 });
 
-const env = process.env.NODE_ENV || argEnv || 'production';
+const NODE_ENV = process.env.NODE_ENV || argEnv || 'production';
 const config = require('./config.js');
 
-console.log(`Starting Maid-IRC.\nEnvironment: ${env}\nHost: ${config.HTTP_HOST}\nPort: ${config.HTTP_PORT}\n`);
+console.log(`Starting Maid-IRC.\nEnvironment: ${NODE_ENV}\nHost: ${config.HTTP_HOST}\nPort: ${config.HTTP_PORT}\n`);
 
 // Requirements
 const http = require('http');
+const https = require('https');
 const express = require('express');
 const path = require('path');
 
@@ -29,12 +30,15 @@ const maidStatic = require('./modules/maidStatic');
 const maidIrc = require('./modules/maidIrc');
 const maidHelpers = require('./modules/maidHelpers');
 
+// package.json
+const pjson = require('./package.json');
+
 // Pre-define express
 const app = express();
 app.use(compression());
 
 // Do enviroment specific tasks
-switch (env) {
+switch (NODE_ENV) {
 	case 'development':
 		const morgan = require('morgan');
 		app.use(morgan('dev'));
@@ -50,8 +54,13 @@ switch (env) {
 	case 'test':
 		break;
 	default:
-		console.warn(`Sorry! NODE_ENV "${env}" is not recognized. Try "development" or "production".`);
+		console.warn(`Sorry! NODE_ENV "${NODE_ENV}" is not recognized. Try "development" or "production".`);
 		break;
+}
+
+// Check for updates. Make sure the environment variable allows it
+if (config.CHECK_FOR_UPDATES && (process.env.CHECK_FOR_UPDATES || typeof process.env.CHECK_FOR_UPDATES === 'undefined')) {
+	const updates = require('./modules/updateChecker')(https, pjson);
 }
 
 // Set up express
@@ -75,7 +84,7 @@ const io = require('socket.io');
 
 function httpServer() {
 	const server = http.createServer(app).listen(config.HTTP_PORT, config.HTTP_HOST);
-	maidIrc(io.listen(server), env);
+	maidIrc(io.listen(server), NODE_ENV);
 }
 
 function httpsServer() {
@@ -83,7 +92,7 @@ function httpsServer() {
 		key: config.PRIVATE_KEY,
 		cert: config.CERTIFICATE,
 	}, app).listen(config.HTTPS_PORT, config.HTTP_HOST);
-	maidIrc(io.listen(server), env);
+	maidIrc(io.listen(server), NODE_ENV);
 }
 
 // If HTTPS
@@ -110,7 +119,7 @@ if (config.ENABLE_HTTPS >= 1) {
 }
 
 // Pass express to maidStatic module
-maidStatic(app, env);
+maidStatic(app, NODE_ENV, pjson.version);
 
 // Technical
 process.on('SIGINT', () => {
@@ -118,6 +127,6 @@ process.on('SIGINT', () => {
 });
 
 // Close Maid-IRC after seccessfully getting to everything above without crashing (This is probably a really bad way of handling this)
-if (env === 'test') {
+if (NODE_ENV === 'test') {
 	maidHelpers.stopMaid('Maid-IRC seems to have started successfully');
 }
