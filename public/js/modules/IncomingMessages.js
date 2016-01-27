@@ -1,8 +1,9 @@
 'use strict';
 
 class IncomingMessages {
-	constructor(updateInterface) {
+	constructor(updateInterface, sources) {
 		this.updateInterface = updateInterface;
+		this.sources = sources;
 		this.connectionId;
 	}
 
@@ -10,7 +11,23 @@ class IncomingMessages {
 		let _content = content;
 
 		_content.connectionId = this.connectionId;
-		this.updateInterface.message(_content, this.connectionId);
+
+		let NewMessage = new Message(_content, this.connectionId);
+		NewMessage.filter();
+		NewMessage.display();
+
+		const output = select('#channel-console output');
+		let scrollInfoView;
+
+		// If scrolled at the bottom set scrollIntoView as true
+		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
+			scrollInfoView = true;
+		}
+
+		// Scroll to bottom unless the user is scrolled up
+		if (scrollInfoView) {
+			output.scrollTop = output.scrollHeight;
+		}
 	}
 
 	handler(connectionId, data) {
@@ -19,7 +36,9 @@ class IncomingMessages {
 
 		const messageTable = {
 			'default': () => {
-				console.log(data);
+				if (client.settings.debug) {
+					console.log(data);
+				}
 			},
 
 			/*
@@ -51,15 +70,19 @@ class IncomingMessages {
 			},
 
 			'join': () => {
+
 				// Make sure the joined channel is in the current saved channel object
 				if (network.sources[data.args[0]] === undefined) {
 					network.sources[data.args[0]] = {};
 				}
 
 				// If it's us update the network-bar
-				if (data.nick == network.nick) {
-					console.log('Updating Source List');
-					this.updateInterface.messageSources(connectionId);
+				if (data.nick === network.nick) {
+					if (client.settings.debug) {
+						console.log('Updating sources list');
+					}
+
+					this.sources.addToList(connectionId, data.args[0]);
 				}
 
 				// If its the focused channel update the userlist
@@ -218,6 +241,7 @@ class IncomingMessages {
 			},
 
 			'353': () => {
+
 				// Build the user list and set the joined channels
 				const _re = new RegExp('^([+~&@%]*)(.+)$');
 				const _channel = data.args[2];

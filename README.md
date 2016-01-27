@@ -22,6 +22,7 @@ A modern web IRC client. Built on [Node](https://nodejs.org).
 Information about building is available on the wiki page [here](https://github.com/Phalanxia/Maid-IRC/wiki/Building).
 
 ## Running
+
 ```bash
 $ node maid.js
 ```
@@ -31,12 +32,14 @@ $ node maid.js
 
 ## Community
 
+[![Twitter](https://img.shields.io/badge/Twitter-%40MaidIRC-55acee.svg?style=flat-square)](https://twitter.com/MaidIRC)
+
 Found a bug? Have a feature request? Please [submit an issue](https://github.com/Phalanxia/Maid-IRC/issues).
 
 Need support? Wanna chat? Join our channel on the Freenode IRC network.
 
 	HOST: irc.freenode.net
-	CHANNEL: ##phalanxia
+	CHANNEL: #Maid-IRC
 
 ## License
 
