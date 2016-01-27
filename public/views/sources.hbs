@@ -1,18 +1,10 @@
-<ul class="message-source-list">
-	<li class="server" data-connection-id="{{connectionId}}" data-value="server">
+<div class="source-container" data-connection-id="{{networkId}}">
+	<header data-source-type="server">
 		<span class="fa fa-angle-down"></span>
-		<span>{{serverName}}</span>
+		<span>{{networkName}}</span>
 		<div class="arrow">
 			<span></span>
 		</div>
-	</li>
-	{{#with sources}}
-	<li class="channel" data-connection-id="{{data.connectionId}}" data-value="{{key}}" data-alert="">
-		<span class="fa fa-comments-o"></span>
-		<span title="{{key}}">{{key}}</span>
-		<div class="arrow">
-			<span></span>
-		</div>
-	</li>
-	{{/with}}
-</ul>
+	</header>
+	<ul class="channel-source-container"></ul>
+</div>

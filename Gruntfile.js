@@ -35,6 +35,7 @@ module.exports = function(grunt) {
 					'public/js/modules/handlebars/Templates.js',
 					'public/js/modules/Message.js',
 					'public/js/modules/Interface.js',
+					'public/js/modules/Sources.js',
 					'public/js/modules/IncomingMessages.js',
 					'public/js/modules/OutgoingMessages.js',
 					'public/js/modules/NetworkConnect.js',
@@ -67,7 +68,6 @@ module.exports = function(grunt) {
 
 		babel: {
 			options: {
-				sourceMap: true,
 				comments: false,
 			},
 			development: {

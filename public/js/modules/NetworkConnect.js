@@ -1,9 +1,9 @@
 'use strict';
 
-class ConnectToNetwork {
-	constructor(socket, updateInterface) {
+class NetworkConnect {
+	constructor(socket, sources) {
 		this.socket = socket;
-		this.updateInterface = updateInterface;
+		this.sources = sources;
 	}
 
 	setup(data) {
@@ -24,6 +24,9 @@ class ConnectToNetwork {
 		network.sources = {};
 
 		this.connect(data, connectionId);
+
+		// Display the server in the sources list
+		this.sources.addServer(connectionId);
 	};
 
 	connect(data, connectionId) {

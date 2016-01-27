@@ -15,15 +15,15 @@
 	width: 0;
 	header h1,
 	header button,
-	.message-source-list,
+	#message-source-list,
 	footer { display: none; }
 }
 // Header
-#network-panel header {
+#network-panel > header {
 	box-shadow: inset -1px 0 0 0 fadeout(@darkBlue, 90%);
 	overflow: hidden;
 }
-#network-panel header h1 {
+#network-panel > header h1 {
 	float: left;
 	width: 72px;
 	padding: 0 0 0 16px;
@@ -36,8 +36,8 @@
 	white-space: pre;
 	&:hover { cursor: default; }
 }
-#network-panel header h1 span { font-weight: 800; }
-#network-panel header button {
+#network-panel > header h1 span { font-weight: 800; }
+#network-panel > header button {
 	float: right;
 	width: 36px;
 	height: 36px;
@@ -46,16 +46,21 @@
 	border-radius: 50%;
 	&:active { color: @white-1; }
 }
-// Networks/Message Sources
-.message-source-list {
+// Source list
+#message-source-list {
 	flex: 1 1 auto;
 	order: 1;
 	width: inherit;
 	padding: 0;
 	margin: 0;
-	list-style: none;
 }
-.message-source-list li {
+#message-source-list header {
+	background-color: lighten(@darkestBlue, 10%);
+	&:hover { background-color: lighten(@darkestBlue, 14%); }
+}
+#message-source-list header span:not(.fa) { font-weight: bold; }
+#message-source-list header,
+#message-source-list li {
 	position: relative;
 	height: 40px;
 	line-height: 40px;
@@ -63,12 +68,12 @@
 	.m-transition(background-color .1s ease-in-out);
 	&:hover { cursor: pointer; }
 }
-.message-source-list .server {
-	background-color: lighten(@darkestBlue, 10%);
-	&:hover { background-color: lighten(@darkestBlue, 14%); }
+#message-source-list ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
-.message-source-list .server span:not(.fa) { font-weight: bold; }
-.message-source-list .fa {
+#message-source-list .fa {
 	float: left;
 	display: block;
 	width: 16px;
@@ -78,34 +83,13 @@
 	text-align: center;
 	line-height: inherit;
 }
-.message-source-list .channel .fa {
+#message-source-list li .fa {
 	padding: 0 16px 0 24px;
 	&:hover { background-color: lighten(@darkestBlue, 4%); }
 }
-.message-source-list .channel:hover { background-color: lighten(@darkestBlue, 4%); }
-.message-source-list span:not(.fa) { font-size: 14px; }
-.message-source-list span .fa { padding: 0 16px 0 8px; }
-.message-source-list li .arrow {
-	display: none;
-	position: absolute;
-	top: 5px;
-	right: 0;
-	overflow: hidden;
-	width: 12px;
-	height: 30px;
-}
-.message-source-list li .arrow span {
-	float: left;
-  margin-left: 7px;
-  width: 30px;
-  height: 30px;
-  background-color: @white-2;
-  border-radius: 2px;
-  transform: rotateZ(45deg);
-}
-.message-source-list li.focusedSource	.arrow { display: block; }
-.message-source-list li[data-alert=""]:after { display: none; }
-.message-source-list li[data-alert]:after {
+#message-source-list li:hover { background-color: lighten(@darkestBlue, 4%); }
+#message-source-list li[data-alert=""]:after { display: none; }
+#message-source-list li[data-alert]:after {
 	float: right;
 	height: 20px;
 	min-width: 16px;
@@ -119,8 +103,28 @@
 	border-radius: 4px;
 	content: attr(data-alert);
 }
+#message-source-list span:not(.fa) { font-size: 14px; }
+#message-source-list span .fa { padding: 0 16px 0 8px; }
+#message-source-list .arrow {
+	display: none;
+	position: absolute;
+	top: 5px;
+	right: 0;
+	overflow: hidden;
+	width: 12px;
+	height: 30px;
+}
+#message-source-list .arrow span {
+	float: left;
+	margin-left: 7px;
+	width: 30px;
+	height: 30px;
+	background-color: @white-2;
+	border-radius: 2px;
+	transform: rotateZ(45deg);
+}
+#message-source-list .focusedSource	.arrow { display: block; }
 // Footer
-#network-panel footer { height: 50px; }
 #network-panel footer button {
 	width: 50px;
 	height: 34px;

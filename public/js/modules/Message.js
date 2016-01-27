@@ -39,7 +39,6 @@ class Message {
 
 		// Channel
 		this.channel = this.raw.channel || this.client.networks[this.connectionId].focusedSource;
-		this.channel = this.channel.toLowerCase();
 
 		// Time
 		this.rawTime = new Date();
@@ -64,7 +63,7 @@ class Message {
 		// Insert message into the console
 		output.insertAdjacentHTML('beforeend', client.Templates['public/views/message.hbs']({
 				connectionId: this.connectionId,
-				source: this.channel,
+				source: this.channel.toLowerCase(),
 				type: this.raw.type,
 				timestamp: this.timestamp,
 				head: this.head,
@@ -73,9 +72,14 @@ class Message {
 			})
 		);
 
-		// Hide messages not from the focused channel
-		selectAll(`#channel-console output article:not([data-source="${client.networks[this.connectionId].focusedSource}"])`).forEach(obj => {
+		// Hide all messages
+		selectAll('#channel-console output article').forEach(obj => {
 			obj.style.display = 'none';
+		});
+
+		// Show messages that are from the focused source
+		selectAll(`#channel-console output article[data-source="${client.networks.focusedSource.toLowerCase()}"][data-connection-id="${this.connectionId}"]`).forEach(obj => {
+			obj.style.display = '';
 		});
 
 		// Add filler message back

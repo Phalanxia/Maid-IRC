@@ -19,7 +19,7 @@ class OutgoingMessages {
 		let command = data.split(' ')[0];
 
 		// If it's a supported command
-		if (commands.indexOf(command)) {
+		if (commands.indexOf(command) > -1) {
 
 			// Depending on the command, lets do someething
 			switch (command) {
@@ -49,18 +49,21 @@ class OutgoingMessages {
 		} else {
 
 			// Normal message
-			this.socket.emit('send-raw', ['PRIVMSG', client.getFocused().focusedSource, data]);
+			this.socket.emit('send-raw', ['PRIVMSG', client.networks.focusedSource, data]);
 
 			// Display it
 			let updateMessage = {
 				type: 'privmsg',
 				head: client.getFocused().nick,
 				nick: client.getFocused().nick,
-				channel: client.getFocused().focusedSource,
+				channel: client.networks.focusedSource,
 				message: data,
 			};
 
-			this.updateInterface.message(updateMessage, client.networks.focusedServer);
+			// Display the message
+			let NewMessage = new Message(updateMessage, client.networks.focusedServer);
+			NewMessage.filter();
+			NewMessage.display();
 		}
 	};
 }

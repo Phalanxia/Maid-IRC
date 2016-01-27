@@ -8,15 +8,20 @@ let client = {
 		awayMessage: 'Away',
 		ignoreList: [],
 		highlights: [],
+		debug: false,
 		messages: {
 			emojis: true,
 			autolink: true,
 		},
-		defaults: {
-			messages: {
-				emojis: true,
-				autolink: true,
-			},
+	},
+	defaultSettings: {
+		awayMessage: 'Away',
+		ignoreList: [],
+		highlights: [],
+		debug: false,
+		messages: {
+			emojis: true,
+			autolink: true,
 		},
 	},
 
@@ -28,6 +33,7 @@ let client = {
 
 	networks: {
 		focusedServer: '',
+		focusedSource: '',
 	},
 
 	getFocused() {
@@ -41,11 +47,12 @@ let client = {
 		});
 
 		const ui = new UI();
-		const outgoingMessages = new OutgoingMessages(socket, ui);
-		const incomingMessages = new IncomingMessages(ui);
-		const connectToNetwork = new ConnectToNetwork(socket, ui);
+		const sources = new Sources(ui);
+		const outgoingMessages = new OutgoingMessages(socket);
+		const incomingMessages = new IncomingMessages(ui, sources);
+		const networkConnect = new NetworkConnect(socket, sources);
 
-		connectToNetwork.setup(connectInfo);
+		networkConnect.setup(connectInfo);
 
 		socket.on('ping', data => socket.emit('pong', {beat: 1}));
 
@@ -78,7 +85,7 @@ let client = {
 			input.value = '';
 		}
 
-		select('#channel-console footer input').onkeydown = function() {
+		select('#channel-console footer input').onkeydown = function(event) {
 			if (event.which === 13) { // Enter Key
 				enterMessage();
 			}
