@@ -78,13 +78,14 @@ html(lang="en")
 					input#channel(type="text", placeholder="Channel", name="channel", spellcheck="false")
 					footer
 						button.btn#submit(type="submit", name="connect") Connect
-						button.btn.fa.fa-gear(type="button")
+						button.btn.fa.fa-gear.connectBtnAdv(type="button")
 				#connect-advanced
 					input#nicknamePassword(type="password", name="nickPassword", placeholder="Password", tabIndex="-1")
 					input#realName(type="text", name="realName", placeholder="Real Name", tabIndex="-1")
 					input#ssl(type="checkbox", name="ssl", tabIndex="-1")
 					span.checkboxLabel SSL
-
+					footer
+						button.btn.fa.fa-gear.connectBtnAdv(type="button")
 		.modal#settings
 			header
 				h1 Settings
