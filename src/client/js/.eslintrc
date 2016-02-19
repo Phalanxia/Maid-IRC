@@ -1,0 +1,32 @@
+{
+  "extends": "airbnb/base",
+  "env": {
+    "browser": true,
+    "node": false,
+    "es6": true
+  },
+  "rules": {
+    "no-console": 0,
+    "strict": [2, "global"],
+    "indent": [2, "tab"]
+  },
+  "ecmaFeatures": {
+    "modules": false
+  },
+  "globals": {
+    "select": true,
+    "selectAll": true,
+    "Maid": true,
+    "io": true,
+    "UI": true,
+    "Sources": true,
+    "Outgoing": true,
+    "Incoming": true,
+    "Connections": true,
+    "Message": true,
+    "Handlebars": true,
+    "Autolinker": true,
+    "twemoji": true,
+    "uuid": true,
+  }
+}

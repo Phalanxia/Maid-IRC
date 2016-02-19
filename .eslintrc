@@ -1,15 +1,15 @@
 {
-	"extends": "airbnb/base",
-	"env": {
-		"node": true,
-		"es6": true
-	},
-	"rules": {
-		"comma-dangle": 0,
-		"no-console": 0,
-		"strict": [2, "global"]
-	},
-	"ecmaFeatures": {
-		"modules": false
-	}
+  "extends": "airbnb/base",
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "no-console": 0,
+    "strict": [2, "global"],
+    "indent": [2, "tab"]
+  },
+  "ecmaFeatures": {
+    "modules": false
+  }
 }

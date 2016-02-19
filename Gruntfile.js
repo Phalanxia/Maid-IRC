@@ -1,8 +1,8 @@
 'use strict';
 
-const grunt = require('grunt');
+module.exports = () => {
+	const grunt = require('grunt');
 
-module.exports = function(grunt) {
 	const pkg = grunt.file.readJSON('package.json');
 	const version = pkg.version;
 
@@ -32,37 +32,37 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				src: [
-					'public/js/modules/handlebars/Templates.js',
-					'public/js/modules/Message.js',
-					'public/js/modules/Interface.js',
-					'public/js/modules/Sources.js',
-					'public/js/modules/IncomingMessages.js',
-					'public/js/modules/OutgoingMessages.js',
-					'public/js/modules/NetworkConnect.js',
-					'public/js/client.js',
+					'src/client/js/modules/handlebars/Templates.js',
+					'src/client/js/modules/Message.js',
+					'src/client/js/modules/Interface.js',
+					'src/client/js/modules/Sources.js',
+					'src/client/js/modules/Incoming.js',
+					'src/client/js/modules/Connections.js',
+					'src/client/js/modules/Outgoing.js',
+					'src/client/js/index.js',
 				],
-				dest: 'dist/public/built.js',
+				dest: 'dist/src/client/built.js',
 			},
 			dependencies: {
 				options: {
 					banner: `/*! Maid-IRC - v${version} - ${grunt.template.today('yyyy-mm-dd')} */\n\n'use strict';\n\n`,
 					stripBanners: true,
-					process: function(src, filepath) {
+					process(src, filepath) {
 						return '// Source: ' + filepath + '\n\n' + src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
 					},
 				},
 				src: [
 					// Libraries
-					'public/js/lib/Autolinker.min.js',
-					'public/js/lib/handlebars.runtime.min.js',
-					'public/js/lib/twemoji.min.js',
-					'public/js/lib/uuid.js',
+					'src/client/js/lib/Autolinker.min.js',
+					'src/client/js/lib/handlebars.runtime.min.js',
+					'src/client/js/lib/twemoji.min.js',
+					'src/client/js/lib/uuid.js',
 					// Compiled core code
-					'public/app.js',
+					'src/client/app.js',
 					// Precompiled templates
-					'public/js/modules/handlebars/compiled.js',
+					'src/client/js/modules/handlebars/compiled.js',
 				],
-				dest: 'public/app.js',
+				dest: 'src/client/app.js',
 			},
 		},
 
@@ -72,12 +72,12 @@ module.exports = function(grunt) {
 			},
 			development: {
 				files: {
-					'public/app.js': 'dist/public/built.js',
+					'src/client/app.js': 'dist/src/client/built.js',
 				},
 			},
 			dist: {
 				files: {
-					'dist/public/app.js': 'dist/public/built.js',
+					'dist/src/client/app.js': 'dist/src/client/built.js',
 				},
 			},
 		},
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
 				src: ['dist/**/*'],
 			},
 			dist: {
-				src: ['build', 'dist/public/built.js'],
+				src: ['build', 'dist/src/client/built.js'],
 			},
 			afterDist: {
 				src: ['dist/**/*', `!dist/maid-irc_v${version}.zip`],
@@ -100,22 +100,26 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						src: [
-							'public/**',
-							'!public/js/**',
-							'!public/css/**',
-							'views/**',
-							'modules/**',
+							'src/client/**',
+							'!src/client/js/**',
+							'!src/client/css/**',
+							'!src/client/less/**',
+							'src/server/**',
 							'screenshots/**',
 						],
 						dest: 'dist',
+					},
+					{
+						src: ['src/index.js'],
+						dest: 'dist/src/index.js',
 					},
 					{
 						src: ['maid.js'],
 						dest: 'dist/maid.js',
 					},
 					{
-						src: ['config.js'],
-						dest: 'dist/config.js',
+						src: ['config.yml'],
+						dest: 'dist/config.yml',
 					},
 					{
 						src: ['package.json'],
@@ -129,15 +133,15 @@ module.exports = function(grunt) {
 						src: ['LICENSE'],
 						dest: 'dist/LICENSE',
 					},
-				]
+				],
 			},
 			final: {
 				files: [
 					{
-						src: ['public/app.js'],
-						dest: 'dist/public/app.js',
+						src: ['src/client/app.js'],
+						dest: 'dist/src/client/app.js',
 					},
-				]
+				],
 			},
 		},
 
@@ -147,7 +151,7 @@ module.exports = function(grunt) {
 					paths: [],
 				},
 				files: {
-					'public/css/client.css': 'less/client.less',
+					'src/client/css/client.css': 'src/client/less/client.less',
 				},
 			},
 			dist: {
@@ -158,7 +162,7 @@ module.exports = function(grunt) {
 					optimization: 0,
 				},
 				files: {
-					'dist/public/css/client.css': 'less/client.less',
+					'dist/src/client/css/client.css': 'src/client/less/client.less',
 				},
 			},
 		},
@@ -173,24 +177,24 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: './dist',
 						src: ['**'],
-					}
+					},
 				],
 			},
 		},
 
 		watch: {
 			less: {
-				files: ['less/*.less'],
+				files: ['src/client/less/*.less'],
 				tasks: ['build:css'],
 				options: {
 					span: false,
 				},
 			},
-			scripts: {
+			js: {
 				files: [
-					'public/js/**/*.js',
-					'!public/js/modules/handlebars/compiled.js',
-					'public/views/**/*.hbs'
+					'src/client/js/**/*.js',
+					'!src/client/js/modules/handlebars/compiled.js',
+					'src/client/views/**/*.hbs',
 				],
 				tasks: ['handlebars:compile', 'build:js'],
 				options: {
@@ -198,7 +202,7 @@ module.exports = function(grunt) {
 				},
 			},
 			handlebars: {
-				files: ['public/views/**/*.hbs'],
+				files: ['src/client/views/**/*.hbs'],
 				tasks: ['handlebars:compile'],
 				options: {
 					span: false,
@@ -208,12 +212,12 @@ module.exports = function(grunt) {
 
 		handlebars: {
 			options: {
-				namespace: 'client.Templates',
+				namespace: 'Maid.Templates',
 				wrapped: true,
 			},
 			compile: {
 				files: {
-					'public/js/modules/handlebars/compiled.js': ['public/views/**/*.hbs'],
+					'src/client/js/modules/handlebars/compiled.js': ['src/client/views/**/*.hbs'],
 				},
 			},
 		},
@@ -235,13 +239,13 @@ module.exports = function(grunt) {
 	// Override default tasks or some magic
 	grunt.registerTask('default', []);
 
-	grunt.registerTask('install', function() {
+	grunt.registerTask('install', function install() {
 		grunt.log.writeln('Installing Dependencies');
 		grunt.task.run(['shell:install']);
 	});
 
-	grunt.registerTask('build:js', function() {
-		grunt.log.writeln(`Compiling Maid-IRC's public javascript`);
+	grunt.registerTask('build:js', function buildjs() {
+		grunt.log.writeln(`Compiling Maid-IRC's client javascript`);
 		grunt.task.run([
 			'concat:dist',
 			'babel:development',
@@ -251,21 +255,33 @@ module.exports = function(grunt) {
 		]);
 	});
 
-	grunt.registerTask('build:css', function() {
+	grunt.registerTask('build:less', function buildless() {
 		grunt.log.writeln(`Compiling Maid-IRC's less files`);
 		grunt.task.run([
 			'less:development',
 		]);
 	});
 
-	grunt.registerTask('build:handlebars', function() {
+	grunt.registerTask('build:handlebars', function buildhandlebars() {
 		grunt.log.writeln(`Compiling Maid-IRC's handlebars files`);
 		grunt.task.run([
 			'handlebars:compile',
 		]);
 	});
 
-	grunt.registerTask('package', function() {
+	grunt.registerTask('build', function build() {
+		grunt.log.writeln('Building Maid-IRC');
+		grunt.task.run([
+			'concat:dist',
+			'babel:development',
+			'handlebars:compile',
+			'concat:dependencies',
+			'clean:dist',
+			'less:development',
+		]);
+	});
+
+	grunt.registerTask('package', function packageTask() {
 		grunt.log.writeln('Packaging Maid-IRC');
 		grunt.task.run([
 			'clean:beforeDist',
@@ -280,27 +296,6 @@ module.exports = function(grunt) {
 			'shell:dist',
 			'compress:dist',
 			'clean:afterDist',
-		]);
-	});
-
-	grunt.registerTask('watch:js', function() {
-		grunt.log.writeln('Watching .js files in public/js');
-		grunt.task.run([
-			'watch:scripts',
-		]);
-	});
-
-	grunt.registerTask('watch:less', function() {
-		grunt.log.writeln('Watching .less files in less');
-		grunt.task.run([
-			'watch:less',
-		]);
-	});
-
-	grunt.registerTask('watch:handlebars', function() {
-		grunt.log.writeln('Watching .hbs files (Handlebar templates) in public/views');
-		grunt.task.run([
-			'watch:handlebars',
 		]);
 	});
 };

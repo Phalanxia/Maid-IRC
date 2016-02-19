@@ -1,4 +1,4 @@
-[![Maid IRC](public/img/logo_medium.png)](https://github.com/Phalanxia/Maid-IRC "Maid-IRC")
+[![Maid IRC](src/client/img/logo_medium.png)](https://github.com/Phalanxia/Maid-IRC "Maid-IRC")
 ==
 
 [![Build Status](https://img.shields.io/travis/Phalanxia/Maid-IRC.svg?style=flat-square)](https://travis-ci.org/Phalanxia/Maid-IRC) [![NPM version](https://img.shields.io/npm/v/maid-irc.svg?style=flat-square)](https://www.npmjs.org/package/maid-irc) [![Dependency Status](https://img.shields.io/gemnasium/Phalanxia/Maid-IRC.svg?style=flat-square)](https://gemnasium.com/Phalanxia/Maid-IRC) [![Downloads](https://img.shields.io/npm/dm/maid-irc.svg?style=flat-square)](https://www.npmjs.org/package/maid-irc) [![Patreon](https://img.shields.io/badge/Patreon-%E2%99%A1%20Donate-ff69b4.svg?style=flat-square)](https://www.patreon.com/Phalanxia)
@@ -7,7 +7,7 @@ A modern web IRC client. Built on [Node](https://nodejs.org).
 
 *Still in early development. Features and bugs may or may not be included.*
 
-**[Screenshots](#screenshots) | [Building](#building) | [Running](#running) | [Community](#community) | [License](#license)**
+**[Screenshots](#screenshots) | [Installation](#installation) | [Building](#building) | [Running](#running) | [Community](#community) | [License](#license)**
 
 ---
 
@@ -17,16 +17,32 @@ A modern web IRC client. Built on [Node](https://nodejs.org).
 
 ![Client](screenshots/client.png "Client screenshot")
 
+## Installation
+
+Maid-IRC prefers to be installed globally, though this isn't required. If you don't wish to install globally, just omit '-g'.
+
+```bash
+$ npm install -g maid-irc
+```
+
 ## Building
 
-Information about building is available on the wiki page [here](https://github.com/Phalanxia/Maid-IRC/wiki/Building).
+Information regarding building is available on the wiki page [here](https://github.com/Phalanxia/Maid-IRC/wiki/Building). Building is required to run Maid-IRC's client. If you don't want, prebuilts are available [here](https://github.com/Phalanxia/Maid-IRC/releases).
 
 ## Running
 
+If installed globally, start Maid-IRC with the command:
+
 ```bash
-$ node maid.js
+$ maid start
 ```
-**Recomended:** Look at 'config.js' and configure it to your liking.
+
+Otherwise navigate to the directory of Maid-IRC in your console and run:
+
+```bash
+$ npm start
+```
+**Recommended:** Look at 'config.yml' and configure it to your liking.
 
 **Optional:** (Not available in prebuilts) Please define the node environment variable. Supported variables are `development` and `production`. Will default to production if not defined.
 
