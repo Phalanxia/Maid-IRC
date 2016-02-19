@@ -1,0 +1,17 @@
+host: '0.0.0.0'
+http:
+  enabled: true
+  port: 4848
+https:
+  enabled: false
+  port: 4949
+
+  # Location of private key file
+  private_key: 'key.pem'
+
+  # Location of certificate file
+  certificate: 'cert.pem'
+public: false
+
+# Check GitHub for avaliable updates on startup
+check_for_updates: true

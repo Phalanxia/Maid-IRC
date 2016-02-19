@@ -4,39 +4,47 @@
   "description": "A modern web IRC client. Built on Node.",
   "author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
   "homepage": "http://madi.moe/Maid-IRC/",
+  "preferGlobal": true,
+  "bin": {
+    "maid": "src/index.js"
+  },
   "dependencies": {
     "body-parser": "^1.14.2",
-    "compression": "^1.6.0",
-    "express": "^4.13.3",
+    "commander": "^2.9.0",
+    "compression": "^1.6.1",
+    "errorhandler": "^1.4.3",
+    "express": "^4.13.4",
     "express-minify": "^0.2.0",
-    "irc": "^0.4.0",
+    "irc": "^0.4.1",
     "jade": "^1.11.0",
     "method-override": "^2.3.5",
     "semver": "^5.1.0",
     "serve-favicon": "^2.3.0",
-    "socket.io": "^1.4.3"
+    "socket.io": "^1.4.5",
+    "yamljs": "^0.2.4"
   },
   "devDependencies": {
-    "babel-eslint": "^4.1.6",
-    "errorhandler": "~1.4.2",
-    "eslint": "^1.6.0",
-    "eslint-config-airbnb": "^3.1.0",
-    "grunt": "~0.4.5",
-    "grunt-babel": "^5.0.3",
-    "grunt-contrib-clean": "^0.7.0",
-    "grunt-contrib-compress": "^0.14.0",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-copy": "^0.8.1",
-    "grunt-contrib-handlebars": "^0.11.0",
-    "grunt-contrib-less": "^1.0.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-shell": "~1.1.2",
-    "morgan": "~1.6.1"
+		"babel-eslint": "^4.1.8",
+		"errorhandler": "~1.4.2",
+		"eslint": "^1.10.3",
+		"eslint-config-airbnb": "^3.1.0",
+		"grunt": "~0.4.5",
+		"grunt-babel": "^5.0.3",
+		"grunt-contrib-clean": "^0.7.0",
+		"grunt-contrib-compress": "^0.14.0",
+		"grunt-contrib-concat": "^0.5.1",
+		"grunt-contrib-copy": "^0.8.1",
+		"grunt-contrib-handlebars": "^0.11.0",
+		"grunt-contrib-less": "^1.2.0",
+		"grunt-contrib-watch": "^0.6.1",
+		"grunt-shell": "~1.1.2",
+		"morgan": "~1.6.1"
   },
   "keywords": [
     "irc",
     "web",
     "client",
+		"server",
     "app",
     "application",
     "chat",
@@ -52,7 +60,9 @@
     "node": ">=4.1.0"
   },
   "scripts": {
-    "start": "node maid.js"
+    "start": "node src/index.js start",
+    "build": "grunt build",
+    "package": "grunt package"
   },
   "readmeFilename": "Readme.md",
   "bugs": "https://github.com/Phalanxia/Maid-IRC/issues"

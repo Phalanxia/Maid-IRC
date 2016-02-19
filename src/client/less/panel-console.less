@@ -1,0 +1,153 @@
+@import: "colors";
+@import: "polyfills";
+
+#channel-console {
+	flex: 1 1 auto;
+	order: 1;
+}
+#channel-console header {
+	display: flex;
+	width: 100%;
+	flex-flow: row wrap;
+}
+#channel-console header .fa-bars {
+	width: 36px;
+	height: 36px;
+	margin: 7px 0 0 12px;
+	border-radius: 50%;
+}
+#channel-console header input {
+	height: 38px;
+	margin: 6px 0;
+	padding: 0 12px;
+	font-size: 1.1em;
+	line-height: 28px;
+	color: @white;
+	background-color: transparent;
+	border: none;
+	border-radius: 4px;
+	box-shadow: none;
+	flex: 1 1 auto;
+	order: 0;
+}
+#channel-console output {
+	z-index: @zIndex-1;
+	position: relative;
+	display: flex;
+	width: 100%;
+	height: 0;
+	overflow-y: scroll;
+	flex: 1 1 auto;
+	order: 1;
+	flex-direction: column;
+	background: @white-2;
+	font-family: "Roboto Mono", Monaco, Consolas, "Lucida Console", monospace;
+}
+#channel-console output article {
+	float: left;
+	width: 100%;
+	line-height: 24px;
+	flex: 0 0 auto;
+	font-size: .84em;
+	&:hover { background-color: @white-3; }
+}
+#channel-console output article aside {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-content: stretch;
+	align-items: flex-start;
+	float: left;
+	width: 184px;
+	height: 100%;
+	min-width: 20px;
+	margin: 0 8px;
+	line-height: 24px;
+	time {
+		order: 0;
+		flex: 0 1 auto;
+		align-self: auto;
+		float: left;
+		padding: 0 8px 0 0;
+		color: @f-grey;
+		text-align: center;
+	}
+	span {
+		order: 1;
+		flex: 1 1 auto;
+		align-self: auto;
+		float: right;
+		color: @lightBlue;
+		line-height: 24px;
+		text-align: right;
+	}
+}
+#channel-console output article p {
+	padding: 0 8px;
+	margin: 0 0 0 200px;
+	line-height: 24px;
+	color: @darkBlue;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	border-left: 1px solid @white-4;
+	.highlighted {
+		padding: 2px;
+		color: @white;
+		background-color: @lightBlue;
+		border-radius: 2px;
+	}
+}
+#channel-console output article p .emoji {
+	height: 22px;
+	vertical-align: middle;
+}
+.filler {
+	display: flex !important;
+	height: 100%;
+	flex: 1 !important;
+	div {
+		display: block;
+		padding: 0 8px;
+		margin: 0 0 0 200px;
+		border-left: 1px solid @white-4;
+		flex: 1;
+	}
+	&:hover { background: 0 !important; }
+}
+// Special messages
+#channel-console output article[data-messagetype="error"] {
+	background-color: fadeout(@red-1, 60%);
+	&:hover { background-color: fadeout(@red-1, 70%); }
+	aside span { color: @red-1; }
+	p { border-left: 1px solid fadeout(@red-1, 60%); }
+}
+#channel-console footer {
+	z-index: @zIndex-2;
+	display: flex;
+	width: 100%;
+	height: 50px;
+	background-color: @white;
+	box-shadow: 0 -3px 5px -3px @white-4;
+	flex: 0 1 auto;
+	order: 2;
+	flex-flow: row nowrap;
+}
+#channel-console footer input {
+	width: 100%;
+	height: 50px;
+	padding: 0 16px;
+	background-color: transparent;
+	border: none;
+	border-radius: 4px;
+	box-shadow: none;
+	color: @darkBlue;
+	font-size: 1em;
+	line-height: 50px;
+	flex: 1 1 auto;
+	order: 0;
+}
+#channel-console footer button {
+	flex: 0 0 auto;
+	order: 1;
+}
