@@ -45,10 +45,16 @@ module.exports = () => {
 			},
 			dependencies: {
 				options: {
-					banner: `/*! Maid-IRC - v${version} - ${grunt.template.today('yyyy-mm-dd')} */\n\n'use strict';\n\n`,
+					banner: `/*! Maid-IRC - v${version} - ${grunt.template.today('yyyy-mm-dd')} */
+
+'use strict';
+
+`,
 					stripBanners: true,
 					process(src, filepath) {
-						return '// Source: ' + filepath + '\n\n' + src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+						return `// Source: ${filepath}
+
+${src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1')}`;
 					},
 				},
 				src: [
