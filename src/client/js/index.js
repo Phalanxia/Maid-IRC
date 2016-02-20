@@ -142,33 +142,33 @@ select('#network-panel footer button.fa-plus').onclick = () => {
 	select('#connect').classList.add('displayed');
 };
 
-// Settings
-const settingsItems = select('#settings nav > ul').getElementsByTagName('li');
-for (let i = 0; i < settingsItems.length; i++) {
-	settingsItems[i].i = i;
-	settingsItems[i].onclick = function() {
-		const theNumber = this.i;
+// Settings navigation
+selectAll('#settings nav > ul li').forEach((obj, index) => {
+	const _obj = obj;
 
-		selectAll('#settings nav > ul li').forEach(obj => obj.classList.remove('focused'));
-
-		select(`#settings nav > ul li:nth-of-type(${theNumber + 1})`).classList.add('focused');
-
-		selectAll('#settings .page').forEach(obj => {
-			const _obj = obj;
-
-			_obj.style.display = 'none';
+	_obj.onclick = () => {
+		selectAll('#settings nav > ul li.focused').forEach(focusedObj => {
+			focusedObj.classList.remove('focused');
 		});
 
-		selectAll(`#settings .page:nth-of-type(${theNumber + 1})`)[0].style.display = 'block';
+		_obj.classList.add('focused');
+
+		selectAll('#settings .page').forEach(page => {
+			const _page = page;
+
+			_page.style.display = 'none';
+		});
+
+		select(`#settings .page:nth-of-type(${index + 1})`).style.display = 'block';
 	};
-}
+});
 
 // Connection screen
-const btnAdv = selectAll('.connectBtnAdv');
-for (let i = 0; i < btnAdv.length; i++) {
-	btnAdv[i].onclick = function() {
-		const advanced = select('#connect-basic').style.display === 'none';
-		if (advanced) {
+selectAll('#connect footer button.fa-gear').forEach(obj => {
+	const _obj = obj;
+
+	_obj.onclick = () => {
+		if (select('#connect-basic').style.display === 'none') {
 			select('#connect-advanced').style.display = 'none';
 			select('#connect-basic').style.display = 'block';
 		} else {
@@ -176,4 +176,4 @@ for (let i = 0; i < btnAdv.length; i++) {
 			select('#connect-basic').style.display = 'none';
 		}
 	};
-}
+});
