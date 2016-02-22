@@ -19,15 +19,17 @@ A modern web IRC client. Built on [Node](https://nodejs.org).
 
 ## Installation
 
-Maid-IRC prefers to be installed globally, though this isn't required. If you don't wish to install globally, just omit '-g'.
+Maid-IRC prefers to be installed globally, though this isn't required.
 
 ```bash
 $ npm install -g maid-irc
 ```
 
+If you don't wish to install globally, just omit '-g'. However, this means you will be required to build Maid-IRC in order to use the client.
+
 ## Building
 
-Information regarding building is available on the wiki page [here](https://github.com/Phalanxia/Maid-IRC/wiki/Building). Building is required to run Maid-IRC's client. If you don't want, prebuilts are available [here](https://github.com/Phalanxia/Maid-IRC/releases).
+Information regarding building is available on the wiki page [here](https://github.com/Phalanxia/Maid-IRC/wiki/Building). You can skip building if you install Maid-IRC globally via NPM, or download a prebuilt [here](https://github.com/Phalanxia/Maid-IRC/releases).
 
 ## Running
 
