@@ -27,7 +27,7 @@ $ npm install -g maid-irc
 
 ## Building
 
-Information regarding building is available on the wiki page [here](https://github.com/Phalanxia/Maid-IRC/wiki/Building). Building is required to run Maid-IRC's client. If you don't want, prebuilts are available [here](https://github.com/Phalanxia/Maid-IRC/releases).
+Information regarding building is available on the wiki page [here](https://github.com/Phalanxia/Maid-IRC/wiki/Building). Building is required to run Maid-IRC's client. If you don't want to, prebuilts are available [here](https://github.com/Phalanxia/Maid-IRC/releases).
 
 ## Running
 
