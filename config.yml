@@ -7,10 +7,10 @@ https:
   port: 4949
 
   # Location of private key file
-  private_key: 'key.pem'
+  private_key: ''
 
   # Location of certificate file
-  certificate: 'cert.pem'
+  certificate: ''
 public: false
 
 # Check GitHub for avaliable updates on startup
