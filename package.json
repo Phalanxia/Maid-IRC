@@ -60,7 +60,6 @@
     "node": ">=4.1.0"
   },
   "scripts": {
-		"prepublish": "grunt build",
     "start": "node src/index.js start",
     "build": "grunt build",
     "package": "grunt package"

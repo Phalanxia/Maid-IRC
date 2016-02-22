@@ -12,6 +12,8 @@ env:
 install:
   - npm install -g grunt-cli
   - npm install
+before_script:
+  - grunt build
 script:
   - node maid.js
 before_deploy:
