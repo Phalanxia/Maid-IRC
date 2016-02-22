@@ -25,7 +25,9 @@ Maid-IRC prefers to be installed globally, though this isn't required.
 $ npm install -g maid-irc
 ```
 
-If you don't wish to install globally, just omit '-g'. However, this means you will be required to build Maid-IRC in order to use the client.
+If you don't wish to install globally, just omit '-g'.
+
+**Note:** Installing without NPM or a prebuilt will require you to build Maid-IRC. See [below](#building).
 
 ## Building
 
