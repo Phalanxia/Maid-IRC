@@ -8,8 +8,5 @@ node_modules/
 rubbish/
 dist/*
 build/*
-src/client/css/*
 
-src/client/js/modules/handlebars/compiled.js
-src/client/app.js
 src/client/app.js.map
