@@ -10,8 +10,8 @@ matrix:
 env:
   - NODE_ENV=test
 install:
-  - npm install
   - npm install -g grunt-cli
+  - npm install
 script:
   - node maid.js
 before_deploy:
