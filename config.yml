@@ -1,10 +1,10 @@
 host: '0.0.0.0'
 http:
   enabled: true
-  port: 4848
+  port: 6615
 https:
   enabled: false
-  port: 4949
+  port: 6616
 
   # Location of private key file
   private_key: ''
