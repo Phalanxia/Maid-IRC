@@ -36,7 +36,7 @@ html(lang="en")
 		link(rel="dns-prefetch", href="twemoji.maxcdn.com")
 
 	body
-		#pageCover.displayed
+		.displayed#pageCover
 
 		// Client
 		#client
@@ -45,14 +45,14 @@ html(lang="en")
 					h1
 						span Maid
 						|  IRC
-					button.btn.btn--clear.fa.fa-cog
+					button.btn.btn--clear.fa.fa-cog(title="Settings")
 				nav#message-source-list
 				footer
-					button.btn.fa.fa-plus
+					button.btn.fa.fa-plus(title="New connection")
 
 			.panel#channel-console
 				header
-					button.btn.btn--clear.fa.fa-bars(type="button")
+					button.btn.btn--clear.fa.fa-bars(type="button", title="Hide menu")
 					input(type="text")
 				output
 					article.filler
@@ -73,18 +73,18 @@ html(lang="en")
 				button(type="button") &times;
 			form(method="post")
 				#connect-basic
-					input#name(type="text", placeholder="Nickname", name="nick", spellcheck="false", autofocus, required)
+					input#name(name="nick", type="text", placeholder="Nickname", spellcheck="false", autofocus, required)
 					section
-						input#server(type="text", placeholder="Server", name="server", spellcheck="false", required)
-						input#port(type="number", placeholder="Port", name="port", maxlength="5", max="65535", required)
-					input#channel(type="text", placeholder="Channel", name="channel", spellcheck="false")
+						input#server(name="server", type="text", placeholder="Server", spellcheck="false", required)
+						input#port(name="port", type="number", placeholder="Port", maxlength="5", min="0" max="65535", required)
+					input#channel(name="channel", type="text", placeholder="Channel", spellcheck="false")
 					footer
-						button.btn#submit(type="submit", name="connect") Connect
+						button.btn#submit(name="connect", type="submit") Connect
 						button.btn.fa.fa-gear(type="button")
 				#connect-advanced
-					input#nicknamePassword(type="password", name="nickPassword", placeholder="Password", tabIndex="-1")
-					input#realName(type="text", name="realName", placeholder="Real name", tabIndex="-1")
-					input#ssl(type="checkbox", name="ssl", tabIndex="-1")
+					input#nicknamePassword(name="nickPassword", type="password", placeholder="Password", tabIndex="-1")
+					input#realName(name="realName", type="text", placeholder="Real name", tabIndex="-1")
+					input#ssl(name="ssl", type="checkbox", tabIndex="-1")
 					span.checkboxLabel SSL
 					footer
 						button.btn.fa.fa-gear(type="button")
