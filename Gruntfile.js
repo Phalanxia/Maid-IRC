@@ -96,7 +96,7 @@ ${src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1')}`;
 				src: ['build', 'dist/src/client/built.js'],
 			},
 			afterDist: {
-				src: ['dist/**/*', `!dist/maid-irc_v${version}.zip`],
+				src: ['dist/**/*', `!dist/maid-irc_v${version}_prebuilt.zip`],
 			},
 		},
 
@@ -176,7 +176,7 @@ ${src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1')}`;
 		compress: {
 			dist: {
 				options: {
-					archive: `dist/maid-irc_v${version}.zip`,
+					archive: `dist/maid-irc_v${version}_prebuilt.zip`,
 				},
 				files: [
 					{
