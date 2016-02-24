@@ -47,6 +47,7 @@ There are several things we do differently than otherwise specified in these gui
 - Keep HTML tags and attributes **lowercase** unless otherwise required by the spec.
 - **@import is okay** and actually required in the Less files due to the modularized way they're coded.
 - Prefixed Less properties use Less [Parametric Mixins](http://lesscss.org/features/#mixins-parametric-feature) from the [polyfills.less](https://github.com/Phalanxia/Maid-IRC/blob/master/src/client/less/polyfills.less) file.
+- Use hard tabs instead of soft tabs, unless the language doesn't support it.
 
 #### JavaScript
 JavaScript code must comply with [github.com/airbnb/javascript](https://github.com/airbnb/javascript)
