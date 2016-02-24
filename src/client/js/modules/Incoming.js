@@ -53,9 +53,8 @@ class Incoming {
 					type: 'privmsg',
 					channel: _data.args[0],
 					head: _data.nick,
-					nick: _data.nick,
 					message: _data.args[1],
-					highlightable: true,
+					isHighlightable: true,
 				});
 			},
 
@@ -64,9 +63,8 @@ class Incoming {
 					type: 'notice',
 					channel: _data.args[0],
 					head: '-notice-',
-					nick: _data.nick,
 					message: _data.args[1],
-					highlightable: true,
+					isHighlightable: true,
 				});
 			},
 
@@ -96,8 +94,7 @@ class Incoming {
 				this.addMessage({
 					type: 'join',
 					channel: _data.args[0],
-					head: ['icon', 'fa-sign-in'],
-					nick: _data.nick,
+					icon: 'fa-sign-in',
 					message: _data.nick + ' (' + _data.prefix + ') has Joined (' + _data.args[0] + ')',
 				});
 			},
@@ -108,16 +105,14 @@ class Incoming {
 						this.addMessage({
 							channel,
 							type: 'quit',
-							head: ['icon', 'fa-angle-double-left'],
-							nick: network.nick,
+							icon: 'fa-angle-double-left',
 							message: _data.nick + ' (' + _data.prefix + ') has Quit (' + _data.args[0] + ')',
 						});
 					} else if (_data.nick in channel.users) {
 						this.addMessage({
 							channel,
 							type: 'quit',
-							head: ['icon', 'fa-angle-double-left'],
-							nick: _data.nick,
+							icon: 'fa-angle-double-left',
 							message: _data.nick + ' (' + _data.prefix + ') has Quit (' + _data.args[0] + ')',
 						});
 					}
@@ -130,8 +125,7 @@ class Incoming {
 						this.addMessage({
 							channel,
 							type: 'error',
-							head: ['icon', 'fa-exclamation-circle'],
-							nick: 'server',
+							icon: 'fa-exclamation-circle',
 							message: 'Error: ' + _data.args[0],
 						});
 					}
@@ -141,8 +135,7 @@ class Incoming {
 				this.addMessage({
 					type: 'error',
 					channel: 'server',
-					head: ['icon', 'fa-exclamation-circle'],
-					nick: 'SERVER',
+					icon: 'fa-exclamation-circle',
 					message: 'Error: ' + _data.args[0],
 				});
 			},
@@ -157,7 +150,6 @@ class Incoming {
 					type: 'RPL_WELCOME',
 					channel: 'server',
 					head: '>',
-					nick: 'SERVER',
 					message: _data.args[1],
 				});
 			},
@@ -167,7 +159,6 @@ class Incoming {
 					type: 'RPL_YOURHOST',
 					channel: 'server',
 					head: '>',
-					nick: 'SERVER',
 					message: _data.args[1],
 				});
 			},
@@ -177,7 +168,6 @@ class Incoming {
 					type: 'RPL_CREATED',
 					channel: 'server',
 					head: '>',
-					nick: 'SERVER',
 					message: _data.args[1],
 				});
 			},
@@ -196,7 +186,6 @@ class Incoming {
 					type: 'RPL_MYINFO',
 					channel: 'server',
 					head: '>',
-					nick: 'SERVER',
 				});
 			},
 
@@ -205,7 +194,6 @@ class Incoming {
 					type: 'RPL_LUSERCLIENT',
 					channel: 'server',
 					head: '>',
-					nick: 'SERVER',
 					message: _data.args[1],
 				});
 			},
@@ -237,7 +225,6 @@ class Incoming {
 					type: 'RPL_TOPICWHOTIME',
 					channel: _data.args[1],
 					head: '>',
-					nick: 'SERVER',
 					message: 'Topic for ' + _data.args[1] + ' set by ' + _data.args[2] + ' at ' + topicDate,
 				});
 			},
@@ -272,7 +259,6 @@ class Incoming {
 					type: 'RPL_MOTD',
 					channel: 'server',
 					head: '>',
-					nick: 'SERVER',
 					message: _data.args[1],
 				});
 			},
@@ -282,7 +268,6 @@ class Incoming {
 					type: 'RPL_ENDOFMOTD',
 					channel: 'server',
 					head: '>',
-					nick: 'SERVER',
 					message: _data.args[1],
 				});
 			},
@@ -295,8 +280,7 @@ class Incoming {
 				this.addMessage({
 					type: 'warning',
 					channel: 'server',
-					head: ['icon', 'fa-exclamation-triangle'],
-					nick: 'SERVER',
+					icon: 'fa-exclamation-triangle',
 					message: _data.args[1] + ': ' + _data.args[2],
 				});
 			},
@@ -305,8 +289,7 @@ class Incoming {
 				this.addMessage({
 					type: 'warning',
 					channel: 'server',
-					head: ['icon', 'fa-exclamation-triangle'],
-					nick: 'SERVER',
+					icon: 'fa-exclamation-triangle',
 					message: _data.args[1] + ': ' + _data.args[2],
 				});
 			},
@@ -315,8 +298,7 @@ class Incoming {
 				this.addMessage({
 					type: 'warning',
 					channel: 'server',
-					head: ['icon', 'fa-exclamation-triangle'],
-					nick: 'SERVER',
+					icon: 'fa-exclamation-triangle',
 					message: _data.args[1] + ': ' + _data.args[2],
 				});
 			},
