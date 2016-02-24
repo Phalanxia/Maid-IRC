@@ -30,8 +30,18 @@ class UI {
 			const rankString = '\r+%@&~';
 			const rankA = rankString.indexOf(users[a]);
 			const rankB = rankString.indexOf(users[b]);
+			let rankSort;
 
-			const rankSort = rankA === rankB ? 0 : (rankA > rankB ? 1 : -1);
+			if (rankA === rankB) {
+				rankSort = 0;
+			} else {
+				if (rankA > rankB) {
+					rankSort = 1;
+				} else {
+					rankSort = -1;
+				}
+			}
+
 			if (rankSort === 0) {
 				return a.toLowerCase() < b.toLowerCase() ? 1 : -1;
 			}
