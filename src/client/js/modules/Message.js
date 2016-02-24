@@ -6,29 +6,6 @@ const autolinker = new Autolinker({
 	phone: false,
 });
 
-function headGenerator(head) {
-	let _head = '';
-	let _icon = '';
-
-	// if (new format) else (old format)
-	if (typeof head === 'object') {
-		if (head[0] === 'text') {
-			_head = head[1];
-		} else if (head[0] === 'icon') {
-			_head = '';
-			_icon = `fa ${head[1]}`;
-		}
-	} else {
-		_head = head;
-
-		if (typeof _head !== 'undefined' && _head.length > 15) {
-			_head = _head.substring(0, 13) + '...';
-		}
-	}
-
-	return { _head, _icon };
-}
-
 class Message {
 	constructor(raw, connectionId) {
 		this.raw = raw;
@@ -44,15 +21,6 @@ class Message {
 		this.timestamp = `${('0' + this.rawTime.getHours()).slice(-2)}:` +
 			`${('0' + this.rawTime.getMinutes()).slice(-2)}:` +
 			`${('0' + this.rawTime.getSeconds()).slice(-2)}`;
-
-		// Message nick / icon
-		const headObj = headGenerator(this.raw.head);
-
-		this.head = headObj._head;
-
-		if (!headObj._icon) {
-			this.icon = headObj._icon;
-		}
 	}
 
 	display() {
@@ -69,9 +37,9 @@ class Message {
 			source: this.channel.toLowerCase(),
 			type: this.raw.type,
 			timestamp: this.timestamp,
-			head: this.head,
-			message: this.message,
-			icon: this.icon,
+			head: this.raw.head,
+			message: this.message || '',
+			icon: this.raw.icon,
 		}));
 
 		// Hide all messages
@@ -102,13 +70,13 @@ class Message {
 			.replace(/>/g, '&gt;');
 
 		function highlight(name, input) {
-			const exp = new RegExp('\\b(' + name + ')', 'ig');
+			const exp = new RegExp(`\\b(${name})`, 'ig');
 			return input.replace(exp, '<span class="highlighted">$1</span>');
 		}
 
 		// Highlight nick if it's a message not from the server
-		if (this.channel !== 'server' && this.raw.highlightable) {
-			for (let i = 0; i < Maid.settings.highlights.length; i++) {
+		if (this.channel !== 'server' && this.raw.isHighlightable) {
+			for (const i of Maid.settings.highlights) {
 				this.message = highlight(Maid.settings.highlights[i], this.message);
 			}
 		}
