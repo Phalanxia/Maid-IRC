@@ -10,7 +10,7 @@ class Outgoing {
 			me: () => {
 				const message = {
 					type: 'privmsg',
-					icon: 'fa-angle-double-right',
+					icon: ['fa-angle-double-right', 'Action'],
 					channel: Maid.focusedSource,
 					message: `${Maid.sessions[Maid.focusedServer].nick} ${_args}`,
 				};
