@@ -37,7 +37,7 @@ class Message {
 			source: this.channel.toLowerCase(),
 			type: this.raw.type,
 			timestamp: this.timestamp,
-			head: this.raw.head,
+			head: this.raw.head || '',
 			message: this.message || '',
 			icon: this.raw.icon,
 		}));
