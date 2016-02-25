@@ -1,5 +1,3 @@
-'use strict';
-
 const autolinker = new Autolinker({
 	stripPrefix: false,
 	twitter: false,
@@ -21,6 +19,14 @@ class Message {
 		this.timestamp = `${('0' + this.rawTime.getHours()).slice(-2)}:` +
 			`${('0' + this.rawTime.getMinutes()).slice(-2)}:` +
 			`${('0' + this.rawTime.getSeconds()).slice(-2)}`;
+
+		// Icon
+		if (this.raw.icon) {
+			this.icon = {
+				cssClass: this.raw.icon[0],
+				copyText: this.raw.icon[1],
+			};
+		}
 	}
 
 	display() {
@@ -37,9 +43,9 @@ class Message {
 			source: this.channel.toLowerCase(),
 			type: this.raw.type,
 			timestamp: this.timestamp,
-			head: this.raw.head,
+			head: this.raw.head || '',
 			message: this.message || '',
-			icon: this.raw.icon,
+			icon: this.icon,
 		}));
 
 		// Hide all messages
@@ -57,7 +63,7 @@ class Message {
 		});
 
 		// Add filler message back
-		output.insertAdjacentHTML('beforeend', '<article class="filler"><div></div></article>');
+		output.insertAdjacentHTML('beforeend', '<article class="filler"><p></p></article>');
 	}
 
 	filter() {

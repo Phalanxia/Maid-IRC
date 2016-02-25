@@ -89,7 +89,6 @@ function maidIrc(io, env) {
 				clientInstance.connect();
 
 				if (!clientInstance.conn._connecting || clientInstance.conn._hadError) {
-
 					// It didn't connect?
 				}
 
@@ -102,6 +101,10 @@ function maidIrc(io, env) {
 
 				socket.on('send-raw', function sendraw(message) {
 					clientInstance.send.apply(null, message);
+				});
+
+				socket.on('send-action', function sendctcp(message) {
+					clientInstance.action(message[0], message[1]);
 				});
 
 				i = allClients.push(socket);

@@ -8,10 +8,7 @@
   "rules": {
     "no-console": 0,
     "strict": [2, "global"],
-    "indent": [2, "tab"]
-  },
-  "ecmaFeatures": {
-    "modules": false
+    "indent": [2, "tab", {"SwitchCase": 1}]
   },
   "globals": {
     "select": true,

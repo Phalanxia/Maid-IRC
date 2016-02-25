@@ -7,7 +7,7 @@ class Helpers {
 		let _reason = reason;
 
 		if (_reason) {
-			_reason = ` Reason: ${_reason}`;
+			_reason = `Reason: ${_reason}`;
 		} else {
 			_reason = '';
 		}

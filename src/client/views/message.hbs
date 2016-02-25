@@ -1,11 +1,9 @@
 <article data-messageType="{{type}}" data-connection-id="{{connectionId}}" data-source="{{source}}">
 	<aside>
 		<time>{{timestamp}}</time>
-		{{#if head}}
-			<span>{{head}}</span>
-		{{/if}}
+		<span>{{head}}</span>
 		{{#if icon}}
-			<span class="fa {{icon}}"></span>
+			<span class="fa {{icon.cssClass}}"></span>
 		{{/if}}
 	</aside>
 	<p>{{{message}}}</p>
