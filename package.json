@@ -1,6 +1,6 @@
 {
   "name": "maid-irc",
-  "version": "0.3.3",
+  "version": "0.3.2",
   "description": "A modern web IRC client. Built on Node.",
   "author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
   "homepage": "http://madi.moe/Maid-IRC/",
