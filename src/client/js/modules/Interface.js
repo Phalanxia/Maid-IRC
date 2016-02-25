@@ -1,8 +1,4 @@
-'use strict';
-
 class UI {
-	constructor() {}
-
 	topic(topic) {
 		let _topic = topic;
 

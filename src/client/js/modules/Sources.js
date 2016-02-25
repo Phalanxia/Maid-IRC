@@ -1,5 +1,3 @@
-'use strict';
-
 class Sources {
 	constructor(ui) {
 		this.ui = ui;

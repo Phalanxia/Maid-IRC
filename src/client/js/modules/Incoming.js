@@ -1,5 +1,3 @@
-'use strict';
-
 class Incoming {
 	constructor(ui, sources) {
 		this.ui = ui;
