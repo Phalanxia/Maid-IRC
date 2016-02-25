@@ -1,5 +1,3 @@
-'use strict';
-
 class Sources {
 	constructor(ui) {
 		this.ui = ui;
@@ -144,7 +142,7 @@ class Sources {
 		}
 
 		// Hide all messages
-		selectAll('#channel-console output article').forEach(obj => {
+		selectAll('#channel-console output article:not(.filler)').forEach(obj => {
 			const _obj = obj;
 
 			_obj.style.display = 'none';

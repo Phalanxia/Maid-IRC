@@ -7,7 +7,7 @@
   "rules": {
     "no-console": 0,
     "strict": [2, "global"],
-    "indent": [2, "tab"]
+    "indent": [2, "tab", {"SwitchCase": 1}]
   },
   "ecmaFeatures": {
     "modules": false

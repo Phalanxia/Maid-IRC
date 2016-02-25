@@ -1,11 +1,33 @@
-'use strict';
-
 class Outgoing {
 	constructor(connections) {
 		this.connections = connections;
 	}
 
-	filtering() {}
+	commands(command, args) {
+		const _args = args;
+
+		const commandTable = {
+			me: () => {
+				const message = {
+					type: 'privmsg',
+					icon: ['fa-angle-double-right', 'Action'],
+					channel: Maid.focusedSource,
+					message: `${Maid.sessions[Maid.focusedServer].nick} ${_args}`,
+				};
+
+				// Display the message
+				const NewMessage = new Message(message, Maid.focusedServer);
+				NewMessage.filter();
+				NewMessage.display();
+
+				// Send message data to the server
+				this.connections.send('send-action', [Maid.focusedSource, _args]);
+			},
+		};
+
+		// Invoke command
+		(commandTable[command])();
+	}
 
 	command(data) {
 		if (data === '') {
@@ -15,11 +37,12 @@ class Outgoing {
 		// List of supported commands
 		const commands = ['me', 'join', 'part', 'whois', 'notice', 'away', 'topic'];
 		const message = data.substring(data.split(' ')[0].length + 1, data.length);
-		const command = data.split(' ')[0];
+		const command = data.split(' ')[0].toLowerCase();
 
 		// If it's a supported command
 		if (commands.indexOf(command) > -1) {
-			// Depending on the command, lets do someething
+			// Depending on the command, lets do something
+			this.commands(command, message);
 		} else {
 			// It's not one of our commands
 			this.connections.send('send-raw', message);
@@ -48,7 +71,6 @@ class Outgoing {
 			const updateMessage = {
 				type: 'privmsg',
 				head: Maid.sessions[Maid.focusedServer].nick,
-				nick: Maid.sessions[Maid.focusedServer].nick,
 				channel: Maid.focusedSource,
 				message: _data,
 			};

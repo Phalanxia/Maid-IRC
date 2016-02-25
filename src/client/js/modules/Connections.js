@@ -1,5 +1,3 @@
-'use strict';
-
 class Connections {
 	constructor(ui, sources, incoming) {
 		// Other modules
