@@ -94,7 +94,7 @@ class Incoming {
 				this.addMessage({
 					type: 'join',
 					channel: _data.args[0],
-					icon: 'fa-sign-in',
+					icon: ['fa-sign-in', 'Join'],
 					message: _data.nick + ' (' + _data.prefix + ') has Joined (' + _data.args[0] + ')',
 				});
 			},
@@ -105,14 +105,14 @@ class Incoming {
 						this.addMessage({
 							channel,
 							type: 'quit',
-							icon: 'fa-angle-double-left',
+							icon: ['fa-angle-double-left', 'Warning'],
 							message: _data.nick + ' (' + _data.prefix + ') has Quit (' + _data.args[0] + ')',
 						});
 					} else if (_data.nick in channel.users) {
 						this.addMessage({
 							channel,
 							type: 'quit',
-							icon: 'fa-angle-double-left',
+							icon: ['fa-angle-double-left', 'Warning'],
 							message: _data.nick + ' (' + _data.prefix + ') has Quit (' + _data.args[0] + ')',
 						});
 					}
@@ -125,7 +125,7 @@ class Incoming {
 						this.addMessage({
 							channel,
 							type: 'error',
-							icon: 'fa-exclamation-circle',
+							icon: ['fa-exclamation-circle', 'Alert'],
 							message: 'Error: ' + _data.args[0],
 						});
 					}
@@ -135,7 +135,7 @@ class Incoming {
 				this.addMessage({
 					type: 'error',
 					channel: 'server',
-					icon: 'fa-exclamation-circle',
+					icon: ['fa-exclamation-circle', 'Alert'],
 					message: 'Error: ' + _data.args[0],
 				});
 			},
@@ -224,8 +224,8 @@ class Incoming {
 				this.addMessage({
 					type: 'RPL_TOPICWHOTIME',
 					channel: _data.args[1],
-					head: '>',
-					message: 'Topic for ' + _data.args[1] + ' set by ' + _data.args[2] + ' at ' + topicDate,
+					icon: ['fa-commenting', 'Topic'],
+					message: `Topic for ${_data.args[1]} set by ${_data.args[2]} at ${topicDate}`,
 				});
 			},
 
@@ -280,7 +280,7 @@ class Incoming {
 				this.addMessage({
 					type: 'warning',
 					channel: 'server',
-					icon: 'fa-exclamation-triangle',
+					icon: ['fa-exclamation-triangle', 'Warning'],
 					message: _data.args[1] + ': ' + _data.args[2],
 				});
 			},
@@ -289,7 +289,7 @@ class Incoming {
 				this.addMessage({
 					type: 'warning',
 					channel: 'server',
-					icon: 'fa-exclamation-triangle',
+					icon: ['fa-exclamation-triangle', 'Warning'],
 					message: _data.args[1] + ': ' + _data.args[2],
 				});
 			},
@@ -298,7 +298,7 @@ class Incoming {
 				this.addMessage({
 					type: 'warning',
 					channel: 'server',
-					icon: 'fa-exclamation-triangle',
+					icon: ['fa-exclamation-triangle', 'Warning'],
 					message: _data.args[1] + ': ' + _data.args[2],
 				});
 			},
