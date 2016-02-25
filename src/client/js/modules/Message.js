@@ -1,5 +1,3 @@
-'use strict';
-
 const autolinker = new Autolinker({
 	stripPrefix: false,
 	twitter: false,
