@@ -59,10 +59,10 @@
 	align-content: stretch;
 	align-items: flex-start;
 	float: left;
-	width: 184px;
+	width: 192px;
 	height: 100%;
 	min-width: 20px;
-	margin: 0 8px;
+	margin: 0 0 0 8px;
 	line-height: 24px;
 	time {
 		order: 0;
@@ -78,6 +78,7 @@
 		flex: 1 1 auto;
 		align-self: auto;
 		float: right;
+		margin: 0 8px 0 0;
 		color: @lightBlue;
 		line-height: 24px;
 		text-align: right;
@@ -85,7 +86,6 @@
 	span.fa {
 		order: 2;
 		flex: 0 1 auto;
-		padding: 0 0 0 8px;
 	}
 }
 #channel-console output article p {
@@ -103,22 +103,32 @@
 		border-radius: 2px;
 	}
 }
+@media (max-width: 740px) {
+	#channel-console output article aside { width: initial; }
+	#channel-console output article p {
+		margin: 0;
+		border-left: 0;
+	}
+}
 #channel-console output article p .emoji {
 	height: 22px;
 	vertical-align: middle;
 }
 .filler {
-	display: flex !important;
+	display: flex;
 	height: 100%;
 	flex: 1 !important;
-	div {
+	p {
 		display: block;
 		padding: 0 8px;
 		margin: 0 0 0 200px;
 		border-left: 1px solid @white-4;
-		flex: 1;
+		flex: 1 !important;
 	}
 	&:hover { background: 0 !important; }
+}
+@media (max-width: 740px) {
+	.filler { display: none; }
 }
 // Special messages
 #channel-console output article[data-messagetype="error"] {

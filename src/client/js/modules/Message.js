@@ -63,7 +63,7 @@ class Message {
 		});
 
 		// Add filler message back
-		output.insertAdjacentHTML('beforeend', '<article class="filler"><div></div></article>');
+		output.insertAdjacentHTML('beforeend', '<article class="filler"><p></p></article>');
 	}
 
 	filter() {
