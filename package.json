@@ -12,7 +12,6 @@
     "body-parser": "^1.15.0",
     "commander": "^2.9.0",
     "compression": "^1.6.1",
-    "errorhandler": "^1.4.3",
     "express": "^4.13.4",
     "express-minify": "^0.2.0",
     "irc": "^0.4.1",
