@@ -17,7 +17,7 @@ class Outgoing {
 				NewMessage.display();
 
 				// Send message data to the server
-				connections.send('send-action', [Maid.focusedSource, _args]);
+				connections.send('send-raw', ['PRIVMSG', Maid.focusedSource, `\x01ACTION ${_args}\x01`]);
 			},
 
 			version: () => {

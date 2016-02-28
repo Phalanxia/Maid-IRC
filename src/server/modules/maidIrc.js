@@ -102,10 +102,6 @@ function maidIrc(io, env) {
 					clientInstance.send.apply(null, message);
 				});
 
-				socket.on('send-action', function sendctcp(message) {
-					clientInstance.action(message[0], message[1]);
-				});
-
 				i = allClients.push(socket);
 			}
 		});
