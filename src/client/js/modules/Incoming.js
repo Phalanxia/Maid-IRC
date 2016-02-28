@@ -321,7 +321,7 @@ class Incoming {
 			461: () => {
 				this.addMessage({
 					type: 'warning',
-					channel: 'server',
+					channel: Maid.focusedSource,
 					icon: ['fa-exclamation-triangle', 'Warning'],
 					message: `${_data.args[1]}: ${_data.args[2]}`,
 				});
