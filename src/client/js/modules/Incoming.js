@@ -6,9 +6,18 @@ class Incoming {
 
 		const NewMessage = new Message(_content, this.connectionId);
 		NewMessage.filter();
-		NewMessage.display();
 
 		const output = select('#channel-console output');
+
+		// Get scroll information before displaying the message
+		const scrollBar = output.scrollHeight <= output.clientHeight;
+
+		NewMessage.display();
+
+		// If this message added a scroll bar
+		if (!scrollBar && output.scrollHeight > output.clientHeight) {
+			output.scrollTop = output.scrollHeight;
+		}
 
 		// Scroll to bottom unless the user is scrolled up
 		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
