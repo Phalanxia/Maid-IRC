@@ -40,6 +40,11 @@ class Incoming {
 			ping: () => {},
 
 			privmsg: () => {
+				// Check if the message is from the server
+				if (_data.prefix === _data.server) {
+					_data.args[0] = 'server';
+				}
+
 				// Detect if the message is a CTCP
 				if (_data.args[1].startsWith('\x01') && _data.args[1].endsWith('\x01')) {
 					// If its an ACTION message (/me)
@@ -58,7 +63,7 @@ class Incoming {
 						this.addMessage({
 							type: 'privmsg',
 							channel: _data.nick,
-							icon: ['fa-angle-double-right', 'Action'],
+							icon: ['fa-angle-double-right', 'Version'],
 							message: `Recieved a CTCP VERSION from ${_data.nick}`,
 							isHighlightable: true,
 						});
@@ -68,6 +73,22 @@ class Incoming {
 							'NOTICE',
 							_data.nick,
 							`VERSION Maid-IRC ${Maid.version}`,
+						]);
+					} else if (_data.args[1].startsWith('\x01TIME')) {
+						// Display the CTCP VERSION request
+						this.addMessage({
+							type: 'privmsg',
+							channel: _data.nick,
+							icon: ['fa-clock-o', 'Time'],
+							message: `Recieved a CTCP TIME from ${_data.nick}`,
+							isHighlightable: true,
+						});
+
+						// Respond
+						connections.send('send-raw', [
+							'NOTICE',
+							_data.nick,
+							`TIME ${new Date}`,
 						]);
 					}
 				} else {
@@ -83,6 +104,20 @@ class Incoming {
 			},
 
 			notice: () => {
+				// Check if the message is from the server
+				if (
+					_data.prefix === _data.server
+					|| ['chanserv', 'nickserv'].indexOf(_data.nick.toLowerCase()) >= 0
+					// TODO: Check what services the network supports
+				) {
+					_data.args[0] = 'server';
+				}
+
+				// Check if it's a PM
+				if (_data.args[0] === network.nick) {
+					_data.args[0] = _data.nick;
+				}
+
 				this.addMessage({
 					type: 'notice',
 					channel: _data.args[0],

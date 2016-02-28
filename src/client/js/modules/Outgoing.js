@@ -21,6 +21,11 @@ class Outgoing {
 			},
 
 			version: () => {
+				// Verify that the user specified a target
+				if (!_args.split(' ')[0]) {
+					return;
+				}
+
 				const message = {
 					type: 'privmsg',
 					icon: ['fa-angle-double-right', 'VERSION'],
@@ -35,7 +40,30 @@ class Outgoing {
 				NewMessage.display();
 
 				// Send message data to the server
-				connections.send('send-raw', ['PRIVMSG', Maid.focusedSource, _args]);
+				connections.send('send-raw', ['PRIVMSG', _args.split(' ')[0], '\x01VERSION\x01']);
+			},
+
+			time: () => {
+				// Verify that the user specified a target
+				if (!_args.split(' ')[0]) {
+					return;
+				}
+
+				const message = {
+					type: 'privmsg',
+					icon: ['fa-angle-double-right', 'TIME'],
+					head: `To ${_args.split(' ')[0]}`,
+					channel: Maid.focusedSource,
+					message: 'CTCP TIME',
+				};
+
+				// Display the message
+				const NewMessage = new Message(message, Maid.focusedServer);
+				NewMessage.filter();
+				NewMessage.display();
+
+				// Send message data to the server
+				connections.send('send-raw', ['PRIVMSG', _args.split(' ')[0], '\x01TIME\x01']);
 			},
 		};
 
@@ -49,7 +77,12 @@ class Outgoing {
 		}
 
 		// List of supported commands
-		const commands = ['me', 'join', 'part', 'whois', 'notice', 'away', 'topic'];
+		const commands = [
+			// CTCP
+			'me', 'version', 'time',
+			// Core
+			'join', 'part', 'whois', 'notice', 'away', 'topic',
+		];
 		const message = data.substring(data.split(' ')[0].length + 1, data.length);
 		const command = data.split(' ')[0].toLowerCase();
 

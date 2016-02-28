@@ -36,6 +36,11 @@ class Message {
 			output.removeChild(select('article.filler'));
 		}
 
+		// Make sure the source is displayed in the list
+		if (!Maid.sessions[this.connectionId].sources[this.channel]) {
+			sources.addToList(this.connectionId, this.channel);
+		}
+
 		// Insert message into the console
 		output.insertAdjacentHTML('beforeend', Maid.Templates['src/client/views/message.hbs']({
 			connectionId: this.connectionId,

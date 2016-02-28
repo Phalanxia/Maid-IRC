@@ -30,12 +30,21 @@ class Sources {
 			this.addServer(networkId);
 		}
 
+		// Don't display duplicates
+		if (select(`${networkSelector} li[data-source="${source}"]`) || source === 'server') {
+			return;
+		}
+
 		// Determin what the type of source provided
 		let type = 'channel';
 
 		if (['#', '&', '!', '+'].indexOf(source.charAt(0)) === -1) {
 			// TODO: Figure out how to determin if the message is from the server or a person (PM)
-			type = 'server';
+			if (source === 'server') {
+				type = 'server';
+			} else {
+				type = 'other';
+			}
 		}
 
 		const chosenNetwork = Maid.sessions[networkId];
@@ -135,18 +144,19 @@ class Sources {
 				select('#users').style.display = 'none';
 				break;
 			}
-			default: {
+			case 'other': {
 				// Update displayed focused source in the networks panel
-				select(`${networkSelector} header`).classList.add('focusedSource');
+				select(`${networkSelector} ul li[data-source="${source}"]`).classList.add('focusedSource');
 
-				// Change header input value to "unknown"
-				select('#channel-console header input').value = 'Unknown';
+				// Change header input value to the name of the server
+				select('#channel-console header input').value = source;
 
 				// Disable the user from being able to edit the topic (there is no point to)
 				select('#channel-console header input').disabled = true;
 
 				// Hide the users list
 				select('#users').style.display = 'none';
+				break;
 			}
 		}
 
