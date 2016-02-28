@@ -47,11 +47,7 @@ class Sources {
 			}
 		}
 
-		let icon = 'fa-comments-o';
-
-		if (type === 'other') {
-			icon = 'fa-user';
-		}
+		const icon = type === 'other' ? 'fa-user' : 'fa-comments-o';
 
 		const chosenNetwork = Maid.sessions[networkId];
 
