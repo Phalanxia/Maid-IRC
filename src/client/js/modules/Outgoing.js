@@ -1,8 +1,4 @@
 class Outgoing {
-	constructor(connections) {
-		this.connections = connections;
-	}
-
 	commands(command, args) {
 		const _args = args;
 
@@ -21,7 +17,25 @@ class Outgoing {
 				NewMessage.display();
 
 				// Send message data to the server
-				this.connections.send('send-action', [Maid.focusedSource, _args]);
+				connections.send('send-action', [Maid.focusedSource, _args]);
+			},
+
+			version: () => {
+				const message = {
+					type: 'privmsg',
+					icon: ['fa-angle-double-right', 'VERSION'],
+					head: `To ${_args.split(' ')[0]}`,
+					channel: Maid.focusedSource,
+					message: 'CTCP VERSION',
+				};
+
+				// Display the message
+				const NewMessage = new Message(message, Maid.focusedServer);
+				NewMessage.filter();
+				NewMessage.display();
+
+				// Send message data to the server
+				connections.send('send-raw', ['PRIVMSG', Maid.focusedSource, _args]);
 			},
 		};
 
@@ -45,7 +59,7 @@ class Outgoing {
 			this.commands(command, message);
 		} else {
 			// It's not one of our commands
-			this.connections.send('send-raw', message);
+			connections.send('send-raw', message);
 		}
 	}
 
@@ -65,7 +79,7 @@ class Outgoing {
 			this.command(_data);
 		} else {
 			// Normal message
-			this.connections.send('send-raw', ['PRIVMSG', Maid.focusedSource, _data]);
+			connections.send('send-raw', ['PRIVMSG', Maid.focusedSource, _data]);
 
 			// Display the message
 			const updateMessage = {

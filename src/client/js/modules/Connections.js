@@ -1,10 +1,5 @@
 class Connections {
-	constructor(ui, sources, incoming) {
-		// Other modules
-		this.ui = ui;
-		this.sources = sources;
-		this.incoming = incoming;
-
+	constructor() {
 		// Technical
 		this.connected = false;
 		this.pastDisconnect = false;
@@ -33,7 +28,7 @@ class Connections {
 			const message = data[1];
 
 			if (['normal', 'reply', 'error'].indexOf(message.commandType) > -1) {
-				this.incoming.handler(connectionId, message);
+				incoming.handler(connectionId, message);
 			} else {
 				console.warn(`Error: Unknown message type "${message.commandType}"`);
 			}
@@ -66,7 +61,7 @@ class Connections {
 		this.socket.emit('connectToNetwork', [information, connectionId]);
 
 		// Display the server in the sources list
-		this.sources.addServer(connectionId);
+		sources.addServer(connectionId);
 
 		// If no server is focused, focus on this one
 		if (!Maid.focusedServer) {

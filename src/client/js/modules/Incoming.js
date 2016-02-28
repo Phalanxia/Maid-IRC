@@ -1,9 +1,4 @@
 class Incoming {
-	constructor(ui, sources) {
-		this.ui = ui;
-		this.sources = sources;
-	}
-
 	addMessage(content) {
 		const _content = content;
 
@@ -14,15 +9,9 @@ class Incoming {
 		NewMessage.display();
 
 		const output = select('#channel-console output');
-		let scrollInfoView;
-
-		// If scrolled at the bottom set scrollIntoView as true
-		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
-			scrollInfoView = true;
-		}
 
 		// Scroll to bottom unless the user is scrolled up
-		if (scrollInfoView) {
+		if (output.scrollHeight - output.scrollTop === output.clientHeight) {
 			output.scrollTop = output.scrollHeight;
 		}
 	}
@@ -32,6 +21,10 @@ class Incoming {
 
 		const network = Maid.sessions[connectionId];
 		this.connectionId = connectionId;
+
+		if (Maid.settings.debug) {
+			console.log(data);
+		}
 
 		const messageTable = {
 			default: () => {
@@ -47,13 +40,46 @@ class Incoming {
 			ping: () => {},
 
 			privmsg: () => {
-				this.addMessage({
-					type: 'privmsg',
-					channel: _data.args[0],
-					head: _data.nick,
-					message: _data.args[1],
-					isHighlightable: true,
-				});
+				// Detect if the message is a CTCP
+				if (_data.args[1].startsWith('\x01') && _data.args[1].endsWith('\x01')) {
+					// If its an ACTION message (/me)
+					if (_data.args[1].startsWith('\x01ACTION')) {
+						const slicedString = _data.args[1].slice(7, -1);
+
+						this.addMessage({
+							type: 'privmsg',
+							channel: _data.args[0],
+							icon: ['fa-angle-double-right', 'Action'],
+							message: `${_data.nick}${slicedString}`,
+							isHighlightable: true,
+						});
+					} else if (_data.args[1].startsWith('\x01VERSION')) {
+						// Display the CTCP VERSION request
+						this.addMessage({
+							type: 'privmsg',
+							channel: _data.nick,
+							icon: ['fa-angle-double-right', 'Action'],
+							message: `Recieved a CTCP VERSION from ${_data.nick}`,
+							isHighlightable: true,
+						});
+
+						// Respond
+						connections.send('send-raw', [
+							'NOTICE',
+							_data.nick,
+							`VERSION Maid-IRC ${Maid.version}`,
+						]);
+					}
+				} else {
+					// Normal message
+					this.addMessage({
+						type: 'privmsg',
+						channel: _data.args[0],
+						head: _data.nick,
+						message: _data.args[1],
+						isHighlightable: true,
+					});
+				}
 			},
 
 			notice: () => {
@@ -78,13 +104,13 @@ class Incoming {
 						console.log('Updating sources list');
 					}
 
-					this.sources.addToList(connectionId, _data.args[0]);
+					sources.addToList(connectionId, _data.args[0]);
 				}
 
 				// If its the focused channel update the userlist
 				if (network.sources[_data.args[0]].users !== undefined) {
 					if (_data.args[0] === Maid.focusedSource || Maid.focusedSource === '') {
-						this.ui.users(_data.args[0], connectionId);
+						ui.users(_data.args[0], connectionId);
 					}
 				}
 
@@ -93,7 +119,7 @@ class Incoming {
 					type: 'join',
 					channel: _data.args[0],
 					icon: ['fa-sign-in', 'Join'],
-					message: _data.nick + ' (' + _data.prefix + ') has Joined (' + _data.args[0] + ')',
+					message: `${_data.nick} (${_data.prefix}) has Joined (${_data.args[0]})`,
 				});
 			},
 
@@ -104,14 +130,14 @@ class Incoming {
 							channel,
 							type: 'quit',
 							icon: ['fa-angle-double-left', 'Warning'],
-							message: _data.nick + ' (' + _data.prefix + ') has Quit (' + _data.args[0] + ')',
+							message: `${_data.nick} (${_data.prefix}) has Quit (${_data.args[0]})`,
 						});
 					} else if (_data.nick in channel.users) {
 						this.addMessage({
 							channel,
 							type: 'quit',
 							icon: ['fa-angle-double-left', 'Warning'],
-							message: _data.nick + ' (' + _data.prefix + ') has Quit (' + _data.args[0] + ')',
+							message: `${_data.nick} (${_data.prefix}) has Quit (${_data.args[0]})`,
 						});
 					}
 				}
@@ -124,7 +150,7 @@ class Incoming {
 							channel,
 							type: 'error',
 							icon: ['fa-exclamation-circle', 'Alert'],
-							message: 'Error: ' + _data.args[0],
+							message: `Error: ${_data.args[0]}`,
 						});
 					}
 				}
@@ -134,7 +160,7 @@ class Incoming {
 					type: 'error',
 					channel: 'server',
 					icon: ['fa-exclamation-circle', 'Alert'],
-					message: 'Error: ' + _data.args[0],
+					message: `Error: ${_data.args[0]}`,
 				});
 			},
 
@@ -248,7 +274,7 @@ class Incoming {
 				}
 
 				if (network.sources[_channel] === Maid.focusedSource) {
-					this.ui.users(_channel, connectionId);
+					ui.users(_channel, connectionId);
 				}
 			},
 
@@ -279,7 +305,7 @@ class Incoming {
 					type: 'warning',
 					channel: 'server',
 					icon: ['fa-exclamation-triangle', 'Warning'],
-					message: _data.args[1] + ': ' + _data.args[2],
+					message: `${_data.args[1]}: ${_data.args[2]}`,
 				});
 			},
 
@@ -288,7 +314,7 @@ class Incoming {
 					type: 'warning',
 					channel: 'server',
 					icon: ['fa-exclamation-triangle', 'Warning'],
-					message: _data.args[1] + ': ' + _data.args[2],
+					message: `${_data.args[1]}: ${_data.args[2]}`,
 				});
 			},
 
@@ -297,7 +323,7 @@ class Incoming {
 					type: 'warning',
 					channel: 'server',
 					icon: ['fa-exclamation-triangle', 'Warning'],
-					message: _data.args[1] + ': ' + _data.args[2],
+					message: `${_data.args[1]}: ${_data.args[2]}`,
 				});
 			},
 		};
