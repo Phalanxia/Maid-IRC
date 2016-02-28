@@ -47,6 +47,12 @@ class Sources {
 			}
 		}
 
+		let icon = 'fa-comments-o';
+
+		if (type === 'other') {
+			icon = 'fa-user';
+		}
+
 		const chosenNetwork = Maid.sessions[networkId];
 
 		select(`${networkSelector} .channel-source-container`).insertAdjacentHTML('beforeend',
@@ -54,6 +60,7 @@ class Sources {
 				networkId,
 				source,
 				type,
+				icon,
 				sourceObj: chosenNetwork[source],
 			})
 		);
