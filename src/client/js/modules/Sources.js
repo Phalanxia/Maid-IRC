@@ -1,8 +1,4 @@
 class Sources {
-	constructor(ui) {
-		this.ui = ui;
-	}
-
 	addServer(networkId) {
 		const network = Maid.sessions[networkId];
 
@@ -54,7 +50,7 @@ class Sources {
 		);
 
 		// Select the element we just inserted and add an onclick event
-		select(`${networkSelector} .channel-source-container li[data-source="${source}"]`).onclick = () => {
+		select(`${networkSelector} li[data-source="${source}"]`).onclick = () => {
 			// Change focus on click
 			this.changeFocus(networkId, source, type);
 		};
@@ -99,13 +95,13 @@ class Sources {
 				select(`${networkSelector} ul li[data-source="${source}"]`).classList.add('focusedSource');
 
 				// Update displayed topic
-				this.ui.topic(sourceObj.topic);
+				ui.topic(sourceObj.topic);
 
 				// Allow the header input value (topic) to be edited
 				select('#channel-console header input').disabled = false;
 
 				// Update displayed users list
-				this.ui.users(networkId, source);
+				ui.users(networkId, source);
 
 				// Display the user list
 				select('#users').style.display = 'block';
@@ -138,6 +134,19 @@ class Sources {
 				// Hide the users list
 				select('#users').style.display = 'none';
 				break;
+			}
+			default: {
+				// Update displayed focused source in the networks panel
+				select(`${networkSelector} header`).classList.add('focusedSource');
+
+				// Change header input value to "unknown"
+				select('#channel-console header input').value = 'Unknown';
+
+				// Disable the user from being able to edit the topic (there is no point to)
+				select('#channel-console header input').disabled = true;
+
+				// Hide the users list
+				select('#users').style.display = 'none';
 			}
 		}
 
