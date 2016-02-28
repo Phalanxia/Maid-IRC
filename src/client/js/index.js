@@ -3,6 +3,13 @@
 const select = document.querySelector.bind(document);
 const selectAll = selection => Array.prototype.slice.call(document.querySelectorAll(selection));
 
+// Modules
+const ui = new UI();
+const sources = new Sources(ui);
+const incoming = new Incoming(ui, sources);
+const connections = new Connections(ui, sources, incoming);
+const outgoing = new Outgoing(connections);
+
 const Maid = {
 	settings: {
 		awayMessage: 'Away',
@@ -20,18 +27,13 @@ const Maid = {
 	focusedSource: '',
 	sessions: {},
 
+	version: select('#about .version').innerHTML.slice(16),
+
 	getFocused() {
 		return this.sessions[this.sessions.focusedServer];
 	},
 
-	init() {
-		// Modules
-		const ui = new UI();
-		const sources = new Sources(ui);
-		const incoming = new Incoming(ui, sources);
-		const connections = new Connections(ui, sources, incoming);
-		const outgoing = new Outgoing(connections);
-
+	init: () => {
 		// Do button magic here
 
 		// Handle connection information
@@ -96,17 +98,17 @@ const Maid = {
 		};
 
 		select('#channel-console footer button').onclick = () => enterMessage();
-
-		window.onbeforeunload = () => {
-			if (connections.status) {
-				return 'Leaving the page will disconnect you from IRC.';
-			}
-		};
 	},
 };
 
 window.onload = () => {
 	Maid.init();
+};
+
+window.onbeforeunload = () => {
+	if (Maid.connections.status) {
+		return 'Leaving the page will disconnect you from IRC.';
+	}
 };
 
 function hideModals() {

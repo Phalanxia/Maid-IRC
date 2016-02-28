@@ -16,9 +16,8 @@ class Message {
 
 		// Time
 		this.rawTime = new Date();
-		this.timestamp = `${('0' + this.rawTime.getHours()).slice(-2)}:` +
-			`${('0' + this.rawTime.getMinutes()).slice(-2)}:` +
-			`${('0' + this.rawTime.getSeconds()).slice(-2)}`;
+
+		this.timestamp = `${(`0${this.rawTime.getHours()}`).slice(-2)}:${(`0${this.rawTime.getMinutes()}`).slice(-2)}:${(`0${this.rawTime.getSeconds()}`).slice(-2)}`;
 
 		// Icon
 		if (this.raw.icon) {

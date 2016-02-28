@@ -80,10 +80,9 @@ function maidIrc(io, env) {
 				socket.disconnect('unauthorized');
 			} else {
 				const connectionId = data[1];
-				let clientInstance;
 
 				thisClient[connectionId] = createClient(socket, data[0], connectionId);
-				clientInstance = thisClient[connectionId];
+				const clientInstance = thisClient[connectionId];
 
 				// Connect it now!
 				clientInstance.connect();
