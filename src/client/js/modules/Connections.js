@@ -52,10 +52,12 @@ class Connections {
 			connection.realName = 'MaidIRC';
 		}
 
+		connection.serverGiven = information.server;
 		connection.nick = information.nick;
-		Maid.sessions.highlights = information.nick;
-
 		connection.sources = {};
+
+		// Add nick to the highlights list
+		Maid.sessions.highlights.push(information.nick);
 
 		// Send connect info to the back-end
 		this.socket.emit('connectToNetwork', [information, connectionId]);
