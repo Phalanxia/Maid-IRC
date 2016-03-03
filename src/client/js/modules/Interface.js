@@ -69,11 +69,13 @@ class UI {
 			}
 
 			// Display the user in the list
-			select('#users ul').insertAdjacentHTML('afterbegin', Maid.Templates['src/client/views/users.hbs']({
-				rank: identifyer.rank,
-				icon: identifyer.icon,
-				nick: element,
-			}));
+			select('#users ul').insertAdjacentHTML('afterbegin',
+				Maid.Templates['src/client/views/users.hbs']({
+					rank: identifyer.rank,
+					icon: identifyer.icon,
+					nick: element,
+				}
+			));
 		});
 
 		// Get user count
