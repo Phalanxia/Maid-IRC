@@ -344,6 +344,15 @@ class Incoming {
 				Error messages
 			*/
 
+			404: () => {
+				this.addMessage({
+					type: 'warning',
+					channel: _data.args[1],
+					icon: ['fa-exclamation-triangle', 'Warning'],
+					message: _data.args[2],
+				});
+			},
+
 			412: () => {
 				this.addMessage({
 					type: 'warning',
