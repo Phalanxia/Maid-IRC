@@ -65,6 +65,10 @@ class Outgoing {
 				// Send message data to the server
 				connections.send('send-raw', ['PRIVMSG', _args.split(' ')[0], '\x01TIME\x01']);
 			},
+
+			join: () => {
+				connections.send('send-raw', ['JOIN', _args]);
+			},
 		};
 
 		// Invoke command
