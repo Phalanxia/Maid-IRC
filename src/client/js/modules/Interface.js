@@ -1,12 +1,6 @@
 class UI {
 	topic(topic) {
-		let _topic = topic;
-
-		if (!_topic) {
-			_topic = '';
-		}
-
-		select('#channel-console header input').value = _topic;
+		select('#channel-console header input').value = topic || '';
 	}
 
 	users(connectionId, channel) {
