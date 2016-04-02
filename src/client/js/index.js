@@ -1,7 +1,7 @@
 'use strict';
 
 const select = document.querySelector.bind(document);
-const selectAll = selection => Array.slice(...document.querySelectorAll(selection));
+const selectAll = selection => Array.prototype.slice.call(document.querySelectorAll(selection));
 
 // Modules
 const ui = new UI();
