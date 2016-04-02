@@ -1,7 +1,7 @@
 'use strict';
 
 const select = document.querySelector.bind(document);
-const selectAll = selection => Array.prototype.slice.call(document.querySelectorAll(selection));
+const selectAll = selection => Array.slice(...document.querySelectorAll(selection));
 
 // Modules
 const ui = new UI();
@@ -25,7 +25,9 @@ const Maid = {
 	// Connections
 	focusedServer: '',
 	focusedSource: '',
-	sessions: {},
+	sessions: {
+		highlights: [],
+	},
 
 	version: select('#about .version').innerHTML.slice(16),
 
@@ -34,7 +36,11 @@ const Maid = {
 	},
 
 	init: () => {
-		// Do button magic here
+		window.onbeforeunload = () => {
+			if (Maid.connections.status) {
+				return 'Leaving the page will disconnect you from IRC.';
+			}
+		};
 
 		// Handle connection information
 		select('#submit').onclick = event => {
@@ -103,12 +109,6 @@ const Maid = {
 
 window.onload = () => {
 	Maid.init();
-};
-
-window.onbeforeunload = () => {
-	if (Maid.connections.status) {
-		return 'Leaving the page will disconnect you from IRC.';
-	}
 };
 
 function hideModals() {

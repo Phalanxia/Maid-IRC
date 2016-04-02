@@ -9,8 +9,7 @@ class UI {
 		select('#users header p').innerHTML = '';
 
 		// Set up user list
-		const network = Maid.sessions[connectionId];
-		const users = network.sources[channel].users;
+		const users = Maid.sessions[connectionId].sources[channel].users;
 		let userList = [];
 
 		userList = Object.keys(users);

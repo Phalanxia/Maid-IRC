@@ -1,7 +1,7 @@
 {
   "extends": "airbnb/base",
   "env": {
-    "node": true,
+    "shared-node-browser": true,
     "es6": true
   },
   "rules": {
