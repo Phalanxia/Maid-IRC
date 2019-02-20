@@ -3,7 +3,7 @@
 
 [![Build Status](https://img.shields.io/travis/Phalanxia/Maid-IRC.svg?style=flat-square)](https://travis-ci.org/Phalanxia/Maid-IRC) [![NPM version](https://img.shields.io/npm/v/maid-irc.svg?style=flat-square)](https://www.npmjs.org/package/maid-irc) [![Downloads](https://img.shields.io/npm/dm/maid-irc.svg?style=flat-square)](https://www.npmjs.org/package/maid-irc)
 
-A modern web IRC client. Built on [Node](https://nodejs.org).
+A modern (no longer maintained) web IRC client. Built on [Node](https://nodejs.org).
 
 *Still in early development. Features and bugs may or may not be included.*
 
