@@ -1,6 +1,6 @@
 {
   "name": "maid-irc",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "A modern web IRC client. Built on Node.",
   "author": "Madison Tries <madisontries@gmail.com> (https://github.com/Phalanxia)",
   "homepage": "http://madi.moe/Maid-IRC/",
@@ -48,7 +48,8 @@
     "application",
     "chat",
     "webirc",
-    "webchat"
+    "webchat",
+    "deprecated"
   ],
   "repository": {
     "type": "git",
